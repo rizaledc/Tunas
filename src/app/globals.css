@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tunas-50: #eefaf2;
+  --color-tunas-100: #d5f2de;
+  --color-tunas-200: #ade4c0;
+  --color-tunas-500: #2e9e5b;
+  --color-tunas-600: #23824a;
+  --color-tunas-700: #1d6a3e;
+  --color-tunas-900: #123d25;
+  --color-telkom-500: #c8102e;
+  --color-telkom-600: #a50d26;
+  --color-sky-brand: #1e5aa8;
+  --color-sky-brand-dark: #154582;
+  --color-oranye-400: #ffa94d;
+  --color-oranye-500: #f28c28;
+  --color-oranye-600: #d9741a;
+  --color-ink: #1f2937;
+  --color-ink-soft: #4b5563;
+  --color-surface: #f6f8f7;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sky-brand disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-oranye-500 text-white shadow-sm hover:bg-oranye-600;
+}
+@utility btn-green {
+  @apply btn bg-tunas-600 text-white hover:bg-tunas-700;
+}
+@utility btn-outline {
+  @apply btn border-2 border-tunas-600 bg-white text-tunas-700 hover:bg-tunas-50;
+}
+@utility btn-ghost {
+  @apply btn text-ink-soft hover:bg-black/5;
+}
+@utility btn-danger {
+  @apply btn bg-telkom-500 text-white hover:bg-telkom-600;
+}
+@utility btn-sm {
+  @apply px-3 py-2 text-sm;
+}
+@utility card {
+  @apply rounded-2xl border border-black/5 bg-white p-4 shadow-sm;
+}
+@utility input {
+  @apply w-full rounded-xl border border-gray-300 bg-white px-3 py-3 text-base text-ink placeholder:text-gray-400 focus:border-tunas-500 focus:ring-2 focus:ring-tunas-200 focus:outline-none;
+}
+@utility label {
+  @apply mb-1 block text-sm font-bold text-ink;
+}
+@utility chip {
+  @apply inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-ink-soft transition has-[:checked]:border-tunas-600 has-[:checked]:bg-tunas-50 has-[:checked]:text-tunas-700;
+}
+@layer components {
+  .tbl {
+    @apply w-full border-collapse text-left text-sm;
+  }
+  .tbl th {
+    @apply border-b border-gray-200 bg-gray-50 px-3 py-2 font-bold whitespace-nowrap text-ink-soft;
+  }
+  .tbl td {
+    @apply border-b border-gray-100 px-3 py-2 align-top;
+  }
+  .prose-sa h2 {
+    @apply mt-6 mb-2 text-xl font-extrabold text-tunas-900;
+  }
+  .prose-sa h3 {
+    @apply mt-4 mb-2 text-lg font-bold text-tunas-900;
+  }
+  .prose-sa p {
+    @apply mb-3 leading-relaxed;
+  }
+  .prose-sa ul {
+    @apply mb-3 list-disc space-y-1 pl-6;
+  }
+  .prose-sa ol {
+    @apply mb-3 list-decimal space-y-1 pl-6;
+  }
+  .prose-sa a {
+    @apply font-semibold text-sky-brand underline;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}

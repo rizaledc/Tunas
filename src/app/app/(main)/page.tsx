@@ -1,0 +1,171 @@
+import Link from "next/link";
+import { requireParent } from "@/lib/auth";
+import { getActiveChild, getAgreement } from "@/lib/parent";
+import { createClient } from "@/lib/supabase/server";
+import { addDays, formatHari, formatMenit, formatTanggal, isoDaysAgo, todayStr } from "@/lib/date";
+import { balancePercent, type InsightOutput } from "@/lib/indicators";
+import { Progress } from "@/components/blocks";
+import { saveReflectionOutcome } from "../actions";
+import { NoChild } from "./no-child";
+
+export const metadata = { title: "Beranda" };
+
+export default async function BerandaPage({ searchParams }: { searchParams: Promise<{ terimakasih?: string }> }) {
+  const parent = await requireParent();
+  const { child } = await getActiveChild(parent.familyId);
+  const { terimakasih } = await searchParams;
+  if (!child) return <NoChild />;
+
+  const today = todayStr();
+  const supabase = await createClient();
+  const [agreement, { data: logs }, { data: checkin }, { data: insight }, { data: event }, { data: pending }, { data: surveys }, { data: answered }] = await Promise.all([
+    getAgreement(child.id),
+    supabase.from("activity_logs").select("type,duration_min").eq("child_id", child.id).eq("log_date", today),
+    supabase.from("daily_checkins").select("id").eq("child_id", child.id).eq("date", today).maybeSingle(),
+    supabase.from("ai_insights").select("id,output,created_at").eq("child_id", child.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("events").select("title,slug,date,location").eq("published", true).gte("date", new Date().toISOString()).order("date").limit(1).maybeSingle(),
+    supabase.from("reflections").select("id,action_text,created_at").eq("child_id", child.id).is("outcome", null).lte("created_at", isoDaysAgo(5)).order("created_at").limit(1).maybeSingle(),
+    supabase.from("surveys").select("id,name").eq("is_open", true),
+    supabase.from("survey_responses").select("survey_id").eq("user_id", parent.id),
+  ]);
+
+  const digital = (logs ?? []).filter((l) => l.type === "digital").reduce((a, l) => a + l.duration_min, 0);
+  const positif = (logs ?? []).filter((l) => l.type === "positif").reduce((a, l) => a + l.duration_min, 0);
+  const target = agreement?.target_screen_min ?? 120;
+  const balance = balancePercent(digital, positif);
+  const openSurvey = (surveys ?? []).find((s) => !(answered ?? []).some((a) => a.survey_id === s.id));
+  const out = insight?.output as InsightOutput | undefined;
+
+  return (
+    <div className="space-y-4">
+      {terimakasih && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Terima kasih sudah mengisi kuesioner! 🙏</p>}
+      <div>
+        <p className="text-ink-soft">{formatHari(today)}</p>
+        <h1 className="text-2xl font-extrabold text-tunas-900">Ringkasan {child.nickname} hari ini</h1>
+      </div>
+
+      {openSurvey && (
+        <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-sky-brand bg-blue-50">
+          <span className="text-3xl">📝</span>
+          <span>
+            <span className="block font-extrabold">Isi kuesioner: {openSurvey.name}</span>
+            <span className="text-sm text-ink-soft">Bantu tim memperbaiki aplikasi (± 3 menit).</span>
+          </span>
+        </Link>
+      )}
+
+      {(logs ?? []).length === 0 && (
+        <div className="card flex items-center gap-3 border-2 border-oranye-400 bg-orange-50">
+          <span className="text-3xl">⏰</span>
+          <div className="flex-1">
+            <p className="font-extrabold">Belum ada catatan hari ini</p>
+            <p className="text-sm text-ink-soft">Cukup 1 menit untuk mencatat.</p>
+          </div>
+          <Link href="/app/catat" className="btn-primary btn-sm">
+            Catat
+          </Link>
+        </div>
+      )}
+
+      <div className="card">
+        <div className="flex items-baseline justify-between">
+          <p className="font-bold text-sky-brand">📱 Screen time</p>
+          <p className="text-sm text-ink-soft">target {formatMenit(target)}</p>
+        </div>
+        <p className="mt-1 text-3xl font-extrabold">
+          {digital} <span className="text-lg text-ink-soft">/ {target} menit</span>
+        </p>
+        <div className="mt-2">
+          <Progress value={digital} max={target} tone={digital > target ? "red" : digital > target * 0.8 ? "orange" : "green"} />
+        </div>
+        {digital > target && <p className="mt-2 text-sm font-semibold text-telkom-600">Sudah melewati target hari ini.</p>}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="card">
+          <p className="text-sm font-bold text-tunas-700">🌳 Aktivitas positif</p>
+          <p className="mt-1 text-2xl font-extrabold">{formatMenit(positif)}</p>
+        </div>
+        <div className="card">
+          <p className="text-sm font-bold text-oranye-600">⚖️ Keseimbangan</p>
+          <p className="mt-1 text-2xl font-extrabold">{digital + positif ? `${balance}%` : "–"}</p>
+          <p className="text-xs text-ink-soft">porsi aktivitas positif</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2">
+        <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
+          <span className="text-2xl">📱</span>Catat gawai
+        </Link>
+        <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
+          <span className="text-2xl">🎨</span>Catat positif
+        </Link>
+        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-tunas-500"}`}>
+          <span className="text-2xl">{checkin ? "✅" : "😊"}</span>Check-in
+        </Link>
+      </div>
+
+      {pending && (
+        <div className="card border-2 border-tunas-200">
+          <p className="font-extrabold">Bagaimana tindak lanjut minggu lalu?</p>
+          <p className="mt-1 text-ink-soft">“{pending.action_text}”</p>
+          <form action={saveReflectionOutcome} className="mt-3 flex flex-wrap gap-2">
+            <input type="hidden" name="id" value={pending.id} />
+            <button name="outcome" value="berhasil" className="btn-green btn-sm">
+              👍 Berhasil
+            </button>
+            <button name="outcome" value="sebagian" className="btn-outline btn-sm">
+              🙂 Sebagian
+            </button>
+            <button name="outcome" value="belum" className="btn-ghost btn-sm ring-1 ring-gray-200">
+              Belum
+            </button>
+          </form>
+        </div>
+      )}
+
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <p className="font-extrabold">✨ Insight terbaru</p>
+          <Link href="/app/insight" className="text-sm font-bold text-sky-brand">
+            Lihat →
+          </Link>
+        </div>
+        {out ? (
+          <>
+            <p className="mt-2 text-ink-soft">{out.ringkasan}</p>
+            <p className="mt-1 text-xs text-ink-soft">{formatTanggal(insight!.created_at)}</p>
+          </>
+        ) : (
+          <p className="mt-2 text-ink-soft">Belum ada insight. Setelah beberapa hari mencatat, tekan “Analisis Sekarang”.</p>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Link href="/app/kesepakatan" className="card text-sm font-bold">
+          🤝 Kesepakatan keluarga
+          <span className="block font-normal text-ink-soft">{agreement ? `Target ${formatMenit(agreement.target_screen_min)}/hari` : "Belum dibuat"}</span>
+        </Link>
+        <Link href="/app/mode-anak/masuk" className="card text-sm font-bold">
+          ⭐ Mode anak
+          <span className="block font-normal text-ink-soft">Anak mencatat sendiri</span>
+        </Link>
+      </div>
+
+      {event && (
+        <Link href="/app/kegiatan" className="card flex gap-3">
+          <span className="flex w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-oranye-500 py-2 text-white">
+            <span className="text-xl leading-none font-extrabold">{formatTanggal(event.date, { day: "numeric" })}</span>
+            <span className="text-xs">{formatTanggal(event.date, { month: "short" })}</span>
+          </span>
+          <span>
+            <span className="block text-xs font-bold text-oranye-600">AGENDA TUNAS TERDEKAT</span>
+            <span className="block font-extrabold">{event.title}</span>
+            <span className="text-sm text-ink-soft">{event.location}</span>
+          </span>
+        </Link>
+      )}
+      <p className="text-center text-xs text-ink-soft">Data 7 hari terakhir: {formatTanggal(addDays(today, -6), { day: "numeric", month: "short" })} – {formatTanggal(today, { day: "numeric", month: "short" })}</p>
+    </div>
+  );
+}
