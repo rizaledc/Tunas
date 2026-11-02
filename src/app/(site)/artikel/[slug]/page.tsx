@@ -1,0 +1,41 @@
+import { Icon } from "@/components/icons";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getArticle } from "@/lib/content";
+import { formatTanggal } from "@/lib/date";
+import { excerpt, renderMarkdown } from "@/lib/markdown";
+import { og } from "@/lib/seo";
+import { ShareButtons } from "@/components/site/share";
+
+export const revalidate = 300;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const a = await getArticle((await params).slug);
+  if (!a) return { title: "Artikel" };
+  const description = a.excerpt || excerpt(a.body);
+  const path = `/artikel/${a.slug}`;
+  return { title: a.title, description, alternates: { canonical: path }, openGraph: og(path, { type: "article", title: `${a.title} · SAHABAT ANAK`, description, publishedTime: a.published_at ?? undefined }) };
+}
+
+export default async function ArticleDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const a = await getArticle((await params).slug);
+  if (!a) notFound();
+  return (
+    <article className="mx-auto max-w-3xl px-4 py-10">
+      <Link href="/artikel" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+        <Icon name="arrow-left" className="h-4 w-4" /> Semua artikel
+      </Link>
+      <h1 className="mt-2 text-3xl font-extrabold text-daun-900">{a.title}</h1>
+      {a.published_at && <p className="mt-1 text-sm text-ink-soft">{formatTanggal(a.published_at)}</p>}
+      {a.cover && (
+        <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl">
+          <Image src={a.cover} alt="" fill sizes="(min-width:768px) 768px, 100vw" className="object-cover" />
+        </div>
+      )}
+      <div className="prose-sa mt-6 text-lg" dangerouslySetInnerHTML={{ __html: renderMarkdown(a.body) }} />
+      <ShareButtons path={`/artikel/${a.slug}`} title={a.title} />
+    </article>
+  );
+}
