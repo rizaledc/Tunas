@@ -1,5 +1,5 @@
 /* Service worker SAHABAT ANAK: cache shell ringan + notifikasi pengingat. */
-const CACHE = "sa-v1";
+const CACHE = "sa-v2";
 const OFFLINE_URLS = ["/offline", "/icons/icon-192.png", "/icons/icon.svg"];
 
 self.addEventListener("install", (event) => {

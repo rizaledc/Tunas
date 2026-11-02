@@ -1,6 +1,7 @@
 import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { LogoMark } from "@/components/logo";
 
 export const metadata: Metadata = { title: "Tentang Program", description: "Latar belakang, tim, mitra, dan roadmap program SAHABAT ANAK." };
 
@@ -24,6 +25,30 @@ export default function TentangPage() {
           <p className="mt-2 text-ink-soft">
             SAHABAT ANAK tidak memblokir aplikasi, tidak membaca isi HP anak, dan tidak melacak lokasi. Screen time dicatat manual oleh orang tua, seperti logbook.
           </p>
+        </div>
+      </section>
+
+      <section className="card mt-8 grid items-center gap-6 md:grid-cols-[auto_1fr]">
+        <div className="flex justify-center gap-4">
+          <LogoMark tile={false} className="h-28 w-28" />
+          <LogoMark className="h-28 w-28" />
+        </div>
+        <div>
+          <h2 className="text-xl font-extrabold">Makna Logo</h2>
+          <ul className="mt-3 space-y-2 text-ink-soft">
+            <li>
+              <strong className="text-tunas-700">Daun besar hijau</strong> — orang tua yang menaungi, sekaligus dunia nyata dan alam tempat anak bermain.
+            </li>
+            <li>
+              <strong className="text-oranye-600">Daun kecil oranye</strong> — anak yang sedang tumbuh: hangat, ceria, dan penuh rasa ingin tahu.
+            </li>
+            <li>
+              <strong className="text-ink">Satu titik tumbuh</strong> — keduanya berangkat dari akar yang sama, yaitu keluarga dan Komunitas TUNAS (tunas = awal kehidupan).
+            </li>
+            <li>
+              <strong className="text-ink">Membentuk tanda ✓</strong> — keseimbangan digital yang dicapai berdua dan disepakati bersama, bukan diperintahkan.
+            </li>
+          </ul>
         </div>
       </section>
 

@@ -2,6 +2,14 @@
 
 **Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak** — website mobile-first untuk Komunitas TUNAS (Tunggu Anak Siap) Banyumas × PKM Telkom University. Orang tua mencatat aktivitas digital dan non-digital anak, melihat keseimbangannya, dan mendapat insight AI. Spesifikasi lengkap: [`PRD Website SAHABAT ANAK.md`](./PRD%20Website%20SAHABAT%20ANAK.md).
 
+## Logo
+
+<img src="public/logo.svg" width="72" alt="Logo SAHABAT ANAK" /> <img src="public/icons/icon.svg" width="72" alt="Ikon aplikasi SAHABAT ANAK" />
+
+Dua daun yang tumbuh dari satu titik. **Daun besar hijau** adalah orang tua yang menaungi (dan dunia nyata tempat anak bermain); **daun kecil oranye** adalah anak yang sedang tumbuh. Keduanya berangkat dari akar yang sama — keluarga dan Komunitas TUNAS (*tunas* = awal kehidupan) — dan bersama-sama membentuk tanda ✓: keseimbangan digital yang dicapai berdua, bukan diperintahkan. Warna kata mengikuti daun: **SAHABAT** hijau, **ANAK** oranye.
+
+Berkas: `public/logo.svg` (latar terang), `public/icons/icon.svg` (ikon aplikasi), PNG 192/512/maskable di `public/icons/`, gambar pratinjau tautan `src/app/opengraph-image.png`. Komponen React: `LogoMark` dan `Logo` di `src/components/logo.tsx`.
+
 ## Teknologi
 
 | Lapisan | Pilihan |
@@ -72,6 +80,6 @@ Perintah lain: `npm test` (unit test), `npm run typecheck`, `npm run lint`, `npm
 
 - **Acuan screen time** per usia masih draf (Pengaturan → Acuan Screen Time) — tetapkan dari pedoman resmi (IDAI/WHO).
 - **Kategori** aktivitas perlu disamakan dengan logbook kertas asli (Pengaturan → Kategori).
-- **Logo** SAHABAT ANAK di repo adalah logo sementara; logo TUNAS & Telkom University ditampilkan sebagai teks sampai file resmi tersedia.
+- Logo TUNAS & Telkom University ditampilkan sebagai teks sampai file resmi tersedia.
 - **Foto** landing page diunggah lewat Konten setelah izin publikasi orang tua ada.
 - Kontak WhatsApp/email di footer masih contoh — ubah di Konten → Hero & Angka.

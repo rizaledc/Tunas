@@ -1,29 +1,44 @@
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-export function LogoMark({ className }: { className?: string }) {
+/**
+ * Logo SAHABAT ANAK — dua daun dari satu titik tumbuh.
+ * Daun besar (hijau) = orang tua yang menaungi; daun kecil (oranye) = anak yang sedang tumbuh.
+ * Keduanya berangkat dari satu akar yang sama (keluarga) dan bersama-sama membentuk tanda ✓:
+ * keseimbangan yang dicapai berdua, bukan diperintahkan.
+ */
+const LEAF_PARENT = "M23.5 38C13.5 35 8 26 10 12c8.5.4 14.5 7 13.5 26z";
+const LEAF_CHILD = "M24.6 38c.3-9.5 4.6-15 12.6-15.6.9 8.4-4.4 14.4-12.6 15.6z";
+const VEIN_PARENT = "M23 35.5c-2.4-7-5.6-13.8-10.4-19.6";
+const VEIN_CHILD = "M26 35.8c2.4-4.6 5.4-8.2 9.4-10.6";
+
+/** Tanda logo. `tile` = ikon aplikasi berlatar hijau; tanpa tile = daun berwarna di atas latar terang. */
+export function LogoMark({ className, tile = true }: { className?: string; tile?: boolean }) {
   return (
-    <svg viewBox="0 0 512 512" aria-hidden className={cn("h-10 w-10 shrink-0", className)}>
-      <rect width="512" height="512" rx="112" fill="#23824a" />
-      <path d="M256 404c-8 0-14-6-14-14V262c0-8 6-14 14-14s14 6 14 14v128c0 8-6 14-14 14z" fill="#fff" />
-      <path d="M250 262c-70 4-124-34-132-108 74-8 128 30 132 108z" fill="#ade4c0" />
-      <path d="M262 236c6-84 64-128 144-122-4 82-62 128-144 122z" fill="#fff" />
-      <path d="M176 404h160" stroke="#f28c28" strokeWidth="28" strokeLinecap="round" />
+    <svg viewBox="0 0 48 48" aria-hidden className={cn("h-10 w-10 shrink-0", className)}>
+      {tile && <rect width="48" height="48" rx="11" fill="#23824a" />}
+      <g transform="translate(0 -1)">
+        <path d={LEAF_PARENT} fill={tile ? "#ffffff" : "#23824a"} />
+        <path d={LEAF_CHILD} fill={tile ? "#ffa94d" : "#f28c28"} />
+        <path d={VEIN_PARENT} stroke={tile ? "#23824a" : "#ffffff"} strokeOpacity={tile ? 0.35 : 0.45} strokeWidth="1.1" strokeLinecap="round" fill="none" />
+        <path d={VEIN_CHILD} stroke="#ffffff" strokeOpacity="0.55" strokeWidth="1.1" strokeLinecap="round" fill="none" />
+      </g>
     </svg>
   );
 }
 
+/** Logo lengkap. Warna kata mengikuti daun: SAHABAT (hijau, orang tua) + ANAK (oranye, anak). */
 export function Logo({ light = false, small = false }: { light?: boolean; small?: boolean }) {
   return (
     <span className="flex items-center gap-2">
-      <LogoMark className={small ? "h-8 w-8" : undefined} />
+      <LogoMark tile={light} className={small ? "h-8 w-8" : light ? "h-10 w-10" : "h-11 w-11"} />
       <span className="leading-tight">
-        <span className={cn("block font-extrabold tracking-wide", small ? "text-base" : "text-lg", light ? "text-white" : "text-tunas-700")}>
-          SAHABAT ANAK
+        <span className={cn("block font-extrabold tracking-wide", small ? "text-base" : "text-lg")}>
+          <span className={light ? "text-white" : "text-tunas-700"}>SAHABAT</span> <span className={light ? "text-oranye-400" : "text-oranye-500"}>ANAK</span>
         </span>
         {!small && (
           <span className={cn("block text-[11px] font-semibold", light ? "text-white/80" : "text-ink-soft")}>
-            bersama Komunitas TUNAS
+            Tumbuh seimbang bersama keluarga
           </span>
         )}
       </span>
