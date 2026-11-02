@@ -63,3 +63,9 @@ export function startOfWeek(dateStr: string): string {
 export function isoDaysAgo(n: number): string {
   return new Date(Date.now() - n * 86400_000).toISOString();
 }
+
+/** Periode koin AI: mulai 07.00 WIB (= 00.00 UTC) hari ini, berakhir 07.00 WIB esok hari. */
+export function coinPeriod(now = new Date()): { start: Date; next: Date } {
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  return { start, next: new Date(start.getTime() + 86_400_000) };
+}

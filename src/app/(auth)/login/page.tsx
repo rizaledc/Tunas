@@ -17,8 +17,8 @@ const REASONS: Record<string, string> = {
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; alasan?: string }> }) {
   const [{ next, alasan }, auth] = await Promise.all([searchParams, getSetting("public.auth")]);
   return (
-    <div className="card rounded-3xl p-7 sm:p-9">
-      <h1 className="display text-3xl text-ink">Masuk</h1>
+    <div className="card rounded-3xl p-6 shadow-xl shadow-black/5 sm:p-9">
+      <h1 className="display text-[1.75rem] leading-tight text-ink sm:text-3xl">Masuk</h1>
       <p className="mb-5 text-ink-soft">Untuk orang tua.</p>
       {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-emas-300/25 p-3 text-sm font-semibold text-aksen-600">{REASONS[alasan]}</p>}
       {auth.google && (

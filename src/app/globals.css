@@ -144,18 +144,21 @@ body {
 /* Teks berjalan (marquee) */
 @keyframes sa-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 .sa-marquee {
   animation: sa-marquee 40s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
+/* Tetap bergerak (lebih pelan) saat perangkat meminta gerak dikurangi, mis. Mode Daya Rendah di iPhone. */
 @media (prefers-reduced-motion: reduce) {
   .sa-marquee {
-    animation: none;
+    animation-duration: 80s;
   }
 }
 

@@ -21,7 +21,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
   const me = await requireAdmin("superadmin");
   const tab = (await searchParams).tab ?? "kategori";
   const db = createAdminClient();
-  const s = await getSettings(["ai.model", "ai.system_prompt", "ai.max_per_day", "ai.max_tokens", "ai.enabled", "screen_time.reference", "public.consent", "reminder.message"]);
+  const s = await getSettings(["ai.model", "ai.system_prompt", "ai.coins_per_day", "ai.max_tokens", "ai.enabled", "screen_time.reference", "public.consent", "reminder.message"]);
   const tabs = [
     ["kategori", "Kategori"],
     ["ai", "AI & Prompt"],
@@ -241,7 +241,7 @@ async function Admins({ db, meId }: { db: ReturnType<typeof createAdminClient>; 
   );
 }
 
-type AiCfg = { "ai.model": string; "ai.system_prompt": string; "ai.max_per_day": number; "ai.max_tokens": number; "ai.enabled": boolean };
+type AiCfg = { "ai.model": string; "ai.system_prompt": string; "ai.coins_per_day": number; "ai.max_tokens": number; "ai.enabled": boolean };
 
 async function AiSettings({ s }: { s: AiCfg }) {
   const [{ key, source }, models, balance] = await Promise.all([resolveOpenRouterKey(), fetchModels(), openRouterBalance()]);
@@ -336,8 +336,9 @@ async function AiSettings({ s }: { s: AiCfg }) {
         </label>
         <div className="grid grid-cols-2 gap-3">
           <label>
-            <span className="label">Maks. analisis / anak / hari</span>
-            <input type="number" name="max_per_day" min={1} max={10} defaultValue={Number(s["ai.max_per_day"])} className="input" />
+            <span className="label">Koin AI / akun / hari</span>
+            <input type="number" name="coins_per_day" min={1} max={10} defaultValue={Number(s["ai.coins_per_day"])} className="input" />
+            <span className="mt-1 block text-xs text-ink-soft">Diisi ulang tiap 07.00 WIB, sisa koin hangus.</span>
           </label>
           <label>
             <span className="label">max_tokens</span>

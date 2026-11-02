@@ -2,7 +2,7 @@ import "server-only";
 import { createClient } from "./supabase/server";
 import { createAdminClient } from "./supabase/admin";
 import { getSettings, referenceForAge } from "./settings";
-import { addDays, todayStr } from "./date";
+import { addDays, coinPeriod, todayStr } from "./date";
 import { computeIndicators, parseInsight, ruleBasedInsight, type CategoryRow, type CheckinRow, type Indicators, type InsightOutput, type LogRow } from "./indicators";
 import { sha256 } from "./crypto";
 import { logError } from "./audit";
@@ -42,6 +42,31 @@ export async function buildIndicators(childId: string): Promise<Indicators | nul
   });
 }
 
+export type CoinStatus = { total: number; used: number; remaining: number; nextReset: string };
+
+/**
+ * Koin AI per akun orang tua (semua anak dalam satu keluarga berbagi koin).
+ * Koin terpakai hanya jika AI benar-benar dipanggil; ringkasan otomatis (cadangan) tidak memotong koin.
+ */
+export async function aiCoins(familyId: string): Promise<CoinStatus> {
+  const supabase = await createClient();
+  const [{ data: kids }, cfg] = await Promise.all([supabase.from("children").select("id").eq("family_id", familyId), getSettings(["ai.coins_per_day"])]);
+  const total = Math.max(1, Number(cfg["ai.coins_per_day"]) || 1);
+  const { start, next } = coinPeriod();
+  const ids = (kids ?? []).map((k) => k.id as string);
+  let used = 0;
+  if (ids.length) {
+    const { count } = await supabase
+      .from("ai_insights")
+      .select("id", { count: "exact", head: true })
+      .in("child_id", ids)
+      .neq("model", "rule-based")
+      .gte("created_at", start.toISOString());
+    used = count ?? 0;
+  }
+  return { total, used, remaining: Math.max(0, total - used), nextReset: next.toISOString() };
+}
+
 type AiCall = { output: InsightOutput; model: string; tokensIn: number; tokensOut: number; cost: number };
 
 async function callOpenRouter(ind: Indicators, cfg: { model: string; prompt: string; maxTokens: number }): Promise<AiCall> {
@@ -78,15 +103,13 @@ export async function generateInsight(childId: string): Promise<InsightResult> {
     .limit(1);
   if (latest?.[0]?.input_hash === hash) return { ok: true, id: latest[0].id, cached: true, fallback: false };
 
-  const cfg = await getSettings(["ai.model", "ai.system_prompt", "ai.max_per_day", "ai.max_tokens", "ai.enabled"]);
-  const startToday = new Date(`${todayStr()}T00:00:00+07:00`).toISOString();
-  const { count } = await supabase
-    .from("ai_insights")
-    .select("id", { count: "exact", head: true })
-    .eq("child_id", childId)
-    .gte("created_at", startToday);
-  if ((count ?? 0) >= Number(cfg["ai.max_per_day"])) {
-    return { ok: false, error: `Batas ${cfg["ai.max_per_day"]} analisis per hari untuk anak ini sudah tercapai. Coba lagi besok.` };
+  const { data: fam } = await supabase.from("children").select("family_id").eq("id", childId).maybeSingle();
+  const [cfg, coins] = await Promise.all([
+    getSettings(["ai.model", "ai.system_prompt", "ai.max_tokens", "ai.enabled"]),
+    aiCoins(String(fam?.family_id ?? "")),
+  ]);
+  if (coins.remaining <= 0) {
+    return { ok: false, error: "Koin AI hari ini sudah terpakai. Koin baru tersedia besok pukul 07.00 WIB." };
   }
 
   let call: AiCall;

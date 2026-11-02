@@ -24,7 +24,8 @@ Balas HANYA dengan JSON valid berformat:
 export const DEFAULT_SETTINGS = {
   "ai.model": "anthropic/claude-haiku-5.5",
   "ai.system_prompt": DEFAULT_SYSTEM_PROMPT,
-  "ai.max_per_day": 3,
+  // Koin AI per akun orang tua per hari. Koin diisi ulang setiap 07.00 WIB (00.00 UTC) dan tidak menumpuk.
+  "ai.coins_per_day": 1,
   "ai.max_tokens": 800,
   "ai.enabled": true,
   // API key OpenRouter, terenkripsi AES-256-GCM (lihat lib/openrouter.ts). Kosong = pakai env OPENROUTER_API_KEY.
@@ -52,10 +53,10 @@ export const DEFAULT_SETTINGS = {
     image: "",
   },
   "public.stats": [
-    { label: "Keterampilan digital orang tua", before: "28,2%", after: "91,8%" },
-    { label: "Praktik pendampingan", before: "3,69", after: "4,14" },
-    { label: "Perilaku digital sehat anak", before: "3,43", after: "3,72" },
-    { label: "Respons positif peserta", before: "", after: "88%" },
+    { label: "Keterampilan digital orang tua", before: "28,2%", after: "91,8%", note: "Orang tua yang sudah mampu memakai fitur keamanan gawai dan memahami aplikasi yang dipakai anak." },
+    { label: "Praktik pendampingan", before: "3,69", after: "4,14", note: "Seberapa sering orang tua menemani dan berdiskusi saat anak memakai gawai." },
+    { label: "Perilaku digital sehat anak", before: "3,43", after: "3,72", note: "Kebiasaan anak memakai gawai secukupnya dan tetap aktif bermain di luar layar." },
+    { label: "Respons positif peserta", before: "", after: "88%", note: "Peserta yang menilai program bermanfaat dan ingin melanjutkan." },
   ],
   // Identitas situs: logo khusus (kosong = logo bawaan) dan slogan.
   "public.brand": { logo: "", tagline: "Tumbuh seimbang bersama keluarga" },
@@ -65,6 +66,9 @@ export const DEFAULT_SETTINGS = {
     cta_primary: "Mulai Mencatat",
     cta_secondary: "Pelajari Program",
     stats_label: "Keluarga aktif mencatat",
+    stats_eyebrow: "Hasil program",
+    stats_title: "Dampak nyata pendampingan",
+    stats_text: "Diukur pada peserta sebelum dan sesudah mengikuti program. Skor memakai skala 1 sampai 5, semakin tinggi semakin baik.",
     events_title: "Kegiatan Pendampingan",
     agenda_title: "Agenda Mendatang",
     features_title: "Fitur Aplikasi",
@@ -201,7 +205,11 @@ export async function getSettings<K extends SettingKey>(keys: K[]): Promise<{ [P
     if (!client) return out;
     const { data } = await client.from("settings").select("key,value").in("key", keys);
     for (const row of data ?? []) {
-      if (row.value !== null && row.value !== undefined) (out as Record<string, unknown>)[row.key] = row.value;
+      if (row.value === null || row.value === undefined) continue;
+      const def = (DEFAULT_SETTINGS as Record<string, unknown>)[row.key];
+      const isObj = (v: unknown) => typeof v === "object" && v !== null && !Array.isArray(v);
+      // Objek digabung dengan default agar kolom baru tetap punya nilai awal.
+      (out as Record<string, unknown>)[row.key] = isObj(def) && isObj(row.value) ? { ...(def as object), ...(row.value as object) } : row.value;
     }
   } catch {
     // pakai default

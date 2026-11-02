@@ -3,6 +3,23 @@ import { Logo, LogoMark } from "@/components/logo";
 import { getSettings } from "@/lib/settings";
 import { DarkMedia, Eyebrow, Headline } from "@/components/site/parts";
 import { AuthAside } from "@/components/site/auth-aside";
+import { Icon } from "@/components/icons";
+import { cn } from "@/lib/utils";
+
+function BackToSite({ dark = false }: { dark?: boolean }) {
+  return (
+    <Link
+      href="/"
+      aria-label="Kembali ke website"
+      className={cn(
+        "inline-flex shrink-0 items-center gap-1.5 rounded-full border py-2 pr-3.5 pl-2.5 text-[11px] font-bold tracking-[0.14em] whitespace-nowrap uppercase transition",
+        dark ? "border-white/25 text-white hover:bg-white/10" : "border-gray-300 bg-white text-ink hover:border-marun-600 hover:text-marun-700",
+      )}
+    >
+      <Icon name="arrow-left" className="h-4 w-4" aria-hidden /> <span className="max-[359px]:sr-only">Website</span>
+    </Link>
+  );
+}
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const s = await getSettings(["public.brand", "public.hero"]);
@@ -26,13 +43,23 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         </div>
       </DarkMedia>
 
-      <div className="flex min-h-dvh flex-col">
-        <header className="flex items-center justify-between px-5 py-5 lg:hidden">
-          <Link href="/" aria-label="Kembali ke beranda">
-            <Logo brand={brand} />
-          </Link>
+      <div className="flex min-h-dvh min-w-0 flex-col">
+        {/* Kepala seluler */}
+        <header className="sa-dark-texture px-5 pt-5 pb-20 text-white lg:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <Link href="/" aria-label="SAHABAT ANAK, beranda" className="min-w-0">
+              <Logo light small brand={brand} />
+            </Link>
+            <BackToSite dark />
+          </div>
+          <p className="display mt-8 text-[1.7rem] leading-[1.05]">
+            Dampingi dengan hati, <span className="text-aksen-400">seimbangkan bersama.</span>
+          </p>
         </header>
-        <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 pb-12 lg:py-12">{children}</main>
+        <div className="hidden justify-end px-8 pt-6 lg:flex">
+          <BackToSite />
+        </div>
+        <main className="relative mx-auto -mt-12 flex w-full max-w-md flex-1 flex-col px-4 pb-12 sm:px-5 lg:mt-0 lg:justify-center lg:py-10">{children}</main>
       </div>
     </div>
   );

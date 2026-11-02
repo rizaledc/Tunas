@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { publicUrl } from "@/lib/site";
 
 const CHILD_MODE_COOKIE = "sa_child_mode";
 
@@ -13,7 +14,7 @@ export async function proxy(request: NextRequest) {
 
   // Mode anak: perangkat terkunci di halaman mode anak sampai orang tua keluar.
   if (request.cookies.get(CHILD_MODE_COOKIE) && pathname.startsWith("/app") && !pathname.startsWith("/app/mode-anak")) {
-    return NextResponse.redirect(new URL("/app/mode-anak", request.url));
+    return NextResponse.redirect(publicUrl("/app/mode-anak", request));
   }
 
   const supabase = createServerClient(url, key, {
@@ -32,12 +33,12 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user && pathname.startsWith("/app")) {
-    const to = new URL("/login", request.url);
+    const to = publicUrl("/login", request);
     to.searchParams.set("next", pathname);
     return NextResponse.redirect(to);
   }
   if (!user && pathname.startsWith("/admin")) {
-    return NextResponse.redirect(new URL("/login/admin", request.url));
+    return NextResponse.redirect(publicUrl("/login/admin", request));
   }
   return response;
 }

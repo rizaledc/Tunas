@@ -1,10 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { publicOrigin } from "@/lib/site";
 
 /** Callback OAuth (Google) & tautan reset password. */
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
+  const origin = publicOrigin(request);
   const code = searchParams.get("code");
   const nextParam = searchParams.get("next") ?? "/app";
   const next = nextParam.startsWith("/") && !nextParam.startsWith("//") ? nextParam : "/app";

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild } from "@/lib/parent";
 import { createClient } from "@/lib/supabase/server";
-import { formatTanggal, todayStr } from "@/lib/date";
-import { getSettings } from "@/lib/settings";
+import { formatTanggal } from "@/lib/date";
+import { aiCoins } from "@/lib/insight";
 import type { Indicators, InsightOutput } from "@/lib/indicators";
 import { ActionForm, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
@@ -35,17 +35,15 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
   if (!child) return <NoChild />;
   const { id } = await searchParams;
   const supabase = await createClient();
-  const startToday = new Date(`${todayStr()}T00:00:00+07:00`).toISOString();
-  const [{ data: history }, { count }, cfg, { data: reflections }] = await Promise.all([
+  const [{ data: history }, coins, { data: reflections }] = await Promise.all([
     supabase.from("ai_insights").select("id,output,created_at,model,rating,input_summary,period_start,period_end").eq("child_id", child.id).order("created_at", { ascending: false }).limit(20),
-    supabase.from("ai_insights").select("id", { count: "exact", head: true }).eq("child_id", child.id).gte("created_at", startToday),
-    getSettings(["ai.max_per_day"]),
+    aiCoins(parent.familyId),
     supabase.from("reflections").select("id,insight_id,action_text,outcome,created_at").eq("child_id", child.id).order("created_at", { ascending: false }).limit(10),
   ]);
   const current = (id ? history?.find((h) => h.id === id) : history?.[0]) ?? null;
   const out = current?.output as InsightOutput | undefined;
   const ind = current?.input_summary as Indicators | undefined;
-  const left = Math.max(0, Number(cfg["ai.max_per_day"]) - (count ?? 0));
+  const left = coins.remaining;
   const reflected = reflections?.find((r) => r.insight_id === current?.id);
 
   return (
@@ -54,10 +52,27 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
       <ActionForm action={runInsight} className="card space-y-2 bg-gradient-to-br from-marun-50 to-marun-50">
         <input type="hidden" name="child_id" value={child.id} />
         <p className="text-ink-soft">Sistem menghitung angka dari catatan Anda, lalu AI menuliskannya menjadi saran. Nama anak tidak dikirim ke AI.</p>
+        <div className="flex items-center gap-3 rounded-2xl border border-emas-400/40 bg-white p-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emas-300/40 text-[#8a5a0b]">
+            <Icon name="coin" className="h-6 w-6" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-extrabold text-ink">
+              Koin AI: {left} dari {coins.total}
+            </p>
+            <p className="text-xs text-ink-soft">
+              {left > 0 ? "1 analisis memakai 1 koin. Koin yang tidak dipakai hangus." : "Koin hari ini sudah terpakai."} Koin baru setiap hari pukul 07.00 WIB.
+            </p>
+          </div>
+          <span className="flex gap-1" aria-hidden>
+            {Array.from({ length: coins.total }).map((_, i) => (
+              <span key={i} className={`h-3 w-3 rounded-full ${i < left ? "bg-emas-500" : "bg-gray-200"}`} />
+            ))}
+          </span>
+        </div>
         <SubmitButton pendingText="Menganalisis…" disabled={left === 0} className="btn-primary w-full text-lg">
-          <Icon name="sparkle" /> Analisis Sekarang
+          <Icon name="sparkle" /> {left > 0 ? "Analisis Sekarang (1 koin)" : "Kembali besok pukul 07.00"}
         </SubmitButton>
-        <p className="text-center text-xs text-ink-soft">Sisa analisis hari ini: {left}</p>
       </ActionForm>
 
       {out && current ? (
