@@ -225,7 +225,7 @@ export default async function LandingPage() {
               <ol className="mt-12 space-y-0 border-t border-black/10">
                 {L.steps.filter((s) => s.title).map((st, i) => (
                   <li key={i} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-black/10 py-7">
-                    <span className="display text-4xl text-marun-600/25">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="display text-4xl text-marun-600">{String(i + 1).padStart(2, "0")}</span>
                     <span>
                       <span className="block text-xl font-extrabold tracking-tight">{st.title}</span>
                       <span className="mt-1.5 block text-ink-soft">{st.text}</span>
@@ -260,7 +260,7 @@ export default async function LandingPage() {
             <ol className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-white/15 md:grid-cols-2 lg:grid-cols-4">
               {L.roadmap.filter((r) => r.title).map((r, i) => (
                 <li key={i} className="relative bg-marun-800/90 p-7">
-                  <span className="display absolute top-5 right-6 text-6xl text-white/10">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="display absolute top-5 right-6 text-6xl text-emas-300">{String(i + 1).padStart(2, "0")}</span>
                   <p className="eyebrow text-emas-300">{r.label}</p>
                   <p className="mt-10 text-xl font-extrabold tracking-tight">{r.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-white/65">{r.text}</p>
