@@ -49,14 +49,15 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
           </ActionForm>
           <ActionForm action={saveStats} className="card space-y-3">
             <h2 className="font-extrabold">Angka capaian</h2>
-            <p className="text-sm text-ink-soft">Kolom “sebelum” boleh kosong. Jumlah keluarga aktif dihitung otomatis.</p>
+            <p className="text-sm text-ink-soft">Kolom “sebelum” boleh kosong. Tulis persen dengan tanda % (mis. 91,8%); angka tanpa % dibaca sebagai skor skala 1 sampai 5. Penjelasan singkat membantu pengunjung memahami arti angkanya. Jumlah keluarga aktif dihitung otomatis.</p>
             {Array.from({ length: 6 }).map((_, i) => {
               const v = s["public.stats"][i];
               return (
-                <div key={i} className="grid grid-cols-5 gap-2">
+                <div key={i} className="grid grid-cols-5 gap-2 border-b border-gray-100 pb-3 last:border-0">
                   <input name={`label_${i}`} defaultValue={v?.label} placeholder="Label" className="input col-span-3 py-2 text-sm" />
                   <input name={`before_${i}`} defaultValue={v?.before} placeholder="Sebelum" className="input py-2 text-sm" />
                   <input name={`after_${i}`} defaultValue={v?.after} placeholder="Sesudah" className="input py-2 text-sm" />
+                  <input name={`note_${i}`} defaultValue={v?.note} maxLength={160} placeholder="Penjelasan singkat (opsional)" className="input col-span-5 py-2 text-sm" />
                 </div>
               );
             })}
@@ -309,6 +310,12 @@ function LandingEditor({ L }: { L: (typeof DEFAULT_SETTINGS)["public.landing"] }
         <Field name="stats_label" label="Label kartu jumlah keluarga" v={L.stats_label} />
         <Field name="events_title" label="Judul bagian kegiatan" v={L.events_title} />
         <Field name="agenda_title" label="Judul agenda" v={L.agenda_title} />
+      </section>
+      <section className="card grid gap-3 md:grid-cols-3">
+        <h2 className="font-extrabold md:col-span-3">Angka capaian (judul bagian)</h2>
+        <Field name="stats_eyebrow" label="Label kecil" v={L.stats_eyebrow} />
+        <Field name="stats_title" label="Judul" v={L.stats_title} />
+        <Field name="stats_text" label="Kalimat penjelasan" v={L.stats_text} />
       </section>
       <section className="card space-y-3">
         <h2 className="font-extrabold">Fitur aplikasi</h2>

@@ -1,3 +1,4 @@
+import { StatsSection } from "@/components/site/stats";
 import Image from "next/image";
 import Link from "next/link";
 import { CategoryIcon, Icon } from "@/components/icons";
@@ -93,9 +94,9 @@ export default async function LandingPage() {
       {/* PITA BERJALAN */}
       {marquee.length > 0 && (
         <div className="overflow-hidden border-y border-white/10 bg-marun-700 py-4 text-white" aria-hidden>
-          <div className="sa-marquee flex w-max gap-10 whitespace-nowrap">
+          <div className="sa-marquee flex w-max whitespace-nowrap">
             {[...marquee, ...marquee, ...marquee, ...marquee].map((t, i) => (
-              <span key={i} className="eyebrow flex items-center gap-10 text-[13px] text-white/90">
+              <span key={i} className="eyebrow flex shrink-0 items-center gap-10 pr-10 text-[13px] text-white/90">
                 {t}
                 <Icon name="star-solid" className="h-3 w-3 text-emas-400" />
               </span>
@@ -106,19 +107,12 @@ export default async function LandingPage() {
 
       {/* ANGKA CAPAIAN */}
       {show.stats && stats.length > 0 && (
-        <section className="bg-gelap-950 text-white" aria-label="Angka capaian program">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-px bg-white/10 md:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="bg-gelap-950 px-4 py-10 md:px-8">
-                <p className="display text-4xl md:text-5xl">
-                  {s.before && <span className="mr-2 align-middle text-lg font-semibold text-white/35 line-through">{s.before}</span>}
-                  <span className="text-white">{s.after}</span>
-                </p>
-                <p className="mt-3 max-w-[14rem] text-sm text-white/55">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <StatsSection
+          stats={stats.map((x) => ({ ...x, note: (x as { note?: string }).note || DEFAULT_SETTINGS["public.stats"].find((d) => d.label === x.label)?.note }))}
+          eyebrow={L.stats_eyebrow}
+          title={L.stats_title}
+          text={L.stats_text}
+        />
       )}
 
       {/* FITUR */}

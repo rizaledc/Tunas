@@ -80,6 +80,12 @@ export async function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-white/45">
           <span>© {new Date().getFullYear()} SAHABAT ANAK</span>
+          <a href="https://kodinginaja.biz.id/" target="_blank" rel="noopener" className="group inline-flex items-center gap-2 text-white/55 transition hover:text-white">
+            <span>Support by:</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="https://www.google.com/s2/favicons?domain=kodinginaja.biz.id&sz=64" alt="" width={18} height={18} loading="lazy" className="h-[18px] w-[18px] rounded bg-white/90 p-px" />
+            <span className="font-semibold text-white/80 group-hover:text-white">Kodinginaja.biz.id</span>
+          </a>
           <Link href="/privasi" className="hover:text-white">
             Privasi & persetujuan data
           </Link>

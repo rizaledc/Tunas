@@ -144,7 +144,7 @@ export async function saveHero(_: ActionState, fd: FormData): Promise<ActionStat
 export async function saveStats(_: ActionState, fd: FormData): Promise<ActionState> {
   const me = await requireAdmin();
   const stats = [0, 1, 2, 3, 4, 5]
-    .map((i) => ({ label: str(fd, `label_${i}`), before: str(fd, `before_${i}`), after: str(fd, `after_${i}`) }))
+    .map((i) => ({ label: str(fd, `label_${i}`), before: str(fd, `before_${i}`), after: str(fd, `after_${i}`), note: str(fd, `note_${i}`).slice(0, 160) }))
     .filter((s) => s.label && s.after);
   await setSetting("public.stats", stats);
   await audit(me.id, "content.stats");
@@ -326,18 +326,18 @@ export async function saveAiSettings(_: ActionState, fd: FormData): Promise<Acti
   const me = await requireAdmin("superadmin");
   const model = str(fd, "model");
   const prompt = str(fd, "system_prompt");
-  const maxPerDay = int(fd, "max_per_day", 3);
+  const coins = int(fd, "coins_per_day", 1);
   const maxTokens = int(fd, "max_tokens", 800);
   if (!model || prompt.length < 50) return { error: "Model dan prompt sistem wajib diisi." };
-  if (maxPerDay < 1 || maxPerDay > 10 || maxTokens < 200 || maxTokens > 2000) return { error: "Batas tidak wajar." };
+  if (coins < 1 || coins > 10 || maxTokens < 200 || maxTokens > 2000) return { error: "Batas tidak wajar." };
   await Promise.all([
     setSetting("ai.model", model),
     setSetting("ai.system_prompt", prompt),
-    setSetting("ai.max_per_day", maxPerDay),
+    setSetting("ai.coins_per_day", coins),
     setSetting("ai.max_tokens", maxTokens),
     setSetting("ai.enabled", str(fd, "enabled") === "on"),
   ]);
-  await audit(me.id, "settings.ai", model, { maxPerDay, maxTokens });
+  await audit(me.id, "settings.ai", model, { coins, maxTokens });
   return { ok: true, message: "Pengaturan AI tersimpan." };
 }
 
@@ -671,6 +671,9 @@ export async function saveLanding(_: ActionState, fd: FormData): Promise<ActionS
     cta_primary: t("cta_primary", 40) || d.cta_primary,
     cta_secondary: t("cta_secondary", 40) || d.cta_secondary,
     stats_label: t("stats_label", 60),
+    stats_eyebrow: t("stats_eyebrow", 40),
+    stats_title: t("stats_title", 80),
+    stats_text: t("stats_text", 240),
     events_title: t("events_title", 80),
     agenda_title: t("agenda_title", 80),
     features_title: t("features_title", 80),

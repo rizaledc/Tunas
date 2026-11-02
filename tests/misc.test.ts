@@ -74,3 +74,21 @@ describe("password sementara admin", () => {
     for (let i = 0; i < 200; i++) expect(validatePassword(tempPassword())).toBeNull();
   });
 });
+
+describe("koin AI & angka capaian", () => {
+  it("periode koin berganti pukul 07.00 WIB (00.00 UTC)", async () => {
+    const { coinPeriod } = await import("../src/lib/date");
+    // 06.59 WIB tanggal 3 = 23.59 UTC tanggal 2 → masih periode tanggal 2
+    expect(coinPeriod(new Date("2026-11-02T23:59:00Z")).start.toISOString()).toBe("2026-11-02T00:00:00.000Z");
+    // 07.00 WIB tanggal 3 → periode baru
+    const p = coinPeriod(new Date("2026-11-03T00:00:00Z"));
+    expect(p.start.toISOString()).toBe("2026-11-03T00:00:00.000Z");
+    expect(p.next.toISOString()).toBe("2026-11-04T00:00:00.000Z");
+  });
+  it("membaca angka persen dan skor", async () => {
+    const { parseStat } = await import("../src/lib/stat-value");
+    expect(parseStat("91,8%")).toEqual({ value: 91.8, percent: true });
+    expect(parseStat("4,14")).toEqual({ value: 4.14, percent: false });
+    expect(parseStat("")).toBeNull();
+  });
+});

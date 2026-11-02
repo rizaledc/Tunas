@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { publicUrl } from "@/lib/site";
 
 async function signOut(request: NextRequest) {
   const supabase = await createClient();
@@ -11,7 +12,7 @@ async function signOut(request: NextRequest) {
   }
   await supabase.auth.signOut({ scope: "local" });
   const alasan = request.nextUrl.searchParams.get("alasan");
-  const to = new URL(admin ? "/login/admin" : "/login", request.url);
+  const to = publicUrl(admin ? "/login/admin" : "/login", request);
   if (alasan) to.searchParams.set("alasan", alasan);
   const res = NextResponse.redirect(to, { status: 303 });
   res.cookies.delete("sa_child");

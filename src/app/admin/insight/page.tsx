@@ -18,7 +18,7 @@ export default async function MonitoringAiPage() {
     db.from("audit_logs").select("created_at,detail").eq("action", "system.error").eq("target", "insight.ai").order("created_at", { ascending: false }).limit(1).maybeSingle(),
     db.from("ai_insights").select("created_at,model,tokens_in,tokens_out,cost_usd,rating,output").gte("created_at", `${since}T00:00:00+07:00`).order("created_at", { ascending: false }),
     openRouterBalance(),
-    getSettings(["ai.model", "ai.max_per_day", "ai.max_tokens", "ai.enabled"]),
+    getSettings(["ai.model", "ai.coins_per_day", "ai.max_tokens", "ai.enabled"]),
   ]);
   const list = rows ?? [];
   const perDay = dateRange(since, todayStr()).map((d) => {
@@ -35,7 +35,7 @@ export default async function MonitoringAiPage() {
 
   return (
     <div className="space-y-4">
-      <PageTitle title="Monitoring AI" subtitle={`Model: ${cfg["ai.model"]} · maks ${cfg["ai.max_per_day"]}/anak/hari · max_tokens ${cfg["ai.max_tokens"]}${cfg["ai.enabled"] ? "" : " · AI dinonaktifkan"}`} />
+      <PageTitle title="Monitoring AI" subtitle={`Model: ${cfg["ai.model"]} · ${cfg["ai.coins_per_day"]} koin/akun/hari · max_tokens ${cfg["ai.max_tokens"]}${cfg["ai.enabled"] ? "" : " · AI dinonaktifkan"}`} />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat icon="sparkle" label="Analisis 30 hari" value={list.length} hint={`${fallback} memakai cadangan rule-based`} />
         <Stat icon="hash" label="Token terpakai" value={(tokensIn + tokensOut).toLocaleString("id-ID")} hint={`in ${tokensIn.toLocaleString("id-ID")} · out ${tokensOut.toLocaleString("id-ID")}`} tone="blue" />
