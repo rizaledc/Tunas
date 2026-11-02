@@ -8,7 +8,7 @@ import { GALLERY_CATEGORIES } from "@/lib/utils";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/ui";
 import { PageTitle, Tabs } from "@/components/blocks";
 import { MultiUpload, SingleUpload } from "@/components/admin/uploader";
-import { deleteArticle, deletePhoto, saveContact, saveHero, savePanduan, savePhotos, saveStats, updatePhoto } from "../actions";
+import { saveShare, deleteArticle, deletePhoto, saveContact, saveHero, savePanduan, savePhotos, saveStats, updatePhoto } from "../actions";
 
 export const metadata = { title: "Konten" };
 
@@ -16,7 +16,7 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
   await requireAdmin();
   const tab = (await searchParams).tab ?? "beranda";
   const db = createAdminClient();
-  const s = await getSettings(["public.hero", "public.stats", "public.contact", "public.panduan"]);
+  const s = await getSettings(["public.hero", "public.stats", "public.contact", "public.panduan", "public.share"]);
   const tabs = [
     { key: "beranda", label: "Hero & Angka", href: "/admin/konten" },
     { key: "artikel", label: "Artikel", href: "/admin/konten?tab=artikel" },
@@ -54,6 +54,36 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
               );
             })}
             <SubmitButton className="btn-green">Simpan Angka</SubmitButton>
+          </ActionForm>
+          <ActionForm action={saveShare} className="card space-y-3 lg:col-span-2">
+            <h2 className="font-extrabold">Tampilan saat dibagikan (WhatsApp & media sosial)</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-3">
+                <p className="text-sm text-ink-soft">
+                  Kosongkan gambar agar kartu dibuat otomatis dari judul hero. Jika mengunggah sendiri, pakai ukuran <strong>1200 × 630 px</strong> (rasio 1,91 : 1). Artikel dan kegiatan otomatis memakai foto sampul dan judulnya masing-masing.
+                </p>
+                <label className="block">
+                  <span className="label">Kalimat deskripsi (maks. 200 karakter)</span>
+                  <textarea name="description" defaultValue={s["public.share"].description} maxLength={200} rows={3} className="input" placeholder="Catat aktivitas digital dan non-digital anak, lihat keseimbangannya, dan dapatkan saran pendampingan." />
+                </label>
+                <SingleUpload name="image" defaultValue={s["public.share"].image} folder="share" label="Unggah gambar khusus" />
+                <SubmitButton className="btn-green">Simpan</SubmitButton>
+              </div>
+              <div>
+                <p className="label">Pratinjau</p>
+                <div className="overflow-hidden rounded-xl bg-[#e7ffdb] p-2 shadow-inner">
+                  <div className="overflow-hidden rounded-lg bg-white">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`/opengraph-image?v=${encodeURIComponent(`${s["public.share"].image}|${s["public.share"].description}|${s["public.hero"].title}`.length + (s["public.share"].image || s["public.share"].description || s["public.hero"].title).slice(-16))}`} alt="Pratinjau kartu tautan" className="aspect-[1200/630] w-full object-cover" />
+                    <div className="space-y-0.5 bg-[#f0f2f5] px-3 py-2 text-xs">
+                      <p className="font-bold text-ink">SAHABAT ANAK — Dampingi Aktivitas Anak, Seimbangkan Dunia Digitalnya</p>
+                      <p className="line-clamp-2 text-ink-soft">{s["public.share"].description || "Catat aktivitas digital dan non-digital anak, lihat keseimbangannya, dan dapatkan saran pendampingan."}</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-2 text-xs text-ink-soft">Contoh tampilan di WhatsApp. Cek tautan lain di developers.facebook.com/tools/debug.</p>
+              </div>
+            </div>
           </ActionForm>
           <ActionForm action={saveContact} className="card space-y-3">
             <h2 className="font-extrabold">Kontak & alamat (footer, CTA)</h2>

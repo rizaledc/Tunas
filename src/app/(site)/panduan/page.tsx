@@ -1,10 +1,11 @@
 import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getSetting } from "@/lib/settings";
 import { renderMarkdown } from "@/lib/markdown";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Panduan", description: "Cara memakai SAHABAT ANAK dan unduhan modul PDF." };
+export const metadata: Metadata = pageMeta("/panduan", "Panduan", "Cara memakai SAHABAT ANAK dan unduhan modul PDF.");
 
 export default async function PanduanPage() {
   const p = await getSetting("public.panduan");

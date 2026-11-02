@@ -25,6 +25,15 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Tailwind v4 memakai currentColor untuk border bawaan; samakan dengan abu-abu lembut. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-gray-200);
+  }
+}
+
 body {
   background: var(--color-surface);
   color: var(--color-ink);

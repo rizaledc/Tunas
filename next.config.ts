@@ -6,6 +6,8 @@ const supabaseHost = supabaseUrl?.hostname ?? "*.supabase.co";
 const isLocalSupabase = supabaseUrl?.protocol === "http:";
 
 const nextConfig: NextConfig = {
+  // Font untuk gambar pratinjau tautan (dibaca saat runtime).
+  outputFileTracingIncludes: { "/**": ["./src/assets/fonts/**"] },
   turbopack: {
     rules: {
       "*.css": {

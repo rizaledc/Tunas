@@ -56,6 +56,8 @@ export const DEFAULT_SETTINGS = {
     { label: "Perilaku digital sehat anak", before: "3,43", after: "3,72" },
     { label: "Respons positif peserta", before: "", after: "88%" },
   ],
+  // Pratinjau tautan saat dibagikan (WhatsApp/medsos). Kosong = kartu otomatis dari judul hero.
+  "public.share": { image: "", description: "" },
   "public.contact": {
     // Kosong = tidak ditampilkan. Isi lewat Admin → Konten.
     address: "",

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getPhotos } from "@/lib/content";
 import { GalleryGrid } from "@/components/site/gallery";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Galeri", description: "Foto kegiatan pendampingan anak dan orang tua." };
+export const metadata: Metadata = pageMeta("/galeri", "Galeri", "Foto kegiatan pendampingan anak dan orang tua.");
 
 export default async function GaleriPage() {
   const photos = await getPhotos();

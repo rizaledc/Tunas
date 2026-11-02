@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { getSetting } from "@/lib/settings";
 import { RegisterForm } from "../forms";
 
-export const metadata: Metadata = { title: "Daftar", description: "Registrasi orang tua dengan kode undangan komunitas." };
+export const metadata: Metadata = pageMeta("/daftar", "Undangan Bergabung", "Anda diundang bergabung dengan SAHABAT ANAK. Daftar dengan kode undangan, lalu mulai mencatat aktivitas si kecil.");
 
 export default async function DaftarPage({ searchParams }: { searchParams: Promise<{ kode?: string }> }) {
   const [{ kode }, consent] = await Promise.all([searchParams, getSetting("public.consent")]);

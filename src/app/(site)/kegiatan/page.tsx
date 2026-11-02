@@ -1,5 +1,6 @@
 import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { getEvents } from "@/lib/content";
@@ -7,7 +8,7 @@ import { formatTanggal } from "@/lib/date";
 import { Placeholder } from "@/components/blocks";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Kegiatan", description: "Jadwal dan dokumentasi kegiatan pendampingan komunitas." };
+export const metadata: Metadata = pageMeta("/kegiatan", "Kegiatan", "Jadwal dan dokumentasi kegiatan pendampingan komunitas.");
 
 export default async function KegiatanPage() {
   const [upcoming, past] = await Promise.all([getEvents({ upcoming: true }), getEvents({ past: true, limit: 30 })]);

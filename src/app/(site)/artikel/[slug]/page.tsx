@@ -6,12 +6,17 @@ import { notFound } from "next/navigation";
 import { getArticle } from "@/lib/content";
 import { formatTanggal } from "@/lib/date";
 import { excerpt, renderMarkdown } from "@/lib/markdown";
+import { og } from "@/lib/seo";
+import { ShareButtons } from "@/components/site/share";
 
 export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const a = await getArticle((await params).slug);
-  return a ? { title: a.title, description: a.excerpt || excerpt(a.body) } : { title: "Artikel" };
+  if (!a) return { title: "Artikel" };
+  const description = a.excerpt || excerpt(a.body);
+  const path = `/artikel/${a.slug}`;
+  return { title: a.title, description, alternates: { canonical: path }, openGraph: og(path, { type: "article", title: `${a.title} · SAHABAT ANAK`, description, publishedTime: a.published_at ?? undefined }) };
 }
 
 export default async function ArticleDetail({ params }: { params: Promise<{ slug: string }> }) {
@@ -30,6 +35,7 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
         </div>
       )}
       <div className="prose-sa mt-6 text-lg" dangerouslySetInnerHTML={{ __html: renderMarkdown(a.body) }} />
+      <ShareButtons path={`/artikel/${a.slug}`} title={a.title} />
     </article>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { getArticles } from "@/lib/content";
@@ -7,7 +8,7 @@ import { excerpt } from "@/lib/markdown";
 import { Empty, Placeholder } from "@/components/blocks";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Artikel & Tips", description: "Tips digital parenting dan kabar seputar pendampingan anak." };
+export const metadata: Metadata = pageMeta("/artikel", "Artikel & Tips", "Tips digital parenting dan kabar seputar pendampingan anak.");
 
 export default async function ArtikelPage() {
   const articles = await getArticles();

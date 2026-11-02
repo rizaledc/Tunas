@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { getSetting } from "@/lib/settings";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Kebijakan Privasi", description: "Bagaimana SAHABAT ANAK menyimpan dan melindungi data keluarga." };
+export const metadata: Metadata = pageMeta("/privasi", "Kebijakan Privasi", "Bagaimana SAHABAT ANAK menyimpan dan melindungi data keluarga.");
 
 export default async function PrivasiPage() {
   const consent = await getSetting("public.consent");

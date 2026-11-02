@@ -67,6 +67,16 @@ Perintah lain: `npm test` (unit test), `npm run typecheck`, `npm run lint`, `npm
 3. **Domain**: arahkan domain Anda ke Vercel.
 4. Buat superadmin pertama dengan `scripts/create-superadmin.mjs` (pakai env produksi), lalu tambah admin komunitas lewat **Pengaturan → Akun Admin**.
 
+## Pratinjau tautan (WhatsApp & media sosial)
+
+Setiap halaman mengirim meta Open Graph/Twitter lengkap (judul, deskripsi, URL kanonik, gambar 1200×630 JPEG ±30–50 KB — format & ukuran yang andal untuk WhatsApp):
+
+- **Beranda & halaman umum**: kartu bermerek otomatis dari judul hero; admin bisa mengganti deskripsi atau mengunggah gambar sendiri di **Admin → Konten → Tampilan saat dibagikan** (ada pratinjau gaya WhatsApp).
+- **Artikel & kegiatan**: kartu memakai foto sampul + judul (dan tanggal untuk kegiatan); tanpa foto memakai kartu bermerek. Ada tombol **Bagikan** (WhatsApp, Facebook, X, Telegram, salin tautan, menu bagikan HP).
+- **Tautan undangan** `/daftar?kode=…`: kartu "Anda diundang bergabung".
+
+Agar gambar muncul, URL situs harus publik dan absolut: isi `NEXT_PUBLIC_SITE_URL` (di Vercel otomatis memakai domain produksi bila kosong). WhatsApp menyimpan pratinjau lama beberapa jam; untuk Facebook gunakan [Sharing Debugger](https://developers.facebook.com/tools/debug/) → *Scrape Again*.
+
 ## Mengaktifkan AI (tanpa coding)
 
 Semua pengaturan AI dilakukan superadmin di **Panel Admin → Pengaturan → AI & Prompt**:

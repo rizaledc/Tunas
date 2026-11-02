@@ -6,12 +6,17 @@ import { notFound } from "next/navigation";
 import { getEvent, getPhotos } from "@/lib/content";
 import { formatTanggal } from "@/lib/date";
 import { GalleryGrid } from "@/components/site/gallery";
+import { og } from "@/lib/seo";
+import { ShareButtons } from "@/components/site/share";
 
 export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const e = await getEvent((await params).slug);
-  return e ? { title: e.title, description: e.description?.slice(0, 150) } : { title: "Kegiatan" };
+  if (!e) return { title: "Kegiatan" };
+  const description = `${formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}${e.location ? ` · ${e.location}` : ""}${e.description ? ` — ${e.description.slice(0, 120)}` : ""}`;
+  const path = `/kegiatan/${e.slug}`;
+  return { title: e.title, description, alternates: { canonical: path }, openGraph: og(path, { title: `${e.title} · SAHABAT ANAK`, description }) };
 }
 
 export default async function EventDetail({ params }: { params: Promise<{ slug: string }> }) {
@@ -44,6 +49,7 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
           </Link>
         </div>
       )}
+      <ShareButtons path={`/kegiatan/${e.slug}`} title={e.title} />
       {photos.length > 0 && (
         <section className="mt-10">
           <h2 className="mb-3 text-xl font-extrabold">Dokumentasi</h2>

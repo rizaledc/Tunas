@@ -620,3 +620,11 @@ export async function resetSystemPrompt(fd: FormData) {
   await audit(me.id, "settings.ai_prompt_reset");
   revalidatePath("/admin/pengaturan");
 }
+
+export async function saveShare(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  await setSetting("public.share", { image: str(fd, "image"), description: str(fd, "description").slice(0, 200) });
+  await audit(me.id, "content.share");
+  revalidatePath("/", "layout");
+  return { ok: true, message: "Tampilan saat dibagikan tersimpan. WhatsApp bisa menyimpan pratinjau lama hingga beberapa jam." };
+}

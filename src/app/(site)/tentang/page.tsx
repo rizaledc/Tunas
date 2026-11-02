@@ -1,9 +1,10 @@
 import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { LogoMark } from "@/components/logo";
 
-export const metadata: Metadata = { title: "Tentang Program", description: "Latar belakang, makna logo, dan alur program SAHABAT ANAK." };
+export const metadata: Metadata = pageMeta("/tentang", "Tentang Program", "Latar belakang, makna logo, dan alur program SAHABAT ANAK.");
 
 export default function TentangPage() {
   return (
