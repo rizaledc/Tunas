@@ -8,14 +8,6 @@ const isLocalSupabase = supabaseUrl?.protocol === "http:";
 const nextConfig: NextConfig = {
   // Font untuk gambar pratinjau tautan (dibaca saat runtime).
   outputFileTracingIncludes: { "/**": ["./src/assets/fonts/**"] },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
   images: {
     formats: ["image/webp"],
     remotePatterns: isLocalSupabase ? [{ protocol: "http", hostname: supabaseHost }] : [{ protocol: "https", hostname: supabaseHost }],
