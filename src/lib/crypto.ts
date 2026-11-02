@@ -1,5 +1,5 @@
 import "server-only";
-import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 
 const SECRET = process.env.APP_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "dev-secret-ganti-di-produksi";
 
@@ -40,4 +40,28 @@ export function sha256(s: string): string {
 
 export function tempPassword(): string {
   return randomBytes(6).toString("base64url").replace(/[-_]/g, "x") + "9a";
+}
+
+/** Enkripsi rahasia (mis. API key) sebelum disimpan di database. */
+export function encryptSecret(plain: string): string {
+  const key = createHash("sha256").update(`secret-box:${SECRET}`).digest();
+  const iv = randomBytes(12);
+  const c = createCipheriv("aes-256-gcm", key, iv);
+  const enc = Buffer.concat([c.update(plain, "utf8"), c.final()]);
+  return `v1.${iv.toString("base64url")}.${c.getAuthTag().toString("base64url")}.${enc.toString("base64url")}`;
+}
+
+/** null jika kosong/rusak (mis. APP_SECRET berubah setelah kunci disimpan). */
+export function decryptSecret(box: string | null | undefined): string | null {
+  if (!box) return null;
+  try {
+    const [v, iv, tag, data] = box.split(".");
+    if (v !== "v1") return null;
+    const key = createHash("sha256").update(`secret-box:${SECRET}`).digest();
+    const d = createDecipheriv("aes-256-gcm", key, Buffer.from(iv, "base64url"));
+    d.setAuthTag(Buffer.from(tag, "base64url"));
+    return Buffer.concat([d.update(Buffer.from(data, "base64url")), d.final()]).toString("utf8");
+  } catch {
+    return null;
+  }
 }

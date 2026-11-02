@@ -26,6 +26,8 @@ export const DEFAULT_SETTINGS = {
   "ai.max_per_day": 3,
   "ai.max_tokens": 800,
   "ai.enabled": true,
+  // API key OpenRouter, terenkripsi AES-256-GCM (lihat lib/openrouter.ts). Kosong = pakai env OPENROUTER_API_KEY.
+  "ai.openrouter_key": "",
   // Draf acuan — WAJIB ditetapkan tim (mis. IDAI/WHO) sebelum dipakai.
   "screen_time.reference": [
     { min_age: 0, max_age: 1, max_min: 0, note: "Di bawah 2 tahun sebaiknya tanpa layar kecuali video call keluarga (draf, perlu ditetapkan tim)" },

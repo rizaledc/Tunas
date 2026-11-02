@@ -60,12 +60,25 @@ Perintah lain: `npm test` (unit test), `npm run typecheck`, `npm run lint`, `npm
 2. **Vercel**: impor repo ini, isi environment variable sesuai `.env.example`:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
    - `NEXT_PUBLIC_SITE_URL=https://domain-anda.id`
-   - `OPENROUTER_API_KEY` (pasang limit kredit di dashboard OpenRouter, mis. USD 10–15)
+   - `OPENROUTER_API_KEY` — **opsional**; API key bisa diisi langsung dari **Panel Admin → Pengaturan → AI & Prompt** (lihat bawah)
    - `APP_SECRET` (string acak panjang, untuk cookie mode anak)
    - `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (`npx web-push generate-vapid-keys`)
    - `CRON_SECRET` (dipakai Vercel Cron untuk `/api/cron/reminder`, setiap hari 19.00 WIB)
 3. **Domain**: arahkan domain Anda ke Vercel.
 4. Buat superadmin pertama dengan `scripts/create-superadmin.mjs` (pakai env produksi), lalu tambah admin komunitas lewat **Pengaturan → Akun Admin**.
+
+## Mengaktifkan AI (tanpa coding)
+
+Semua pengaturan AI dilakukan superadmin di **Panel Admin → Pengaturan → AI & Prompt**:
+
+1. Buat API key di [openrouter.ai/keys](https://openrouter.ai/keys), **pasang limit kredit** pada kunci (mis. USD 10–15), lalu isi saldo di [openrouter.ai/credits](https://openrouter.ai/credits).
+2. Tempel kunci → **Verifikasi & Simpan**. Kunci dicek ke OpenRouter dulu, lalu disimpan terenkripsi (AES-256-GCM dengan `APP_SECRET`) dan hanya ditampilkan tersamar.
+3. Tekan **Uji koneksi & contoh insight**: memeriksa kunci & saldo, memastikan model ada di katalog (beserta harga), dan menjalankan satu insight dari data contoh anonim.
+4. Atur model (daftar diambil otomatis dari katalog OpenRouter, lengkap dengan perkiraan biaya per analisis), batas analisis per anak per hari, `max_tokens`, prompt sistem (ada tombol pulihkan bawaan), atau matikan AI sementara.
+
+Kunci di panel diutamakan; jika kosong dipakai `OPENROUTER_API_KEY` dari server. Jika kunci salah, saldo habis, atau OpenRouter gangguan, orang tua tetap mendapat ringkasan rule-based, dan penyebabnya tampil di **Monitoring AI** (error terakhir, saldo, token, biaya). Penting: jangan mengganti `APP_SECRET` setelah kunci disimpan — jika terganti, cukup simpan ulang API key.
+
+Untuk pengujian lokal tanpa internet, `OPENROUTER_BASE_URL` dapat diarahkan ke server tiruan.
 
 ## Privasi & keamanan (ringkas)
 

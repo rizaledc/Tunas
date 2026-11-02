@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { openRouterBalance } from "@/lib/insight";
@@ -13,7 +14,8 @@ export default async function MonitoringAiPage() {
   await requireAdmin("superadmin");
   const db = createAdminClient();
   const since = addDays(todayStr(), -29);
-  const [{ data: rows }, balance, cfg] = await Promise.all([
+  const [{ data: lastErr }, { data: rows }, balance, cfg] = await Promise.all([
+    db.from("audit_logs").select("created_at,detail").eq("action", "system.error").eq("target", "insight.ai").order("created_at", { ascending: false }).limit(1).maybeSingle(),
     db.from("ai_insights").select("created_at,model,tokens_in,tokens_out,cost_usd,rating,output").gte("created_at", `${since}T00:00:00+07:00`).order("created_at", { ascending: false }),
     openRouterBalance(),
     getSettings(["ai.model", "ai.max_per_day", "ai.max_tokens", "ai.enabled"]),
@@ -42,12 +44,23 @@ export default async function MonitoringAiPage() {
           icon="wallet"
           label="Saldo / limit API key"
           value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(2)}` : "tanpa limit") : "—"}
-          hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "OPENROUTER_API_KEY belum diatur"}
+          hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "API key belum diisi — Pengaturan → AI"}
           tone={balance?.remaining !== null && balance && balance.remaining < 2 ? "red" : "green"}
         />
         <Stat icon="thumbsUp" label="Membantu" value={up} tone="green" />
         <Stat icon="thumbsDown" label="Tidak membantu" value={down} tone="red" hint={up + down ? `${Math.round((up / (up + down)) * 100)}% positif` : "belum ada rating"} />
       </div>
+      {lastErr && (
+        <p className="card flex items-start gap-2 border-l-4 border-l-oranye-500 text-sm">
+          <Icon name="warning" className="mt-0.5 text-oranye-500" />
+          <span>
+            <strong>Error AI terakhir</strong> ({formatTanggal(lastErr.created_at, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}): {String((lastErr.detail as { message?: string } | null)?.message ?? "")}{" "}
+            <a href="/admin/pengaturan?tab=ai" className="font-bold text-sky-brand underline">
+              Periksa pengaturan AI
+            </a>
+          </span>
+        </p>
+      )}
       <section className="card">
         <h2 className="font-extrabold">Analisis per hari</h2>
         <TrendChart data={perDay} lines={[{ key: "analisis", name: "Analisis", color: "#23824a" }, { key: "cadangan", name: "Cadangan rule-based", color: "#c8102e" }]} />

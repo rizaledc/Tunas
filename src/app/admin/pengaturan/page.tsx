@@ -6,7 +6,10 @@ import { formatTanggal } from "@/lib/date";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/ui";
 import { PageTitle, Tabs } from "@/components/blocks";
 import { MfaSetup } from "@/components/admin/mfa";
-import { changeAdminRole, createAdminAccount, deleteAdminAccount, saveAiSettings, saveCategory, saveConsent, saveReminder, saveScreenRef, toggleCategory } from "../actions";
+import { AiTestForm } from "@/components/admin/ai-test";
+import { fetchModels, maskKey, resolveOpenRouterKey } from "@/lib/openrouter";
+import { openRouterBalance } from "@/lib/insight";
+import { changeAdminRole, createAdminAccount, deleteAdminAccount, deleteOpenRouterKey, resetSystemPrompt, saveAiSettings, saveOpenRouterKey, saveCategory, saveConsent, saveReminder, saveScreenRef, toggleCategory } from "../actions";
 
 export const metadata = { title: "Pengaturan" };
 
@@ -32,32 +35,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
 
       {tab === "kategori" && <Categories db={db} />}
 
-      {tab === "ai" && (
-        <ActionForm action={saveAiSettings} className="card space-y-3">
-          <label className="flex items-center gap-2 font-bold">
-            <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-daun-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
-          </label>
-          <label className="block">
-            <span className="label">Model OpenRouter</span>
-            <input name="model" defaultValue={String(s["ai.model"])} className="input font-mono" />
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            <label>
-              <span className="label">Maks. analisis / anak / hari</span>
-              <input type="number" name="max_per_day" min={1} max={10} defaultValue={Number(s["ai.max_per_day"])} className="input" />
-            </label>
-            <label>
-              <span className="label">max_tokens</span>
-              <input type="number" name="max_tokens" min={200} max={2000} defaultValue={Number(s["ai.max_tokens"])} className="input" />
-            </label>
-          </div>
-          <label className="block">
-            <span className="label">Prompt sistem</span>
-            <textarea name="system_prompt" defaultValue={String(s["ai.system_prompt"])} rows={18} className="input font-mono text-sm" />
-          </label>
-          <SubmitButton className="btn-green">Simpan</SubmitButton>
-        </ActionForm>
-      )}
+      {tab === "ai" && <AiSettings s={s} />}
 
       {tab === "acuan" && (
         <ActionForm action={saveScreenRef} className="card space-y-3">
@@ -266,5 +244,123 @@ function IconSelect({ defaultValue }: { defaultValue: string }) {
         </option>
       ))}
     </select>
+  );
+}
+
+type AiCfg = { "ai.model": string; "ai.system_prompt": string; "ai.max_per_day": number; "ai.max_tokens": number; "ai.enabled": boolean };
+
+async function AiSettings({ s }: { s: AiCfg }) {
+  const [{ key, source }, models, balance] = await Promise.all([resolveOpenRouterKey(), fetchModels(), openRouterBalance()]);
+  const model = String(s["ai.model"]);
+  const current = models.find((m) => m.id === model);
+  // Perkiraan: ±1.500 token masuk (prompt + angka) dan max_tokens keluar.
+  const estimate = current ? (1500 * current.promptPerM + Number(s["ai.max_tokens"]) * current.completionPerM) / 1_000_000 : null;
+  const status =
+    source === "panel"
+      ? { tone: "bg-daun-50 text-daun-700", icon: "check-circle" as const, text: `Terhubung · kunci ${maskKey(key)} disimpan di Panel Admin (terenkripsi)` }
+      : source === "env"
+        ? { tone: "bg-blue-50 text-sky-brand", icon: "info" as const, text: `Terhubung · kunci ${maskKey(key)} dari variabel server OPENROUTER_API_KEY. Kunci yang diisi di bawah akan diutamakan.` }
+        : source === "broken"
+          ? { tone: "bg-red-50 text-merah-600", icon: "warning" as const, text: "Kunci tersimpan tidak bisa dibuka (APP_SECRET berubah). Simpan ulang API key." }
+          : { tone: "bg-orange-50 text-oranye-600", icon: "warning" as const, text: "Belum terhubung. Insight memakai ringkasan cadangan sampai API key diisi." };
+
+  return (
+    <div className="space-y-4">
+      <section className="card space-y-4">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-extrabold">Koneksi OpenRouter</h2>
+            <p className="text-sm text-ink-soft">Semua pengaturan AI cukup dari halaman ini — tanpa mengubah kode atau server.</p>
+          </div>
+          {balance && (
+            <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-bold">
+              Saldo/limit: {balance.remaining !== null ? `$${balance.remaining.toFixed(2)} tersisa` : "tanpa limit"} · terpakai ${balance.usage.toFixed(2)}
+            </span>
+          )}
+        </div>
+        <p className={`flex items-start gap-2 rounded-xl p-3 text-sm font-semibold ${status.tone}`}>
+          <Icon name={status.icon} className="mt-0.5" /> {status.text}
+        </p>
+        <ActionForm action={saveOpenRouterKey} resetOnSuccess className="space-y-2">
+          <label className="block">
+            <span className="label">{source === "panel" ? "Ganti API key" : "API key OpenRouter"}</span>
+            <input name="api_key" type="password" autoComplete="off" spellCheck={false} placeholder="sk-or-v1-…" className="input font-mono" />
+          </label>
+          <ol className="list-decimal space-y-0.5 pl-5 text-xs text-ink-soft">
+            <li>
+              Buat kunci di{" "}
+              <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+                openrouter.ai/keys
+              </a>{" "}
+              dan <strong>pasang limit kredit</strong> (mis. $10–15) pada kunci tersebut.
+            </li>
+            <li>
+              Isi saldo di{" "}
+              <a href="https://openrouter.ai/credits" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+                openrouter.ai/credits
+              </a>
+              .
+            </li>
+            <li>Tempel kunci di atas lalu simpan. Kunci diverifikasi dulu ke OpenRouter, lalu disimpan terenkripsi dan tidak pernah ditampilkan utuh.</li>
+          </ol>
+          <SubmitButton className="btn-green" pendingText="Memverifikasi…">
+            <Icon name="lock" /> Verifikasi & Simpan
+          </SubmitButton>
+        </ActionForm>
+        {source === "panel" && (
+          <form action={deleteOpenRouterKey}>
+            <ConfirmButton message="Hapus API key dari panel? Insight akan memakai ringkasan cadangan (atau kunci env bila ada).">Hapus API key</ConfirmButton>
+          </form>
+        )}
+        <div className="border-t pt-4">
+          <AiTestForm model={model} />
+        </div>
+      </section>
+
+      <ActionForm action={saveAiSettings} className="card space-y-3">
+        <h2 className="text-lg font-extrabold">Model & batas pemakaian</h2>
+        <label className="flex items-center gap-2 font-bold">
+          <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-daun-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
+        </label>
+        <label className="block">
+          <span className="label">Model OpenRouter</span>
+          <input name="model" list="model-list" defaultValue={model} className="input font-mono" />
+          <datalist id="model-list">
+            {models.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name} — ${m.promptPerM.toFixed(2)} / ${m.completionPerM.toFixed(2)} per 1 jt token
+              </option>
+            ))}
+          </datalist>
+          <span className="mt-1 block text-xs text-ink-soft">
+            {current
+              ? `${current.name} · perkiraan ±$${estimate!.toFixed(4)} per analisis`
+              : models.length
+                ? "Model ini tidak ditemukan di katalog OpenRouter — pilih dari daftar saat mengetik."
+                : "Ketik ID model, mis. anthropic/claude-haiku-5.5."}
+          </span>
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <label>
+            <span className="label">Maks. analisis / anak / hari</span>
+            <input type="number" name="max_per_day" min={1} max={10} defaultValue={Number(s["ai.max_per_day"])} className="input" />
+          </label>
+          <label>
+            <span className="label">max_tokens</span>
+            <input type="number" name="max_tokens" min={200} max={2000} defaultValue={Number(s["ai.max_tokens"])} className="input" />
+          </label>
+        </div>
+        <label className="block">
+          <span className="label">Prompt sistem</span>
+          <textarea name="system_prompt" defaultValue={String(s["ai.system_prompt"])} rows={18} className="input font-mono text-sm" />
+        </label>
+        <SubmitButton className="btn-green">Simpan</SubmitButton>
+      </ActionForm>
+      <form action={resetSystemPrompt} className="text-right">
+        <ConfirmButton message="Kembalikan prompt sistem ke versi bawaan?" className="btn-ghost btn-sm">
+          Pulihkan prompt bawaan
+        </ConfirmButton>
+      </form>
+    </div>
   );
 }

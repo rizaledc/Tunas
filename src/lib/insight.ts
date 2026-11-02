@@ -1,4 +1,3 @@
-import { SITE_URL } from "@/lib/site";
 import "server-only";
 import { createClient } from "./supabase/server";
 import { createAdminClient } from "./supabase/admin";
@@ -8,6 +7,7 @@ import { computeIndicators, parseInsight, ruleBasedInsight, type CategoryRow, ty
 import { sha256 } from "./crypto";
 import { logError } from "./audit";
 import { SCHOOL_LEVELS } from "./utils";
+import { chatCompletion, extractJson, fetchKeyInfo, resolveOpenRouterKey } from "./openrouter";
 
 export type InsightResult =
   | { ok: true; id: string; cached: boolean; fallback: boolean }
@@ -45,44 +45,18 @@ export async function buildIndicators(childId: string): Promise<Indicators | nul
 type AiCall = { output: InsightOutput; model: string; tokensIn: number; tokensOut: number; cost: number };
 
 async function callOpenRouter(ind: Indicators, cfg: { model: string; prompt: string; maxTokens: number }): Promise<AiCall> {
-  const key = process.env.OPENROUTER_API_KEY;
-  if (!key) throw new Error("OPENROUTER_API_KEY belum diatur");
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": SITE_URL,
-      "X-Title": "SAHABAT ANAK",
-    },
-    body: JSON.stringify({
-      model: cfg.model,
-      max_tokens: cfg.maxTokens,
-      temperature: 0.4,
-      response_format: { type: "json_object" },
-      usage: { include: true },
-      messages: [
-        { role: "system", content: cfg.prompt },
-        { role: "user", content: `Ringkasan angka 7 hari terakhir (JSON):\n${JSON.stringify(ind)}` },
-      ],
-    }),
-    signal: AbortSignal.timeout(30_000),
+  const { key } = await resolveOpenRouterKey();
+  if (!key) throw new Error("API key OpenRouter belum diisi (Panel Admin → Pengaturan → AI)");
+  const r = await chatCompletion(key, {
+    model: cfg.model,
+    system: cfg.prompt,
+    user: `Ringkasan angka 7 hari terakhir (JSON):\n${JSON.stringify(ind)}`,
+    maxTokens: cfg.maxTokens,
+    json: true,
   });
-  if (!res.ok) throw new Error(`OpenRouter ${res.status}: ${(await res.text()).slice(0, 300)}`);
-  const json = await res.json();
-  const content: string = json.choices?.[0]?.message?.content ?? "";
-  const cleaned = content.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "").trim();
-  const start = cleaned.indexOf("{");
-  const end = cleaned.lastIndexOf("}");
-  const parsed = parseInsight(JSON.parse(cleaned.slice(start, end + 1)));
+  const parsed = parseInsight(extractJson(r.content));
   if (!parsed) throw new Error("Format output AI tidak valid");
-  return {
-    output: parsed,
-    model: json.model ?? cfg.model,
-    tokensIn: json.usage?.prompt_tokens ?? 0,
-    tokensOut: json.usage?.completion_tokens ?? 0,
-    cost: Number(json.usage?.cost ?? 0),
-  };
+  return { output: parsed, model: r.model, tokensIn: r.tokensIn, tokensOut: r.tokensOut, cost: r.cost };
 }
 
 export async function generateInsight(childId: string): Promise<InsightResult> {
@@ -147,13 +121,10 @@ export async function generateInsight(childId: string): Promise<InsightResult> {
 }
 
 export async function openRouterBalance(): Promise<{ limit: number | null; usage: number; remaining: number | null } | null> {
-  const key = process.env.OPENROUTER_API_KEY;
+  const { key } = await resolveOpenRouterKey();
   if (!key) return null;
   try {
-    const res = await fetch("https://openrouter.ai/api/v1/key", { headers: { Authorization: `Bearer ${key}` }, cache: "no-store" });
-    if (!res.ok) return null;
-    const { data } = await res.json();
-    return { limit: data.limit ?? null, usage: Number(data.usage ?? 0), remaining: data.limit_remaining ?? (data.limit != null ? data.limit - data.usage : null) };
+    return await fetchKeyInfo(key);
   } catch {
     return null;
   }

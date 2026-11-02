@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { audit } from "@/lib/audit";
-import { tempPassword } from "@/lib/crypto";
+import { encryptSecret, tempPassword } from "@/lib/crypto";
+import { chatCompletion, extractJson, fetchKeyInfo, fetchModels, maskKey, resolveOpenRouterKey } from "@/lib/openrouter";
+import { parseInsight, type InsightOutput } from "@/lib/indicators";
 import { readXlsx } from "@/lib/excel";
 import { SURVEY_TEMPLATES } from "@/lib/survey";
-import { DEFAULT_SETTINGS, type ScreenRef } from "@/lib/settings";
+import { DEFAULT_SETTINGS, getSettings, type ScreenRef } from "@/lib/settings";
 import { bool, int, normalizePhone, phoneToAuthEmail, randomCode, slugify, str } from "@/lib/utils";
 import type { ActionState } from "@/components/ui";
 
@@ -492,4 +494,129 @@ export async function importLogbookForm(_: ActionState, fd: FormData): Promise<A
   await audit(me.id, "logbook.import_form", `${inserted} baris`);
   const failed = results.filter((r) => r.status !== "OK");
   return failed.length ? { error: `${inserted} tersimpan. Gagal: ${failed.map((f) => `baris ${f.baris} (${f.status})`).join("; ")}` } : { ok: true, message: `${inserted} baris logbook tersimpan.` };
+}
+
+// =============== OpenRouter (superadmin) ===============
+export async function saveOpenRouterKey(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin("superadmin");
+  const key = str(fd, "api_key").replace(/\s/g, "");
+  if (!key) return { error: "Tempelkan API key dari openrouter.ai/keys." };
+  if (!key.startsWith("sk-or-") || key.length < 20) return { error: 'Format API key OpenRouter diawali "sk-or-". Periksa kembali.' };
+  try {
+    // Pastikan kunci benar-benar valid sebelum disimpan.
+    await fetchKeyInfo(key);
+  } catch (e) {
+    return { error: `Kunci tidak bisa dipakai: ${(e as Error).message}` };
+  }
+  await setSetting("ai.openrouter_key", encryptSecret(key));
+  await audit(me.id, "settings.openrouter_key", maskKey(key));
+  revalidatePath("/admin/pengaturan");
+  revalidatePath("/admin/insight");
+  return { ok: true, message: `API key ${maskKey(key)} tersimpan (terenkripsi) dan sudah terverifikasi.` };
+}
+
+export async function deleteOpenRouterKey(fd: FormData) {
+  void fd;
+  const me = await requireAdmin("superadmin");
+  await setSetting("ai.openrouter_key", "");
+  await audit(me.id, "settings.openrouter_key_deleted");
+  revalidatePath("/admin/pengaturan");
+  revalidatePath("/admin/insight");
+}
+
+export type AiTestResult = {
+  steps: Array<{ label: string; ok: boolean; detail: string }>;
+  sample?: { output: InsightOutput; model: string; tokensIn: number; tokensOut: number; cost: number; ms: number };
+};
+
+export async function testOpenRouter(_: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin("superadmin");
+  const steps: AiTestResult["steps"] = [];
+  const cfg = await getSettings(["ai.model", "ai.system_prompt", "ai.max_tokens"]);
+  const model = str(fd, "model") || String(cfg["ai.model"]);
+  const { key, source } = await resolveOpenRouterKey();
+  if (!key) {
+    steps.push({ label: "API key", ok: false, detail: source === "broken" ? "Kunci tersimpan tidak bisa dibuka (APP_SECRET berubah?). Simpan ulang API key." : "Belum ada API key. Isi di formulir di atas." });
+    return { ok: false, data: { steps } };
+  }
+  try {
+    const info = await fetchKeyInfo(key);
+    steps.push({
+      label: "API key",
+      ok: true,
+      detail: `Valid (${source === "panel" ? "dari Panel Admin" : "dari env server"})${info.label ? ` · ${info.label}` : ""} · terpakai $${info.usage.toFixed(4)}${info.limit !== null ? ` dari limit $${info.limit}` : " · tanpa limit (disarankan pasang limit kredit)"}${info.isFreeTier ? " · akun gratis" : ""}`,
+    });
+    if (info.remaining !== null && info.remaining <= 0) steps.push({ label: "Saldo", ok: false, detail: "Limit/saldo habis — insight akan memakai ringkasan cadangan." });
+  } catch (e) {
+    steps.push({ label: "API key", ok: false, detail: (e as Error).message });
+    return { ok: false, data: { steps } };
+  }
+  const models = await fetchModels();
+  if (models.length) {
+    const m = models.find((x) => x.id === model);
+    steps.push(
+      m
+        ? { label: "Model", ok: true, detail: `${m.name} · input $${m.promptPerM.toFixed(2)}/1 jt token · output $${m.completionPerM.toFixed(2)}/1 jt token` }
+        : { label: "Model", ok: false, detail: `"${model}" tidak ada di katalog OpenRouter. Pilih dari daftar model.` },
+    );
+  } else {
+    steps.push({ label: "Model", ok: true, detail: "Katalog model tidak bisa diambil; dilewati." });
+  }
+  const t0 = Date.now();
+  try {
+    const r = await chatCompletion(key, {
+      model,
+      system: String(cfg["ai.system_prompt"]),
+      user: `Ringkasan angka 7 hari terakhir (JSON):\n${JSON.stringify(SAMPLE_INDICATORS)}`,
+      maxTokens: Number(cfg["ai.max_tokens"]),
+      json: true,
+      timeoutMs: 45_000,
+    });
+    const output = parseInsight(extractJson(r.content));
+    if (!output) throw new Error("Model menjawab, tetapi formatnya bukan 5 bagian insight. Periksa prompt sistem.");
+    steps.push({ label: "Uji insight", ok: true, detail: `Berhasil dalam ${((Date.now() - t0) / 1000).toFixed(1)} detik` });
+    return { ok: true, data: { steps, sample: { output, model: r.model, tokensIn: r.tokensIn, tokensOut: r.tokensOut, cost: r.cost, ms: Date.now() - t0 } } };
+  } catch (e) {
+    steps.push({ label: "Uji insight", ok: false, detail: (e as Error).message });
+    return { ok: false, data: { steps } };
+  }
+}
+
+/** Data contoh anonim untuk uji coba (tidak terkait keluarga mana pun). */
+const SAMPLE_INDICATORS = {
+  periode: { mulai: "contoh", selesai: "contoh" },
+  usia_anak: 9,
+  jenjang: "SD kelas 4–6",
+  hari_tercatat: 6,
+  target_screen_min: 90,
+  acuan_screen_time: { maks_menit: 120, catatan: "contoh acuan" },
+  rata_screen_min_per_hari: 115,
+  total_digital_min: 690,
+  total_positif_min: 420,
+  rasio_digital_positif: "1,6 : 1",
+  persen_positif: 38,
+  komposisi_tujuan_gawai: [
+    { tujuan: "Game", menit: 360, persen: 52 },
+    { tujuan: "Hiburan (video)", menit: 240, persen: 35 },
+    { tujuan: "Belajar", menit: 90, persen: 13 },
+  ],
+  persen_didampingi: 25,
+  hari_gawai_menjelang_tidur: 3,
+  hari_patuh_kesepakatan: 2,
+  variasi_aktivitas_positif: 3,
+  aktivitas_positif_teratas: [
+    { kategori: "Menggambar/Mewarnai", menit: 180 },
+    { kategori: "Olahraga/Bermain di luar", menit: 150 },
+  ],
+  tren: { rata_screen_minggu_lalu: 130, perubahan_screen_persen: -12, positif_minggu_lalu: 300, perubahan_positif_persen: 40 },
+  checkin: { jumlah: 5, suasana_hati: { senang: 3, biasa: 2 }, respons_berhenti: { diingatkan: 3, mudah: 2 } },
+  tindak_lanjut_sebelumnya: { rencana: "Memberi tanda 5 menit sebelum waktu gawai habis", hasil: "sebagian" },
+};
+
+export async function resetSystemPrompt(fd: FormData) {
+  void fd;
+  const me = await requireAdmin("superadmin");
+  await setSetting("ai.system_prompt", DEFAULT_SETTINGS["ai.system_prompt"]);
+  await audit(me.id, "settings.ai_prompt_reset");
+  revalidatePath("/admin/pengaturan");
 }
