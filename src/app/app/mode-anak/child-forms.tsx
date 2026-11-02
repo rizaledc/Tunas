@@ -34,7 +34,7 @@ export function ChildLogForm({ categories }: { categories: Cat[] }) {
             </div>
           </div>
           <div>
-            <p className="mb-3 text-center text-2xl font-extrabold text-tunas-700">Berapa lama?</p>
+            <p className="mb-3 text-center text-2xl font-extrabold text-daun-700">Berapa lama?</p>
             <div className="grid grid-cols-3 gap-3">
               {([
                 [15, "Sebentar", "time-15"],
@@ -46,9 +46,9 @@ export function ChildLogForm({ categories }: { categories: Cat[] }) {
                   key={m}
                   onClick={() => setDur(Number(m))}
                   aria-pressed={dur === m}
-                  className={cn("flex flex-col items-center rounded-3xl border-4 bg-white p-3 font-extrabold", dur === m ? "border-tunas-500" : "border-transparent")}
+                  className={cn("flex flex-col items-center rounded-3xl border-4 bg-white p-3 font-extrabold", dur === m ? "border-daun-500" : "border-transparent")}
                 >
-                  <Icon name={icon} className="h-10 w-10 text-tunas-600" />
+                  <Icon name={icon} className="h-10 w-10 text-daun-600" />
                   {label}
                   <span className="text-sm font-semibold text-ink-soft">{m} menit</span>
                 </button>
@@ -73,7 +73,7 @@ export function EnterForm({ kids }: { kids: Array<{ id: string; nickname: string
       <div className="grid grid-cols-2 gap-3">
         {kids.map((k) => (
           <button type="button" key={k.id} disabled={!k.hasPin} onClick={() => setId(k.id)} className={cn("rounded-3xl border-4 bg-white p-4 text-xl font-extrabold disabled:opacity-40", id === k.id ? "border-oranye-500" : "border-transparent")}>
-            <Icon name="child" className="mx-auto mb-1 block h-8 w-8 text-tunas-600" />
+            <Icon name="child" className="mx-auto mb-1 block h-8 w-8 text-daun-600" />
             {k.nickname}
             {!k.hasPin && <span className="block text-xs font-semibold">PIN belum diatur</span>}
           </button>

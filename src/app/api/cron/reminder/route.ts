@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
   const priv = process.env.VAPID_PRIVATE_KEY;
   if (!pub || !priv) return NextResponse.json({ error: "VAPID belum diatur" }, { status: 500 });
-  webpush.setVapidDetails(process.env.VAPID_SUBJECT ?? "mailto:admin@sahabatanaktunas.com", pub, priv);
+  webpush.setVapidDetails(process.env.VAPID_SUBJECT ?? "mailto:admin@example.com", pub, priv);
 
   const db = createAdminClient();
   const today = todayStr();

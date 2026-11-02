@@ -10,11 +10,11 @@ export default async function PanduanPage() {
   const p = await getSetting("public.panduan");
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
-      <h1 className="text-3xl font-extrabold text-tunas-900">Panduan Pemakaian</h1>
+      <h1 className="text-3xl font-extrabold text-daun-900">Panduan Pemakaian</h1>
       <div className="prose-sa mt-6 text-lg" dangerouslySetInnerHTML={{ __html: renderMarkdown(p.body) }} />
-      <div className="card mt-8 flex flex-col gap-3 bg-tunas-50 sm:flex-row sm:items-center sm:justify-between">
+      <div className="card mt-8 flex flex-col gap-3 bg-daun-50 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="flex items-center gap-2 font-extrabold"><Icon name="book" className="h-5 w-5 text-tunas-600" /> {p.module_name}</p>
+          <p className="flex items-center gap-2 font-extrabold"><Icon name="book" className="h-5 w-5 text-daun-600" /> {p.module_name}</p>
           <p className="text-sm text-ink-soft">Modul pendamping program untuk dibaca dan dicetak.</p>
         </div>
         {p.module_url ? (

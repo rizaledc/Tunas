@@ -13,7 +13,7 @@ function PasswordInput({ name = "password", label = "Password", autoComplete = "
       </label>
       <div className="relative">
         <input id={name} name={name} type={show ? "text" : "password"} required minLength={name === "password" && autoComplete === "current-password" ? 1 : 8} autoComplete={autoComplete} className="input pr-20" />
-        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-2 py-1 text-sm font-bold text-tunas-700">
+        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-2 py-1 text-sm font-bold text-daun-700">
           {show ? "Sembunyi" : "Lihat"}
         </button>
       </div>
@@ -63,7 +63,7 @@ export function RegisterForm({ consentText, consentVersion, code }: { consentTex
     <ActionForm action={register}>
       <div>
         <label className="label" htmlFor="kode">
-          Kode undangan TUNAS
+          Kode undangan
         </label>
         <input id="kode" name="kode" required defaultValue={code} autoCapitalize="characters" className="input font-mono tracking-widest uppercase" placeholder="ABCD2345" />
       </div>
@@ -78,7 +78,7 @@ export function RegisterForm({ consentText, consentVersion, code }: { consentTex
           Nomor HP (atau email)
         </label>
         <input id="contact" name="contact" required autoComplete="tel" className="input" placeholder="08xxxxxxxxxx" />
-        <p className="mt-1 text-xs text-ink-soft">Nomor HP dipakai untuk masuk. Jika lupa password, pengurus TUNAS dapat membantu reset.</p>
+        <p className="mt-1 text-xs text-ink-soft">Nomor HP dipakai untuk masuk. Jika lupa password, pengurus komunitas dapat membantu reset.</p>
       </div>
       <div>
         <label className="label" htmlFor="rt">
@@ -96,7 +96,7 @@ export function RegisterForm({ consentText, consentVersion, code }: { consentTex
         </Link>
       </details>
       <label className="flex items-start gap-3 text-sm">
-        <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-tunas-600" />
+        <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-daun-600" />
         <span>Saya sudah membaca dan menyetujui penyimpanan serta pemakaian data seperti dijelaskan di atas.</span>
       </label>
       <SubmitButton pendingText="Mendaftarkan…">Daftar</SubmitButton>

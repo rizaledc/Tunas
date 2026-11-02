@@ -1,5 +1,6 @@
 "use server";
 import { redirect } from "next/navigation";
+import { SITE_URL } from "@/lib/site";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { clientIp } from "@/lib/auth";
@@ -59,7 +60,7 @@ async function doLogin(fd: FormData, scope: "parent" | "admin"): Promise<ActionS
   if (!profile || profile.status !== "active" || (scope === "admin") !== isAdmin) {
     await supabase.auth.signOut({ scope: "local" });
     await recordAttempt(resolved.key, scope, false);
-    if (profile?.status === "inactive") return { error: "Akun dinonaktifkan. Hubungi pengurus TUNAS." };
+    if (profile?.status === "inactive") return { error: "Akun dinonaktifkan. Hubungi pengurus komunitas." };
     return { error: scope === "admin" ? "Akun ini bukan akun admin." : "Akun admin masuk lewat halaman /login/admin." };
   }
   await recordAttempt(resolved.key, scope, true);
@@ -117,7 +118,7 @@ export async function register(_: ActionState, fd: FormData): Promise<ActionStat
 
   const db = createAdminClient();
   const { data: invite } = await db.from("invite_codes").select("*").eq("code", code).maybeSingle();
-  if (!invite) return { error: "Kode undangan tidak ditemukan. Tanyakan ke pengurus TUNAS." };
+  if (!invite) return { error: "Kode undangan tidak ditemukan. Tanyakan ke pengurus komunitas." };
   if (invite.expires_at && new Date(invite.expires_at) < new Date()) return { error: "Kode undangan sudah kedaluwarsa." };
   if (invite.used_count >= invite.max_uses) return { error: "Kode undangan sudah habis dipakai." };
 
@@ -152,10 +153,10 @@ export async function register(_: ActionState, fd: FormData): Promise<ActionStat
 export async function requestReset(_: ActionState, fd: FormData): Promise<ActionState> {
   const email = str(fd, "email").toLowerCase();
   if (!email.includes("@")) {
-    return { error: "Reset lewat email hanya untuk akun yang mendaftar dengan email. Jika memakai nomor HP, minta pengurus TUNAS mereset password Anda." };
+    return { error: "Reset lewat email hanya untuk akun yang mendaftar dengan email. Jika memakai nomor HP, minta pengurus komunitas mereset password Anda." };
   }
   const supabase = await createClient();
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const site = SITE_URL;
   await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${site}/auth/callback?next=/reset-password` });
   return { ok: true, message: "Jika email terdaftar, tautan reset password sudah dikirim. Periksa kotak masuk Anda." };
 }

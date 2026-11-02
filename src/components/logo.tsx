@@ -1,4 +1,3 @@
-import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 /**
@@ -34,7 +33,7 @@ export function Logo({ light = false, small = false }: { light?: boolean; small?
       <LogoMark tile={light} className={small ? "h-8 w-8" : light ? "h-10 w-10" : "h-11 w-11"} />
       <span className="leading-tight">
         <span className={cn("block font-extrabold tracking-wide", small ? "text-base" : "text-lg")}>
-          <span className={light ? "text-white" : "text-tunas-700"}>SAHABAT</span> <span className={light ? "text-oranye-400" : "text-oranye-500"}>ANAK</span>
+          <span className={light ? "text-white" : "text-daun-700"}>SAHABAT</span> <span className={light ? "text-oranye-400" : "text-oranye-500"}>ANAK</span>
         </span>
         {!small && (
           <span className={cn("block text-[11px] font-semibold", light ? "text-white/80" : "text-ink-soft")}>
@@ -42,21 +41,6 @@ export function Logo({ light = false, small = false }: { light?: boolean; small?
           </span>
         )}
       </span>
-    </span>
-  );
-}
-
-/** Lencana teks TUNAS (ganti dengan logo resmi lewat /public bila sudah tersedia). */
-export function TunasBadge({ light = false }: { light?: boolean }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-extrabold",
-        light ? "border-white/40 text-white" : "border-tunas-200 text-tunas-700",
-      )}
-      title="Komunitas TUNAS (Tunggu Anak Siap)"
-    >
-      <Icon name="sprout" className="h-4 w-4" /> TUNAS
     </span>
   );
 }

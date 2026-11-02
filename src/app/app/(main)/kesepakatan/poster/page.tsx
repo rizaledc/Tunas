@@ -20,9 +20,9 @@ export default async function PosterPage() {
       <div className="no-print mb-4 flex justify-end">
         <PrintButton label="Cetak Poster" />
       </div>
-      <div className="mx-auto aspect-[1/1.414] max-w-md rounded-3xl border-8 border-tunas-500 bg-white p-6 text-center shadow-lg print:max-w-none print:border-[12px] print:shadow-none">
+      <div className="mx-auto aspect-[1/1.414] max-w-md rounded-3xl border-8 border-daun-500 bg-white p-6 text-center shadow-lg print:max-w-none print:border-[12px] print:shadow-none">
         <LogoMark className="mx-auto h-14 w-14" />
-        <p className="mt-2 text-sm font-bold tracking-widest text-tunas-700">KESEPAKATAN DIGITAL KELUARGA</p>
+        <p className="mt-2 text-sm font-bold tracking-widest text-daun-700">KESEPAKATAN DIGITAL KELUARGA</p>
         <h1 className="mt-1 text-3xl font-extrabold text-oranye-600">Keluarga {child.nickname}</h1>
         <div className="mt-6 rounded-2xl bg-blue-50 p-4">
           <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-sky-brand"><Icon name="device" className="h-4 w-4" /> Waktu layar maksimal</p>
@@ -49,7 +49,7 @@ export default async function PosterPage() {
           <div className="border-t-2 border-dashed pt-2">Tanda tangan anak</div>
           <div className="border-t-2 border-dashed pt-2">Tanda tangan orang tua</div>
         </div>
-        <p className="mt-6 text-xs text-ink-soft">SAHABAT ANAK · Komunitas TUNAS</p>
+        <p className="mt-6 text-xs text-ink-soft">SAHABAT ANAK · Tumbuh seimbang bersama keluarga</p>
       </div>
     </div>
   );

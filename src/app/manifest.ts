@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "SAHABAT ANAK",
     short_name: "SAHABAT ANAK",
-    description: "Catat dan seimbangkan aktivitas digital anak bersama Komunitas TUNAS.",
+    description: "Catat dan seimbangkan aktivitas digital anak bersama keluarga.",
     start_url: "/app",
     scope: "/",
     display: "standalone",

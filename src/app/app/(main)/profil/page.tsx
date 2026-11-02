@@ -23,13 +23,13 @@ export default async function ProfilPage() {
           ["/app/kesepakatan", "agreement", "Kesepakatan"],
           ["/app/insight", "sparkle", "Insight"],
           ["/app/checkin", "face-smile", "Check-in harian"],
-          ["/app/kegiatan", "calendar", "Kegiatan TUNAS"],
+          ["/app/kegiatan", "calendar", "Kegiatan komunitas"],
           ["/app/mode-anak/masuk", "star", "Mode anak"],
           ["/panduan", "book", "Panduan"],
           ["/privasi", "lock", "Privasi"],
         ] as Array<[string, IconName, string]>).map(([href, icon, label]) => (
           <Link key={href} href={href} className="card flex items-center gap-2 p-3 font-bold">
-            <Icon name={icon} className="h-6 w-6 text-tunas-600" />
+            <Icon name={icon} className="h-6 w-6 text-daun-600" />
             {label}
           </Link>
         ))}
@@ -81,7 +81,7 @@ export default async function ProfilPage() {
           </a>
         </div>
         <details className="rounded-xl bg-red-50 p-3">
-          <summary className="cursor-pointer font-bold text-telkom-600">Hapus akun beserta seluruh data</summary>
+          <summary className="cursor-pointer font-bold text-merah-600">Hapus akun beserta seluruh data</summary>
           <ActionForm action={deleteAccount} confirm="Yakin menghapus akun dan SEMUA data anak? Tidak bisa dibatalkan." className="mt-3 space-y-2">
             <p className="text-sm">Semua profil anak, catatan, insight, dan refleksi akan dihapus permanen. Ketik <strong>HAPUS</strong> untuk melanjutkan.</p>
             <input name="confirm" required className="input" autoComplete="off" />

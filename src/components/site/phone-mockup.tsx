@@ -15,8 +15,8 @@ export function PhoneMockup() {
         </div>
       </div>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="rounded-xl bg-tunas-50 p-2">
-          <p className="text-[11px] font-semibold text-tunas-700">Aktivitas positif</p>
+        <div className="rounded-xl bg-daun-50 p-2">
+          <p className="text-[11px] font-semibold text-daun-700">Aktivitas positif</p>
           <p className="font-extrabold">90 mnt</p>
         </div>
         <div className="rounded-xl bg-orange-50 p-2">
@@ -24,12 +24,12 @@ export function PhoneMockup() {
           <p className="font-extrabold">55%</p>
         </div>
       </div>
-      <div className="mt-2 rounded-xl border border-tunas-100 p-2">
-        <p className="flex items-center gap-1 text-[11px] font-bold text-tunas-700"><Icon name="sparkle" className="h-3 w-3" /> Insight minggu ini</p>
+      <div className="mt-2 rounded-xl border border-daun-100 p-2">
+        <p className="flex items-center gap-1 text-[11px] font-bold text-daun-700"><Icon name="sparkle" className="h-3 w-3" /> Insight minggu ini</p>
         <p className="text-[11px] text-ink-soft">Dika makin sering menggambar. Coba ajak ngobrol tentang gambarnya…</p>
       </div>
       <div className="mt-3 flex items-end justify-around border-t pt-2 text-[10px] text-ink-soft">
-        <Icon name="home" className="h-4 w-4 text-tunas-600" />
+        <Icon name="home" className="h-4 w-4 text-daun-600" />
         <Icon name="list" className="h-4 w-4" />
         <span className="-mt-4 flex h-9 w-9 items-center justify-center rounded-full bg-oranye-500 text-white"><Icon name="plus" className="h-5 w-5" strokeWidth={2.5} /></span>
         <Icon name="chart" className="h-4 w-4" />

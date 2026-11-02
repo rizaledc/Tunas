@@ -22,13 +22,15 @@ export function normalizePhone(input: string): string | null {
   return s;
 }
 
-/** Email sintetis untuk akun yang mendaftar hanya dengan nomor HP. */
+/** Domain email sintetis (tidak pernah dikirimi email) untuk akun yang mendaftar hanya dengan nomor HP. */
+const PHONE_EMAIL_DOMAIN = "hp.sahabat-anak.internal";
+
 export function phoneToAuthEmail(phone: string): string {
-  return `${phone}@hp.sahabatanaktunas.com`;
+  return `${phone}@${PHONE_EMAIL_DOMAIN}`;
 }
 
 export function isSyntheticEmail(email: string | null | undefined): boolean {
-  return !!email && email.endsWith("@hp.sahabatanaktunas.com");
+  return !!email && email.endsWith(`@${PHONE_EMAIL_DOMAIN}`);
 }
 
 export function randomCode(len = 8): string {

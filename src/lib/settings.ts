@@ -5,7 +5,7 @@ import { isSupabaseConfigured, SUPABASE_SERVICE_KEY } from "./supabase/env";
 
 export type ScreenRef = { min_age: number; max_age: number; max_min: number; note: string };
 
-export const DEFAULT_SYSTEM_PROMPT = `Anda adalah pendamping digital parenting untuk orang tua anggota Komunitas TUNAS (Banyumas).
+export const DEFAULT_SYSTEM_PROMPT = `Anda adalah pendamping digital parenting untuk orang tua di Indonesia.
 Anda menerima RINGKASAN ANGKA aktivitas seorang anak selama 7 hari yang sudah dihitung sistem. Jangan menghitung ulang dan jangan mengarang angka baru.
 
 Aturan:
@@ -39,8 +39,8 @@ export const DEFAULT_SETTINGS = {
     text: `Dengan mendaftar, saya menyetujui bahwa:
 1. Data yang saya isi (nama, nomor HP/email, RT) dan data anak (nama panggilan, tahun lahir, jenjang sekolah, catatan aktivitas) disimpan untuk keperluan pendampingan dalam program SAHABAT ANAK.
 2. Ringkasan angka aktivitas anak — tanpa nama atau identitas — dikirim ke layanan AI untuk dibuatkan saran.
-3. Pengurus TUNAS hanya melihat data gabungan (minimal 5 keluarga), bukan catatan harian keluarga saya.
-4. Tim PKM Telkom University dapat memakai data anonim untuk evaluasi program dan artikel ilmiah.
+3. Pengurus komunitas hanya melihat data gabungan (minimal 5 keluarga), bukan catatan harian keluarga saya.
+4. Pengelola program dapat memakai data anonim untuk evaluasi program dan penelitian.
 5. Saya dapat mengunduh dan menghapus seluruh data saya kapan saja melalui menu Profil.`,
   },
   "public.hero": {
@@ -55,14 +55,15 @@ export const DEFAULT_SETTINGS = {
     { label: "Respons positif peserta", before: "", after: "88%" },
   ],
   "public.contact": {
-    address: "Perum Bukit Lestari RT 7 RW 5, Desa Banteran, Kec. Sumbang, Kab. Banyumas, Jawa Tengah",
-    whatsapp: "6281200000000",
-    email: "halo@sahabatanaktunas.com",
+    // Kosong = tidak ditampilkan. Isi lewat Admin → Konten.
+    address: "",
+    whatsapp: "",
+    email: "",
   },
   "public.panduan": {
     body: `## Mulai memakai SAHABAT ANAK
 
-1. **Daftar** di halaman Daftar memakai kode undangan dari pengurus TUNAS.
+1. **Daftar** di halaman Daftar memakai kode undangan dari pengurus komunitas atau sekolah.
 2. **Tambah profil anak** (nama panggilan, tahun lahir, jenjang sekolah).
 3. **Buat kesepakatan keluarga**: target waktu layar harian dan jam bebas gawai.
 4. **Catat aktivitas** setiap hari lewat tombol **+ Catat** di tengah menu bawah.

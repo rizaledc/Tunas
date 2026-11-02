@@ -20,13 +20,13 @@ export function Alert({ state }: { state: ActionState }) {
   if (!state) return null;
   if (state.error)
     return (
-      <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-telkom-600">
+      <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-merah-600">
         {state.error}
       </p>
     );
   if (state.message)
     return (
-      <p role="status" className="rounded-xl bg-tunas-50 px-3 py-2 text-sm font-semibold text-tunas-700">
+      <p role="status" className="rounded-xl bg-daun-50 px-3 py-2 text-sm font-semibold text-daun-700">
         {state.message}
       </p>
     );
@@ -71,7 +71,7 @@ export function ConfirmButton({ children, message, className }: { children: Reac
   return (
     <button
       type="submit"
-      className={className ?? "btn-ghost btn-sm text-telkom-600"}
+      className={className ?? "btn-ghost btn-sm text-merah-600"}
       onClick={(e) => {
         if (!window.confirm(message)) e.preventDefault();
       }}

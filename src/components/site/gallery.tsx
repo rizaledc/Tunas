@@ -32,7 +32,7 @@ export function GalleryGrid({ photos, limit }: { photos: Photo[]; limit?: number
             role="tab"
             aria-selected={cat === k}
             onClick={() => setCat(k)}
-            className={cn("rounded-full px-4 py-2 text-sm font-bold", cat === k ? "bg-tunas-600 text-white" : "bg-white text-ink-soft ring-1 ring-gray-200")}
+            className={cn("rounded-full px-4 py-2 text-sm font-bold", cat === k ? "bg-daun-600 text-white" : "bg-white text-ink-soft ring-1 ring-gray-200")}
           >
             {v}
           </button>

@@ -27,7 +27,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
 
   return (
     <div className="space-y-4">
-      <PageTitle title="Pengaturan" subtitle="Khusus superadmin (Tim PKM)." />
+      <PageTitle title="Pengaturan" subtitle="Khusus superadmin (pengelola program)." />
       <Tabs items={tabs} active={tab} />
 
       {tab === "kategori" && <Categories db={db} />}
@@ -35,7 +35,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
       {tab === "ai" && (
         <ActionForm action={saveAiSettings} className="card space-y-3">
           <label className="flex items-center gap-2 font-bold">
-            <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-tunas-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
+            <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-daun-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
           </label>
           <label className="block">
             <span className="label">Model OpenRouter</span>
@@ -138,7 +138,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
     <div className="space-y-4">
       {(["digital", "positif"] as const).map((type) => (
         <section key={type} className="card overflow-x-auto">
-          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-tunas-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
+          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-daun-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
           <table className="tbl">
             <thead>
               <tr>
@@ -159,7 +159,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
                         <input type="hidden" name="id" value={c.id} />
                         <input type="hidden" name="type" value={c.type} />
                         <input type="hidden" name="active" value={c.active ? "on" : "off"} />
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tunas-50 text-tunas-600">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-daun-50 text-daun-600">
                           <CategoryIcon icon={c.icon} className="h-6 w-6" />
                         </span>
                         <IconSelect defaultValue={c.icon} />
@@ -244,11 +244,11 @@ async function Admins({ db, meId }: { db: ReturnType<typeof createAdminClient>; 
       <ActionForm action={createAdminAccount} className="card space-y-3" resetOnSuccess>
         <h2 className="font-extrabold">Tambah admin</h2>
         <div className="grid gap-2 md:grid-cols-3">
-          <input name="nama" required placeholder="Nama (mis. Ibu Mifta Khul Khusnah)" className="input" />
+          <input name="nama" required placeholder="Nama pengurus" className="input" />
           <input name="email" type="email" required placeholder="Email" className="input" />
           <select name="role" className="input">
             <option value="admin">Admin komunitas</option>
-            <option value="superadmin">Superadmin (Tim PKM)</option>
+            <option value="superadmin">Superadmin (pengelola program)</option>
           </select>
         </div>
         <SubmitButton className="btn-green">Buat Akun</SubmitButton>

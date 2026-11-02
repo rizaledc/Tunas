@@ -66,7 +66,7 @@ export async function monthlyReport(month: string): Promise<Report> {
   const purposes = g.suppressed ? [] : g.purposes.map((p) => ({ tujuan_gawai: p.name, total_menit: p.value }));
   const positives = g.suppressed ? [] : g.positives.map((p) => ({ aktivitas_positif: p.name, total_menit: p.value }));
   return {
-    title: `Rekap Bulanan Komunitas TUNAS — ${formatTanggal(from, { month: "long", year: "numeric" })}`,
+    title: `Rekap Bulanan Komunitas — ${formatTanggal(from, { month: "long", year: "numeric" })}`,
     sheets: [
       { name: "Ringkasan", rows: summary },
       { name: "Per minggu", rows: weeks },
@@ -133,7 +133,7 @@ export async function attendanceReport(): Promise<Report> {
     konfirmasi: a.rsvp,
     hadir: a.attended ? "ya" : "tidak",
   }));
-  return { title: "Rekap Kehadiran Kegiatan TUNAS", sheets: [{ name: "Ringkasan", rows: summary }, { name: "Detail", rows: detail }] };
+  return { title: "Rekap Kehadiran Kegiatan", sheets: [{ name: "Ringkasan", rows: summary }, { name: "Detail", rows: detail }] };
 }
 
 export function toPdf(report: Report): Buffer {
@@ -141,7 +141,7 @@ export function toPdf(report: Report): Buffer {
   doc.setFontSize(16);
   doc.text(report.title.replace(/[^\x20-\x7E–]/g, ""), 40, 40);
   doc.setFontSize(9);
-  doc.text(`Dibuat ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} · SAHABAT ANAK · Komunitas TUNAS & PKM Telkom University`, 40, 56);
+  doc.text(`Dibuat ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} · SAHABAT ANAK`, 40, 56);
   let y = 72;
   for (const s of report.sheets) {
     if (!s.rows.length) continue;

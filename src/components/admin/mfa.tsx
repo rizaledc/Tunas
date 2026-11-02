@@ -27,7 +27,7 @@ export function MfaSetup() {
   if (factor)
     return (
       <div className="space-y-2">
-        <p className="flex items-center gap-2 font-bold text-tunas-700"><Icon name="shield" className="h-5 w-5" /> Verifikasi dua langkah aktif.</p>
+        <p className="flex items-center gap-2 font-bold text-daun-700"><Icon name="shield" className="h-5 w-5" /> Verifikasi dua langkah aktif.</p>
         <button
           className="btn-danger btn-sm"
           onClick={async () => {

@@ -152,7 +152,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
           <input name="caption" placeholder="Keterangan (opsional)" className="input" />
         </div>
         <label className="flex items-start gap-2 text-sm">
-          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-tunas-600" />
+          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-daun-600" />
           <span>
             <strong>Izin publikasi sudah ada</strong> dari orang tua anak yang wajahnya tampak. Tanpa centang, foto disimpan tetapi tidak tampil di website.
           </span>
@@ -167,7 +167,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
           <div key={p.id} className="card space-y-2 p-2">
             <div className="relative aspect-square overflow-hidden rounded-lg">
               <Image src={p.url} alt={p.caption ?? ""} fill sizes="25vw" className="object-cover" />
-              {!p.publish_consent && <span className="absolute top-1 left-1 rounded bg-telkom-500 px-2 text-xs font-bold text-white">Tidak tampil</span>}
+              {!p.publish_consent && <span className="absolute top-1 left-1 rounded bg-merah-500 px-2 text-xs font-bold text-white">Tidak tampil</span>}
             </div>
             <form action={updatePhoto} className="space-y-1">
               <input type="hidden" name="id" value={p.id} />

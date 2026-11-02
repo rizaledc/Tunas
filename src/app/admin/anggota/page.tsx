@@ -138,7 +138,7 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
                 <td>{m.kids}</td>
                 <td>{m.last_active_at ? formatTanggal(m.last_active_at, { day: "numeric", month: "short", year: "numeric" }) : "belum pernah"}</td>
                 <td>
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${m.status === "active" ? "bg-tunas-50 text-tunas-700" : "bg-gray-200"}`}>{m.status === "active" ? "Aktif" : "Nonaktif"}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${m.status === "active" ? "bg-daun-50 text-daun-700" : "bg-gray-200"}`}>{m.status === "active" ? "Aktif" : "Nonaktif"}</span>
                 </td>
                 <td className="space-y-1">
                   <form action={setUserStatus}>

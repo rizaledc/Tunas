@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Logo, TunasBadge } from "@/components/logo";
+import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const MENU = [
@@ -22,9 +22,6 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex items-center gap-2" aria-label="SAHABAT ANAK — Beranda">
           <Logo light />
-          <span className="hidden sm:inline">
-            <TunasBadge light />
-          </span>
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu utama">
           {MENU.map((m) => (

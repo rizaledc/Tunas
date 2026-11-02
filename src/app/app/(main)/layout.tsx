@@ -14,7 +14,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const { children: kids, child } = await getActiveChild(parent.familyId);
   return (
     <div className="min-h-dvh pb-28">
-      <header className="no-print sticky top-0 z-30 bg-tunas-600 text-white shadow">
+      <header className="no-print sticky top-0 z-30 bg-daun-600 text-white shadow">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3 px-4 py-3">
           <Link href="/app" className="flex items-center gap-2" aria-label="Beranda aplikasi">
             <LogoMark className="h-9 w-9 ring-2 ring-white/40 rounded-xl" />

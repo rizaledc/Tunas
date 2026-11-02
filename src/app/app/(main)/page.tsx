@@ -39,10 +39,10 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-4">
-      {terimakasih && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Terima kasih sudah mengisi kuesioner!</p>}
+      {terimakasih && <p className="rounded-xl bg-daun-50 p-3 font-semibold text-daun-700">Terima kasih sudah mengisi kuesioner!</p>}
       <div>
         <p className="text-ink-soft">{formatHari(today)}</p>
-        <h1 className="text-2xl font-extrabold text-tunas-900">Ringkasan {child.nickname} hari ini</h1>
+        <h1 className="text-2xl font-extrabold text-daun-900">Ringkasan {child.nickname} hari ini</h1>
       </div>
 
       {openSurvey && (
@@ -79,12 +79,12 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         <div className="mt-2">
           <Progress value={digital} max={target} tone={digital > target ? "red" : digital > target * 0.8 ? "orange" : "green"} />
         </div>
-        {digital > target && <p className="mt-2 text-sm font-semibold text-telkom-600">Sudah melewati target hari ini.</p>}
+        {digital > target && <p className="mt-2 text-sm font-semibold text-merah-600">Sudah melewati target hari ini.</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div className="card">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-tunas-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-daun-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
           <p className="mt-1 text-2xl font-extrabold">{formatMenit(positif)}</p>
         </div>
         <div className="card">
@@ -99,15 +99,15 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
           <Icon name="device" className="h-7 w-7 text-sky-brand" />Catat gawai
         </Link>
         <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
-          <Icon name="palette" className="h-7 w-7 text-tunas-600" />Catat positif
+          <Icon name="palette" className="h-7 w-7 text-daun-600" />Catat positif
         </Link>
-        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-tunas-500"}`}>
+        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-daun-500"}`}>
           <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-oranye-500" />Check-in
         </Link>
       </div>
 
       {pending && (
-        <div className="card border-2 border-tunas-200">
+        <div className="card border-2 border-daun-200">
           <p className="font-extrabold">Bagaimana tindak lanjut minggu lalu?</p>
           <p className="mt-1 text-ink-soft">“{pending.action_text}”</p>
           <form action={saveReflectionOutcome} className="mt-3 flex flex-wrap gap-2">
@@ -144,7 +144,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/app/kesepakatan" className="card text-sm font-bold">
-          <Icon name="agreement" className="mb-1 block h-6 w-6 text-tunas-600" />
+          <Icon name="agreement" className="mb-1 block h-6 w-6 text-daun-600" />
           Kesepakatan keluarga
           <span className="block font-normal text-ink-soft">{agreement ? `Target ${formatMenit(agreement.target_screen_min)}/hari` : "Belum dibuat"}</span>
         </Link>
@@ -162,7 +162,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
             <span className="text-xs">{formatTanggal(event.date, { month: "short" })}</span>
           </span>
           <span>
-            <span className="block text-xs font-bold text-oranye-600">AGENDA TUNAS TERDEKAT</span>
+            <span className="block text-xs font-bold text-oranye-600">AGENDA TERDEKAT</span>
             <span className="block font-extrabold">{event.title}</span>
             <span className="text-sm text-ink-soft">{event.location}</span>
           </span>

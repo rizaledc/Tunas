@@ -25,7 +25,7 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
       <Link href="/kegiatan" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
         <Icon name="arrow-left" className="h-4 w-4" /> Semua kegiatan
       </Link>
-      <h1 className="mt-2 text-3xl font-extrabold text-tunas-900">{e.title}</h1>
+      <h1 className="mt-2 text-3xl font-extrabold text-daun-900">{e.title}</h1>
       <p className="mt-2 flex items-center gap-2 font-semibold text-oranye-600">
         <Icon name="calendar" className="h-5 w-5" /> {formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })} WIB
       </p>
@@ -37,8 +37,8 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
       )}
       {e.description && <div className="mt-6 text-lg leading-relaxed whitespace-pre-line">{e.description}</div>}
       {upcoming && (
-        <div className="card mt-6 bg-tunas-50">
-          <p className="font-bold">Anggota TUNAS bisa konfirmasi kehadiran lewat aplikasi.</p>
+        <div className="card mt-6 bg-daun-50">
+          <p className="font-bold">Anggota bisa konfirmasi kehadiran lewat aplikasi.</p>
           <Link href="/app/kegiatan" className="btn-green mt-2">
             Konfirmasi Hadir
           </Link>

@@ -53,7 +53,7 @@ export function AdminSidebar({ role, nama }: { role: string; nama: string }) {
         <div className="flex-1 overflow-y-auto">{nav}</div>
         <div className="mt-4 border-t border-white/20 pt-4 text-sm">
           <p className="font-bold">{nama}</p>
-          <p className="text-white/70">{role === "superadmin" ? "Superadmin (Tim PKM)" : "Admin komunitas"}</p>
+          <p className="text-white/70">{role === "superadmin" ? "Superadmin" : "Admin komunitas"}</p>
           <form action="/keluar" method="post" className="mt-2">
             <button className="inline-flex items-center gap-2 rounded-lg px-3 py-1 font-bold ring-1 ring-white/40 hover:bg-white/10">
               <Icon name="logout" className="h-4 w-4" /> Keluar

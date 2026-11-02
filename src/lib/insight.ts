@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import "server-only";
 import { createClient } from "./supabase/server";
 import { createAdminClient } from "./supabase/admin";
@@ -51,7 +52,7 @@ async function callOpenRouter(ind: Indicators, cfg: { model: string; prompt: str
     headers: {
       Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
-      "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "https://sahabatanaktunas.com",
+      "HTTP-Referer": SITE_URL,
       "X-Title": "SAHABAT ANAK",
     },
     body: JSON.stringify({

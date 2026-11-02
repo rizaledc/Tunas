@@ -22,7 +22,7 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
       <Link href="/artikel" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
         <Icon name="arrow-left" className="h-4 w-4" /> Semua artikel
       </Link>
-      <h1 className="mt-2 text-3xl font-extrabold text-tunas-900">{a.title}</h1>
+      <h1 className="mt-2 text-3xl font-extrabold text-daun-900">{a.title}</h1>
       {a.published_at && <p className="mt-1 text-sm text-ink-soft">{formatTanggal(a.published_at)}</p>}
       {a.cover && (
         <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl">

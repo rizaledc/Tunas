@@ -16,7 +16,7 @@ export default async function MasukModeAnak() {
     <div className="mx-auto max-w-md space-y-5 px-4 py-8">
       <div className="text-center">
         <Icon name="star" className="mx-auto h-14 w-14 text-oranye-500" />
-        <h1 className="text-3xl font-extrabold text-tunas-900">Mode Anak</h1>
+        <h1 className="text-3xl font-extrabold text-daun-900">Mode Anak</h1>
         <p className="mt-1 text-ink-soft">Anak bisa mencatat kegiatan positifnya sendiri dan mengumpulkan bintang. Anak tidak bisa melihat analitik atau insight.</p>
       </div>
       {kids.some((k) => k.pin_hash) ? (

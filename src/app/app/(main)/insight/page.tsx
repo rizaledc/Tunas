@@ -51,7 +51,7 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
   return (
     <div className="space-y-4">
       <PageTitle title="Insight Mingguan" subtitle={`${child.nickname} · 7 hari terakhir`} />
-      <ActionForm action={runInsight} className="card space-y-2 bg-gradient-to-br from-tunas-50 to-orange-50">
+      <ActionForm action={runInsight} className="card space-y-2 bg-gradient-to-br from-daun-50 to-orange-50">
         <input type="hidden" name="child_id" value={child.id} />
         <p className="text-ink-soft">Sistem menghitung angka dari catatan Anda, lalu AI menuliskannya menjadi saran. Nama anak tidak dikirim ke AI.</p>
         <SubmitButton pendingText="Menganalisis…" disabled={left === 0} className="btn-primary w-full text-lg">
@@ -67,10 +67,10 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
               Periode {formatTanggal(current.period_start, { day: "numeric", month: "short" })} – {formatTanggal(current.period_end, { day: "numeric", month: "short" })}
               {current.model === "rule-based" && " · ringkasan otomatis"}
             </p>
-            <p className="mt-1 flex items-center gap-2 text-lg font-extrabold"><Icon name="note" className="text-tunas-600" /> Ringkasan minggu ini</p>
+            <p className="mt-1 flex items-center gap-2 text-lg font-extrabold"><Icon name="note" className="text-daun-600" /> Ringkasan minggu ini</p>
             <p className="mt-1">{out.ringkasan}</p>
           </div>
-          <Section icon="star" title="Yang sudah baik" items={out.sudah_baik} tone="border-l-tunas-500" />
+          <Section icon="star" title="Yang sudah baik" items={out.sudah_baik} tone="border-l-daun-500" />
           <Section icon="eye" title="Perlu diperhatikan" items={out.perlu_diperhatikan} tone="border-l-oranye-500" />
           <Section icon="bulb" title="Saran untuk dicoba" items={out.saran} tone="border-l-sky-brand" />
           <div className="card border-l-4 border-l-purple-500">
@@ -83,18 +83,18 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
             <input type="hidden" name="id" value={current.id} />
             <span className="font-bold">Apakah insight ini membantu?</span>
             <span className="flex gap-2">
-              <button name="rating" value="1" className={`btn-sm btn ${current.rating === 1 ? "bg-tunas-600 text-white" : "bg-gray-100"}`} aria-label="Membantu">
+              <button name="rating" value="1" className={`btn-sm btn ${current.rating === 1 ? "bg-daun-600 text-white" : "bg-gray-100"}`} aria-label="Membantu">
                 <Icon name="thumbsUp" />
               </button>
-              <button name="rating" value="-1" className={`btn-sm btn ${current.rating === -1 ? "bg-telkom-500 text-white" : "bg-gray-100"}`} aria-label="Tidak membantu">
+              <button name="rating" value="-1" className={`btn-sm btn ${current.rating === -1 ? "bg-merah-500 text-white" : "bg-gray-100"}`} aria-label="Tidak membantu">
                 <Icon name="thumbsDown" />
               </button>
             </span>
           </form>
 
           {reflected ? (
-            <div className="card bg-tunas-50">
-              <p className="flex items-center gap-2 font-extrabold"><Icon name="check-circle" className="text-tunas-600" /> Tindak lanjut Anda</p>
+            <div className="card bg-daun-50">
+              <p className="flex items-center gap-2 font-extrabold"><Icon name="check-circle" className="text-daun-600" /> Tindak lanjut Anda</p>
               <p>{reflected.action_text}</p>
               {reflected.outcome && <p className="mt-1 text-sm text-ink-soft">Hasil: {reflected.outcome}</p>}
             </div>
@@ -102,7 +102,7 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
             <ActionForm action={saveReflection} className="card space-y-3">
               <input type="hidden" name="child_id" value={child.id} />
               <input type="hidden" name="insight_id" value={current.id} />
-              <p className="flex items-center gap-2 font-extrabold"><Icon name="refresh" className="text-tunas-600" /> Refleksi: apa yang akan dicoba minggu ini?</p>
+              <p className="flex items-center gap-2 font-extrabold"><Icon name="refresh" className="text-daun-600" /> Refleksi: apa yang akan dicoba minggu ini?</p>
               <div className="grid gap-2">
                 {[...out.saran, "Mengobrol dengan anak memakai ide obrolan di atas"].map((s) => (
                   <label key={s} className="chip justify-start rounded-xl py-3 text-left">
@@ -150,7 +150,7 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
           <ul className="space-y-2">
             {history.map((h) => (
               <li key={h.id}>
-                <Link href={`/app/insight?id=${h.id}`} className={`card block p-3 ${h.id === current?.id ? "ring-2 ring-tunas-500" : ""}`}>
+                <Link href={`/app/insight?id=${h.id}`} className={`card block p-3 ${h.id === current?.id ? "ring-2 ring-daun-500" : ""}`}>
                   <span className="text-xs text-ink-soft">{formatTanggal(h.created_at, { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}</span>
                   <span className="line-clamp-2 block text-sm">{(h.output as InsightOutput).ringkasan}</span>
                 </Link>

@@ -72,7 +72,7 @@ export function SingleUpload({ name, defaultValue, folder, accept = "image/*", l
           </button>
         )}
       </div>
-      {err && <p className="text-sm text-telkom-600">Gagal: {err}</p>}
+      {err && <p className="text-sm text-merah-600">Gagal: {err}</p>}
     </div>
   );
 }

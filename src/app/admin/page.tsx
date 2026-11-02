@@ -14,7 +14,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   return (
     <div className="space-y-6">
       <PageTitle title="Dashboard" subtitle="Angka gabungan komunitas — tanpa data per keluarga." />
-      {akses === "ditolak" && <p className="rounded-xl bg-red-50 p-3 font-semibold text-telkom-600">Menu tersebut khusus superadmin.</p>}
+      {akses === "ditolak" && <p className="rounded-xl bg-red-50 p-3 font-semibold text-merah-600">Menu tersebut khusus superadmin.</p>}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat icon="home" label="Keluarga terdaftar" value={k.families} />
         <Stat icon="child" label="Anak terdaftar" value={k.children} />

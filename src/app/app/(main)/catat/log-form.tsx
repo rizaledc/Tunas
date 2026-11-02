@@ -56,7 +56,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
                 setTab(t);
                 setMode(t === "digital" ? "jam" : "durasi");
               }}
-              className={cn("rounded-xl py-3 font-extrabold", tab === t ? (t === "digital" ? "bg-sky-brand text-white" : "bg-tunas-600 text-white") : "text-ink-soft")}
+              className={cn("rounded-xl py-3 font-extrabold", tab === t ? (t === "digital" ? "bg-sky-brand text-white" : "bg-daun-600 text-white") : "text-ink-soft")}
             >
               <span className="inline-flex items-center gap-1.5"><Icon name={t === "digital" ? "device" : "leaf"} /> {t === "digital" ? "Aktivitas Digital" : "Aktivitas Positif"}</span>
             </button>
@@ -132,7 +132,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
               <p className="label">Berapa lama?</p>
               <div className="grid grid-cols-3 gap-2">
                 {[15, 30, 60].map((m) => (
-                  <button key={m} type="button" onClick={() => setDuration(m)} className={cn("rounded-xl border-2 py-3 text-lg font-extrabold", duration === m ? "border-tunas-600 bg-tunas-50 text-tunas-700" : "border-gray-200 bg-white")}>
+                  <button key={m} type="button" onClick={() => setDuration(m)} className={cn("rounded-xl border-2 py-3 text-lg font-extrabold", duration === m ? "border-daun-600 bg-daun-50 text-daun-700" : "border-gray-200 bg-white")}>
                     {m} mnt
                   </button>
                 ))}
@@ -171,7 +171,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
           </label>
           <textarea id="note" name="note" rows={2} maxLength={500} defaultValue={edit?.note ?? ""} className="input" placeholder="Contoh: menggambar ikan lele bersama kakak" />
         </div>
-        <SubmitButton className={cn("btn w-full text-lg text-white", tab === "digital" ? "bg-sky-brand hover:bg-sky-brand-dark" : "bg-tunas-600 hover:bg-tunas-700")}>
+        <SubmitButton className={cn("btn w-full text-lg text-white", tab === "digital" ? "bg-sky-brand hover:bg-sky-brand-dark" : "bg-daun-600 hover:bg-daun-700")}>
           {edit ? "Simpan Perubahan" : "Simpan Catatan"}
         </SubmitButton>
       </ActionForm>

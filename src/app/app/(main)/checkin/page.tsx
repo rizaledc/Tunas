@@ -43,7 +43,7 @@ export default async function CheckinPage() {
             {Object.entries(STOP_RESPONSES).map(([k, label]) => (
               <label key={k} className="chip justify-start rounded-xl py-3 text-base">
                 <input type="radio" name="stop_response" value={k} defaultChecked={c?.stop_response === k} className="sr-only" />
-                <Icon name={k === "mudah" ? "face-smile" : k === "diingatkan" ? "megaphone" : "face-angry"} className="h-6 w-6 text-tunas-600" /> {label}
+                <Icon name={k === "mudah" ? "face-smile" : k === "diingatkan" ? "megaphone" : "face-angry"} className="h-6 w-6 text-daun-600" /> {label}
               </label>
             ))}
           </div>

@@ -35,7 +35,7 @@ export default async function ArticleEditPage({ params }: { params: Promise<{ id
         <ArticleEditor defaultValue={a?.body ?? ""} />
         <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2 font-bold">
-            <input type="checkbox" name="publish" defaultChecked={Boolean(a?.published_at)} className="h-5 w-5 accent-tunas-600" /> Terbitkan
+            <input type="checkbox" name="publish" defaultChecked={Boolean(a?.published_at)} className="h-5 w-5 accent-daun-600" /> Terbitkan
           </label>
           <label className="text-sm">
             Tanggal terbit{" "}

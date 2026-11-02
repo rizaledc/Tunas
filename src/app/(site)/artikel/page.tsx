@@ -7,19 +7,19 @@ import { excerpt } from "@/lib/markdown";
 import { Empty, Placeholder } from "@/components/blocks";
 
 export const revalidate = 300;
-export const metadata: Metadata = { title: "Artikel & Tips", description: "Tips digital parenting dan kabar Komunitas TUNAS." };
+export const metadata: Metadata = { title: "Artikel & Tips", description: "Tips digital parenting dan kabar seputar pendampingan anak." };
 
 export default async function ArtikelPage() {
   const articles = await getArticles();
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="mb-6 text-3xl font-extrabold text-tunas-900">Artikel & Tips</h1>
+      <h1 className="mb-6 text-3xl font-extrabold text-daun-900">Artikel & Tips</h1>
       {articles.length === 0 ? (
         <Empty icon="book-open" title="Belum ada artikel" text="Tips digital parenting akan segera hadir." />
       ) : (
         <div className="grid gap-4 md:grid-cols-3">
           {articles.map((a) => (
-            <Link key={a.id} href={`/artikel/${a.slug}`} className="card overflow-hidden p-0 hover:ring-2 hover:ring-tunas-200">
+            <Link key={a.id} href={`/artikel/${a.slug}`} className="card overflow-hidden p-0 hover:ring-2 hover:ring-daun-200">
               <div className="relative aspect-[16/9]">
                 {a.cover ? <Image src={a.cover} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Tips" icon="bulb" className="h-full w-full" />}
               </div>

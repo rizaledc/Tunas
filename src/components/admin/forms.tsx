@@ -44,7 +44,7 @@ export function ImportMembersForm() {
           </SubmitButton>
           {state?.data?.results ? (
             <>
-              <p className="text-sm font-semibold text-telkom-600">Simpan daftar password sementara ini sekarang — tidak akan ditampilkan lagi.</p>
+              <p className="text-sm font-semibold text-merah-600">Simpan daftar password sementara ini sekarang — tidak akan ditampilkan lagi.</p>
               <ResultTable rows={state.data.results as Row[]} />
             </>
           ) : null}

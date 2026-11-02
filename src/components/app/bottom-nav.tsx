@@ -35,7 +35,7 @@ export function BottomNav() {
               <Link
                 href={it.href}
                 aria-current={active ? "page" : undefined}
-                className={cn("flex min-w-16 flex-col items-center gap-0.5 py-2 text-xs font-bold", active ? "text-tunas-700" : "text-ink-soft")}
+                className={cn("flex min-w-16 flex-col items-center gap-0.5 py-2 text-xs font-bold", active ? "text-daun-700" : "text-ink-soft")}
               >
                 <Icon name={it.icon} className="h-7 w-7" />
                 {it.label}

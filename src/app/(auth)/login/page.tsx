@@ -5,8 +5,8 @@ import { LoginForm } from "../forms";
 export const metadata: Metadata = { title: "Masuk" };
 
 const REASONS: Record<string, string> = {
-  nonaktif: "Akun Anda sedang dinonaktifkan. Hubungi pengurus TUNAS.",
-  keluarga: "Data keluarga tidak ditemukan. Hubungi pengurus TUNAS.",
+  nonaktif: "Akun Anda sedang dinonaktifkan. Hubungi pengurus komunitas.",
+  keluarga: "Data keluarga tidak ditemukan. Hubungi pengurus komunitas.",
   dihapus: "Akun dan seluruh data Anda sudah dihapus. Terima kasih sudah ikut program.",
 };
 
@@ -14,8 +14,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { next, alasan } = await searchParams;
   return (
     <div className="card mt-4 p-6">
-      <h1 className="text-2xl font-extrabold text-tunas-900">Masuk</h1>
-      <p className="mb-5 text-ink-soft">Untuk orang tua anggota TUNAS.</p>
+      <h1 className="text-2xl font-extrabold text-daun-900">Masuk</h1>
+      <p className="mb-5 text-ink-soft">Untuk orang tua.</p>
       {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-orange-50 p-3 text-sm font-semibold text-oranye-600">{REASONS[alasan]}</p>}
       <LoginForm next={next} />
       <div className="mt-6 border-t pt-4 text-center text-sm">
