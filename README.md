@@ -56,7 +56,7 @@ Perintah lain: `npm test` (unit test), `npm run typecheck`, `npm run lint`, `npm
 
 ## Deploy ke produksi
 
-1. **Supabase**: buat project, lalu `npx supabase link --project-ref <ref>` dan `npx supabase db push` (menerapkan `supabase/migrations`). Jalankan `supabase/seed.sql` di SQL editor. Aktifkan **MFA TOTP** di Authentication → Multi-Factor. Atur Site URL ke domain Anda (mis. `https://domain-anda.id`) dan tambahkan redirect `https://domain-anda.id/auth/callback`.
+1. **Supabase**: buat project, buka **SQL Editor**, tempel seluruh isi `supabase/setup.sql` (skema + RLS + storage + data awal) lalu **Run** sekali. Alternatif CLI: `npx supabase link --project-ref <ref>` lalu `npx supabase db push` dan jalankan `supabase/seed.sql`. Aktifkan **MFA TOTP** di Authentication → Multi-Factor. Atur Site URL ke domain Anda (mis. `https://domain-anda.id`) dan tambahkan redirect `https://domain-anda.id/auth/callback`.
 2. **Vercel**: impor repo ini, isi environment variable sesuai `.env.example`:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
    - `NEXT_PUBLIC_SITE_URL=https://domain-anda.id`
