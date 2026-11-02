@@ -72,7 +72,8 @@ export function PageHero({ eyebrow, title, text, children }: { eyebrow: string; 
 /** Latar gambar gelap: foto bila ada, tekstur marun bila belum ada. */
 export function DarkMedia({ src, alt, className, children, sizes = "100vw", priority }: { src?: string | null; alt?: string; className?: string; children?: ReactNode; sizes?: string; priority?: boolean }) {
   return (
-    <div className={cn("relative overflow-hidden", !src && "sa-dark-texture", className)}>
+    // Jangan gabungkan "relative" dengan pemosisian "absolute" dari pemanggil: tingginya akan nol.
+    <div className={cn(/\b(absolute|fixed|sticky)\b/.test(className ?? "") ? "" : "relative", "overflow-hidden", !src && "sa-dark-texture", className)}>
       {src && <Image src={src} alt={alt ?? ""} fill sizes={sizes} priority={priority} className="object-cover" />}
       {children}
     </div>

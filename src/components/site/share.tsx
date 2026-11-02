@@ -13,7 +13,7 @@ export function ShareButtons({ path, title }: { path: string; title: string }) {
   const url = () => `${window.location.origin}${path}`;
   const open = (href: string) => window.open(href, "_blank", "noopener,noreferrer");
   const items: Array<{ label: string; icon: IconName; className: string; onClick: () => void }> = [
-    { label: "WhatsApp", icon: "chat", className: "bg-[#25D366] text-white", onClick: () => open(`https://wa.me/?text=${encodeURIComponent(`${title}\n${url()}`)}`) },
+    { label: "WhatsApp", icon: "chat", className: "bg-[#128C4A] text-white hover:bg-[#0E7A3F]", onClick: () => open(`https://wa.me/?text=${encodeURIComponent(`${title}\n${url()}`)}`) },
     { label: "Facebook", icon: "share", className: "bg-[#1877F2] text-white", onClick: () => open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url())}`) },
     { label: "X", icon: "send", className: "bg-black text-white", onClick: () => open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url())}`) },
     { label: "Telegram", icon: "send", className: "bg-[#229ED9] text-white", onClick: () => open(`https://t.me/share/url?url=${encodeURIComponent(url())}&text=${encodeURIComponent(title)}`) },

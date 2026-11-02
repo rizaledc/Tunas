@@ -153,7 +153,7 @@ export function CreateMemberForm() {
                 <p className="text-xs text-ink-soft">Password tidak ditampilkan lagi setelah halaman ini ditutup. Orang tua akan diminta menyetujui persetujuan data saat pertama masuk.</p>
                 <div className="flex flex-wrap gap-2">
                   {d.phone && (
-                    <a className="btn-sm btn bg-[#25D366] text-white" target="_blank" rel="noopener noreferrer" href={`https://wa.me/${d.phone}?text=${encodeURIComponent(msg)}`}>
+                    <a className="btn-sm btn bg-[#128C4A] text-white hover:bg-[#0E7A3F]" target="_blank" rel="noopener noreferrer" href={`https://wa.me/${d.phone}?text=${encodeURIComponent(msg)}`}>
                       <Icon name="chat" className="h-4 w-4" /> Kirim lewat WhatsApp
                     </a>
                   )}
