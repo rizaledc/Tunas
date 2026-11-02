@@ -1,4 +1,5 @@
 "use client";
+import { Icon, CategoryIcon } from "@/components/icons";
 import { useState } from "react";
 import { ActionForm, SubmitButton } from "@/components/ui";
 import { cn, WITH_WHOM } from "@/lib/utils";
@@ -26,10 +27,10 @@ function YesNo({ name, label, defaultValue }: { name: string; label: string; def
       <legend className="label">{label}</legend>
       <div className="flex gap-2">
         <label className="chip flex-1 justify-center py-3 text-base">
-          <input type="radio" name={name} value="ya" defaultChecked={defaultValue === true} className="sr-only" /> 👍 Ya
+          <input type="radio" name={name} value="ya" defaultChecked={defaultValue === true} className="sr-only" /> <Icon name="check" /> Ya
         </label>
         <label className="chip flex-1 justify-center py-3 text-base">
-          <input type="radio" name={name} value="tidak" defaultChecked={defaultValue === false} className="sr-only" /> ✋ Tidak
+          <input type="radio" name={name} value="tidak" defaultChecked={defaultValue === false} className="sr-only" /> <Icon name="close" /> Tidak
         </label>
       </div>
     </fieldset>
@@ -57,7 +58,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
               }}
               className={cn("rounded-xl py-3 font-extrabold", tab === t ? (t === "digital" ? "bg-sky-brand text-white" : "bg-tunas-600 text-white") : "text-ink-soft")}
             >
-              {t === "digital" ? "📱 Aktivitas Digital" : "🌳 Aktivitas Positif"}
+              <span className="inline-flex items-center gap-1.5"><Icon name={t === "digital" ? "device" : "leaf"} /> {t === "digital" ? "Aktivitas Digital" : "Aktivitas Positif"}</span>
             </button>
           ))}
         </div>
@@ -86,9 +87,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
             {cats.map((c) => (
               <label key={c.id} className="chip flex-col justify-center rounded-2xl py-3 text-center">
                 <input type="radio" name="category_id" value={c.id} required defaultChecked={edit?.category_id === c.id} className="sr-only" />
-                <span className="text-3xl" aria-hidden>
-                  {c.icon}
-                </span>
+                <CategoryIcon icon={c.icon} className="h-8 w-8" />
                 <span className="text-xs leading-tight">{c.name}</span>
               </label>
             ))}

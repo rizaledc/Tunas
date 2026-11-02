@@ -15,13 +15,13 @@ export default async function ArtikelPage() {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="mb-6 text-3xl font-extrabold text-tunas-900">Artikel & Tips</h1>
       {articles.length === 0 ? (
-        <Empty icon="📚" title="Belum ada artikel" text="Tips digital parenting akan segera hadir." />
+        <Empty icon="book-open" title="Belum ada artikel" text="Tips digital parenting akan segera hadir." />
       ) : (
         <div className="grid gap-4 md:grid-cols-3">
           {articles.map((a) => (
             <Link key={a.id} href={`/artikel/${a.slug}`} className="card overflow-hidden p-0 hover:ring-2 hover:ring-tunas-200">
               <div className="relative aspect-[16/9]">
-                {a.cover ? <Image src={a.cover} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Tips" icon="💡" className="h-full w-full" />}
+                {a.cover ? <Image src={a.cover} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Tips" icon="bulb" className="h-full w-full" />}
               </div>
               <div className="p-4">
                 <p className="text-xs font-semibold text-ink-soft">{a.published_at && formatTanggal(a.published_at)}</p>

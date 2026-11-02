@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { filterChildren, groupStats, loadBase, type GroupStats } from "@/lib/stats";
 import { addDays, todayStr } from "@/lib/date";
@@ -11,7 +12,7 @@ export const metadata = { title: "Statistik" };
 function Hidden() {
   return (
     <div className="card bg-gray-50 text-center">
-      <p className="text-3xl">🔒</p>
+      <Icon name="lock" className="mx-auto h-10 w-10 text-ink-soft" />
       <p className="font-bold">Data disembunyikan</p>
       <p className="text-sm text-ink-soft">Kelompok ini berisi kurang dari {MIN_GROUP_FAMILIES} keluarga yang mencatat, sehingga angka tidak ditampilkan agar keluarga tidak bisa ditebak.</p>
     </div>
@@ -24,7 +25,7 @@ function Row({ label, g }: { label: string; g: GroupStats }) {
       <td className="font-bold">{label}</td>
       {g.suppressed ? (
         <td colSpan={5} className="text-ink-soft">
-          🔒 &lt; {MIN_GROUP_FAMILIES} keluarga
+          <span className="inline-flex items-center gap-1"><Icon name="lock" className="h-4 w-4" /> &lt; {MIN_GROUP_FAMILIES} keluarga</span>
         </td>
       ) : (
         <>
@@ -92,12 +93,12 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <Stat icon="⏱️" label="Rata-rata screen time" value={`${app.avgScreen} mnt`} hint={`target rata-rata ${app.avgTarget ?? "—"} mnt`} tone="blue" />
-            <Stat icon="🌳" label="Rata-rata aktivitas positif" value={`${app.avgPositive} mnt`} hint="per anak per hari tercatat" />
-            <Stat icon="🤝" label="Kepatuhan kesepakatan" value={`${app.compliancePct}%`} hint="hari-anak sesuai target" tone="orange" />
-            <Stat icon="🌙" label="Penggunaan malam" value={`${app.nightPct}%`} hint="menit gawai 21.00–04.00" tone="red" />
-            <Stat icon="👪" label="Didampingi" value={`${app.accompaniedPct}%`} hint="menit gawai didampingi" />
-            <Stat icon="🏡" label="Keluarga dalam filter" value={app.families} hint={`${app.children} anak · ${app.childDays} hari-anak`} tone="gray" />
+            <Stat icon="clock" label="Rata-rata screen time" value={`${app.avgScreen} mnt`} hint={`target rata-rata ${app.avgTarget ?? "—"} mnt`} tone="blue" />
+            <Stat icon="leaf" label="Rata-rata aktivitas positif" value={`${app.avgPositive} mnt`} hint="per anak per hari tercatat" />
+            <Stat icon="agreement" label="Kepatuhan kesepakatan" value={`${app.compliancePct}%`} hint="hari-anak sesuai target" tone="orange" />
+            <Stat icon="moon" label="Penggunaan malam" value={`${app.nightPct}%`} hint="menit gawai 21.00–04.00" tone="red" />
+            <Stat icon="family" label="Didampingi" value={`${app.accompaniedPct}%`} hint="menit gawai didampingi" />
+            <Stat icon="home" label="Keluarga dalam filter" value={app.families} hint={`${app.children} anak · ${app.childDays} hari-anak`} tone="gray" />
           </div>
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="card">
@@ -121,7 +122,7 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
         {baseline.childDays === 0 ? (
           <p className="text-ink-soft">Belum ada data logbook kertas yang diimpor untuk periode/filter ini.</p>
         ) : baseline.suppressed || app.suppressed ? (
-          <p className="text-ink-soft">🔒 Salah satu kelompok berisi kurang dari {MIN_GROUP_FAMILIES} keluarga.</p>
+          <p className="flex items-center gap-1 text-ink-soft"><Icon name="lock" className="h-4 w-4" /> Salah satu kelompok berisi kurang dari {MIN_GROUP_FAMILIES} keluarga.</p>
         ) : (
           <table className="tbl mt-2">
             <thead>

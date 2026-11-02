@@ -67,7 +67,7 @@ export default async function EvaluasiPage() {
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-tunas-50 text-tunas-700" : "bg-gray-100"}`}>{s.is_open ? "🟢 Terbuka" : "Tertutup"}</span>
+              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-tunas-50 text-tunas-700" : "bg-gray-100"}`}>{s.is_open ? <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-tunas-500" /> Terbuka</span> : "Tertutup"}</span>
               {mean !== null && (
                 <span className="rounded-full bg-orange-50 px-3 py-1 text-sm font-bold text-oranye-600">
                   Skor rata-rata: {mean}

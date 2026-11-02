@@ -1,18 +1,18 @@
 -- Data awal: kategori aktivitas + contoh konten. Aman dijalankan ulang.
 insert into public.categories (type, name, icon, sort) values
-  ('digital','Belajar','📚',1),
-  ('digital','Hiburan (video)','🎬',2),
-  ('digital','Game','🎮',3),
-  ('digital','Media sosial','💬',4),
-  ('digital','Komunikasi','📞',5),
-  ('positif','Membaca','📖',1),
-  ('positif','Menggambar/Mewarnai','🎨',2),
-  ('positif','Merawat lele','🐟',3),
-  ('positif','Olahraga/Bermain di luar','⚽',4),
-  ('positif','Membantu di rumah','🧹',5),
-  ('positif','Ibadah/Mengaji','🕌',6),
-  ('positif','Bermain bersama keluarga','👨‍👩‍👧',7),
-  ('positif','Belajar/PR tanpa gawai','✏️',8)
+  ('digital','Belajar','book',1),
+  ('digital','Hiburan (video)','video',2),
+  ('digital','Game','gamepad',3),
+  ('digital','Media sosial','chats',4),
+  ('digital','Komunikasi','phone-call',5),
+  ('positif','Membaca','book-open',1),
+  ('positif','Menggambar/Mewarnai','palette',2),
+  ('positif','Merawat lele','fish',3),
+  ('positif','Olahraga/Bermain di luar','ball',4),
+  ('positif','Membantu di rumah','broom',5),
+  ('positif','Ibadah/Mengaji','mosque',6),
+  ('positif','Bermain bersama keluarga','family',7),
+  ('positif','Belajar/PR tanpa gawai','pencil2',8)
 on conflict do nothing;
 
 insert into public.events (title, slug, date, location, description, featured, published) values

@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 export function LogoMark({ className }: { className?: string }) {
@@ -40,7 +41,7 @@ export function TunasBadge({ light = false }: { light?: boolean }) {
       )}
       title="Komunitas TUNAS (Tunggu Anak Siap)"
     >
-      🌱 TUNAS
+      <Icon name="sprout" className="h-4 w-4" /> TUNAS
     </span>
   );
 }

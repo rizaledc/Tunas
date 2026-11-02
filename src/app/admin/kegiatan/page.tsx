@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -44,7 +45,7 @@ export default async function AdminKegiatanPage() {
                     <Link href={`/admin/kegiatan/${e.id}`} className="font-bold text-sky-brand">
                       {e.title}
                     </Link>
-                    {e.featured && <span className="ml-1 text-xs">⭐</span>}
+                    {e.featured && <Icon name="star-solid" className="ml-1 h-3.5 w-3.5 text-oranye-500" title="Unggulan" />}
                   </td>
                   <td>{e.published ? "Tayang" : "Draf"}</td>
                   <td>{a.filter((x) => x.rsvp === "hadir").length}</td>

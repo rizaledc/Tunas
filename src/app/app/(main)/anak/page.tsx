@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild } from "@/lib/parent";
 import { SCHOOL_LEVELS } from "@/lib/utils";
@@ -53,14 +54,14 @@ export default async function AnakPage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-4">
       <PageTitle title="Profil Anak" subtitle="Data anak disimpan minimal: tanpa NIK, alamat, atau foto." />
-      {baru && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Selamat datang! Tambahkan profil anak untuk mulai mencatat. 🎉</p>}
+      {baru && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Selamat datang! Tambahkan profil anak untuk mulai mencatat.</p>}
       {children.map((c) => (
         <details key={c.id} className="card">
           <summary className="flex cursor-pointer items-center justify-between font-extrabold">
             <span>
-              👧 {c.nickname} <span className="font-normal text-ink-soft">· {SCHOOL_LEVELS[c.school_level]} · lahir {c.birth_year}</span>
+              <Icon name="child" className="h-5 w-5 align-[-3px] text-tunas-600" /> {c.nickname} <span className="font-normal text-ink-soft">· {SCHOOL_LEVELS[c.school_level]} · lahir {c.birth_year}</span>
             </span>
-            <span className="text-xs text-ink-soft">{c.pin_hash ? "🔒 PIN aktif" : "PIN belum diatur"}</span>
+            <span className="text-xs text-ink-soft">{c.pin_hash ? <span className="inline-flex items-center gap-1"><Icon name="lock" className="h-3.5 w-3.5" /> PIN aktif</span> : "PIN belum diatur"}</span>
           </summary>
           <div className="mt-4">
             <ChildForm child={c} />
@@ -72,7 +73,7 @@ export default async function AnakPage({ searchParams }: { searchParams: Promise
         </details>
       ))}
       <div className="card">
-        <h2 className="mb-3 text-lg font-extrabold">➕ Tambah anak</h2>
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-extrabold"><Icon name="plus" className="text-tunas-600" /> Tambah anak</h2>
         <ChildForm />
       </div>
     </div>

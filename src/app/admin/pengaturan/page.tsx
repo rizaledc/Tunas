@@ -1,3 +1,4 @@
+import { CATEGORY_ICONS, CategoryIcon, Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSettings } from "@/lib/settings";
@@ -137,7 +138,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
     <div className="space-y-4">
       {(["digital", "positif"] as const).map((type) => (
         <section key={type} className="card overflow-x-auto">
-          <h2 className="mb-2 font-extrabold">{type === "digital" ? "📱 Tujuan gawai (digital)" : "🌳 Aktivitas positif"}</h2>
+          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-tunas-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
           <table className="tbl">
             <thead>
               <tr>
@@ -158,7 +159,10 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
                         <input type="hidden" name="id" value={c.id} />
                         <input type="hidden" name="type" value={c.type} />
                         <input type="hidden" name="active" value={c.active ? "on" : "off"} />
-                        <input name="icon" defaultValue={c.icon} className="input w-16 py-1 text-center text-xl" />
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tunas-50 text-tunas-600">
+                          <CategoryIcon icon={c.icon} className="h-6 w-6" />
+                        </span>
+                        <IconSelect defaultValue={c.icon} />
                         <input name="name" defaultValue={c.name} className="input py-1" />
                         <input type="number" name="sort" defaultValue={c.sort} className="input w-20 py-1" />
                         <button className="btn-outline btn-sm">Simpan</button>
@@ -178,7 +182,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
           </table>
           <ActionForm action={saveCategory} resetOnSuccess className="mt-3 flex flex-wrap items-center gap-2">
             <input type="hidden" name="type" value={type} />
-            <input name="icon" placeholder="🙂" className="input w-16 py-1 text-center text-xl" />
+            <IconSelect defaultValue="star" />
             <input name="name" placeholder="Nama kategori baru" required className="input w-60 py-1" />
             <input type="number" name="sort" defaultValue={99} className="input w-20 py-1" />
             <button className="btn-green btn-sm">+ Tambah</button>
@@ -250,5 +254,17 @@ async function Admins({ db, meId }: { db: ReturnType<typeof createAdminClient>; 
         <SubmitButton className="btn-green">Buat Akun</SubmitButton>
       </ActionForm>
     </div>
+  );
+}
+
+function IconSelect({ defaultValue }: { defaultValue: string }) {
+  return (
+    <select name="icon" defaultValue={CATEGORY_ICONS.some((i) => i.key === defaultValue) ? defaultValue : "heart"} className="input w-44 py-1 text-sm" aria-label="Ikon">
+      {CATEGORY_ICONS.map((i) => (
+        <option key={i.key} value={i.key}>
+          {i.label}
+        </option>
+      ))}
+    </select>
   );
 }

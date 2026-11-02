@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@/components/icons";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -55,8 +56,8 @@ export function GalleryGrid({ photos, limit }: { photos: Photo[]; limit?: number
             <Image src={list[open].url} alt={list[open].caption ?? "Foto kegiatan"} fill sizes="100vw" className="object-contain" />
           </div>
           {list[open].caption && <p className="absolute bottom-6 px-4 text-center text-white">{list[open].caption}</p>}
-          <button className="absolute top-4 right-4 rounded-full bg-white/90 px-3 py-1 text-xl font-bold" aria-label="Tutup" onClick={() => setOpen(null)}>
-            ×
+          <button className="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-ink" aria-label="Tutup" onClick={() => setOpen(null)}>
+            <Icon name="close" className="h-6 w-6" />
           </button>
         </div>
       )}

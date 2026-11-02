@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@/components/icons";
 import { useActionState, useEffect, useRef, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";
@@ -83,7 +84,7 @@ export function ConfirmButton({ children, message, className }: { children: Reac
 export function PrintButton({ label = "Cetak" }: { label?: string }) {
   return (
     <button type="button" className="btn-primary no-print" onClick={() => window.print()}>
-      🖨️ {label}
+      <Icon name="printer" className="h-5 w-5" /> {label}
     </button>
   );
 }

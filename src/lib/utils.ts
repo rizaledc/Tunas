@@ -75,11 +75,11 @@ export const GALLERY_CATEGORIES: Record<string, string> = {
   lele: "Lele",
 };
 
-export const MOODS: Record<string, { label: string; icon: string }> = {
-  senang: { label: "Senang", icon: "😄" },
-  biasa: { label: "Biasa", icon: "🙂" },
-  sedih: { label: "Sedih", icon: "😟" },
-  marah: { label: "Marah", icon: "😠" },
+export const MOODS: Record<string, { label: string; icon: "face-happy" | "face-smile" | "face-sad" | "face-angry" }> = {
+  senang: { label: "Senang", icon: "face-happy" },
+  biasa: { label: "Biasa", icon: "face-smile" },
+  sedih: { label: "Sedih", icon: "face-sad" },
+  marah: { label: "Marah", icon: "face-angry" },
 };
 
 export const STOP_RESPONSES: Record<string, string> = {

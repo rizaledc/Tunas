@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,14 +22,14 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
   const upcoming = new Date(e.date) > new Date();
   return (
     <article className="mx-auto max-w-4xl px-4 py-10">
-      <Link href="/kegiatan" className="text-sm font-bold text-sky-brand">
-        ← Semua kegiatan
+      <Link href="/kegiatan" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+        <Icon name="arrow-left" className="h-4 w-4" /> Semua kegiatan
       </Link>
       <h1 className="mt-2 text-3xl font-extrabold text-tunas-900">{e.title}</h1>
-      <p className="mt-2 font-semibold text-oranye-600">
-        🗓️ {formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })} WIB
+      <p className="mt-2 flex items-center gap-2 font-semibold text-oranye-600">
+        <Icon name="calendar" className="h-5 w-5" /> {formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })} WIB
       </p>
-      {e.location && <p className="text-ink-soft">📍 {e.location}</p>}
+      {e.location && <p className="flex items-center gap-2 text-ink-soft"><Icon name="pin" className="h-5 w-5" /> {e.location}</p>}
       {e.cover_photo && (
         <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl">
           <Image src={e.cover_photo} alt={e.title} fill sizes="(min-width:896px) 896px, 100vw" className="object-cover" />

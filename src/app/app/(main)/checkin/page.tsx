@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild } from "@/lib/parent";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +31,7 @@ export default async function CheckinPage() {
             {Object.entries(MOODS).map(([k, m]) => (
               <label key={k} className="chip flex-col justify-center rounded-2xl py-3">
                 <input type="radio" name="mood" value={k} defaultChecked={c?.mood === k} className="sr-only" />
-                <span className="text-3xl">{m.icon}</span>
+                <Icon name={m.icon} className="h-9 w-9 text-oranye-500" />
                 <span className="text-xs">{m.label}</span>
               </label>
             ))}
@@ -42,7 +43,7 @@ export default async function CheckinPage() {
             {Object.entries(STOP_RESPONSES).map(([k, label]) => (
               <label key={k} className="chip justify-start rounded-xl py-3 text-base">
                 <input type="radio" name="stop_response" value={k} defaultChecked={c?.stop_response === k} className="sr-only" />
-                {k === "mudah" ? "😊" : k === "diingatkan" ? "🗣️" : "😤"} {label}
+                <Icon name={k === "mudah" ? "face-smile" : k === "diingatkan" ? "megaphone" : "face-angry"} className="h-6 w-6 text-tunas-600" /> {label}
               </label>
             ))}
           </div>
@@ -57,10 +58,10 @@ export default async function CheckinPage() {
           <legend className="mb-2 px-1 text-lg font-extrabold">4. Memakai gawai menjelang tidur?</legend>
           <div className="flex gap-2">
             <label className="chip flex-1 justify-center py-3 text-base">
-              <input type="radio" name="device_before_sleep" value="ya" defaultChecked={c?.device_before_sleep === true} className="sr-only" /> 📱 Ya
+              <input type="radio" name="device_before_sleep" value="ya" defaultChecked={c?.device_before_sleep === true} className="sr-only" /> <Icon name="device" /> Ya
             </label>
             <label className="chip flex-1 justify-center py-3 text-base">
-              <input type="radio" name="device_before_sleep" value="tidak" defaultChecked={c?.device_before_sleep === false} className="sr-only" /> 😴 Tidak
+              <input type="radio" name="device_before_sleep" value="tidak" defaultChecked={c?.device_before_sleep === false} className="sr-only" /> <Icon name="sleep" /> Tidak
             </label>
           </div>
         </fieldset>

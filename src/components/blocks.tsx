@@ -1,3 +1,4 @@
+import { Icon, type IconName } from "@/components/icons";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -14,11 +15,11 @@ export function PageTitle({ title, subtitle, action }: { title: string; subtitle
   );
 }
 
-export function Empty({ icon = "🌱", title, text, action }: { icon?: string; title: string; text?: string; action?: ReactNode }) {
+export function Empty({ icon = "sprout", title, text, action }: { icon?: IconName; title: string; text?: string; action?: ReactNode }) {
   return (
     <div className="card flex flex-col items-center gap-2 py-8 text-center">
-      <span className="text-4xl" aria-hidden>
-        {icon}
+      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-tunas-50 text-tunas-600">
+        <Icon name={icon} className="h-9 w-9" />
       </span>
       <p className="text-lg font-bold">{title}</p>
       {text && <p className="max-w-sm text-ink-soft">{text}</p>}
@@ -27,7 +28,7 @@ export function Empty({ icon = "🌱", title, text, action }: { icon?: string; t
   );
 }
 
-export function Stat({ label, value, hint, tone = "green", icon }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "green" | "orange" | "blue" | "red" | "gray"; icon?: string }) {
+export function Stat({ label, value, hint, tone = "green", icon }: { label: string; value: ReactNode; hint?: ReactNode; tone?: "green" | "orange" | "blue" | "red" | "gray"; icon?: IconName }) {
   const tones = {
     green: "bg-tunas-50 text-tunas-700",
     orange: "bg-orange-50 text-oranye-600",
@@ -38,7 +39,11 @@ export function Stat({ label, value, hint, tone = "green", icon }: { label: stri
   return (
     <div className="card">
       <div className="flex items-center gap-2 text-sm font-semibold text-ink-soft">
-        {icon && <span className={cn("flex h-8 w-8 items-center justify-center rounded-lg text-base", tones[tone])} aria-hidden>{icon}</span>}
+        {icon && (
+          <span className={cn("flex h-9 w-9 items-center justify-center rounded-xl", tones[tone])}>
+            <Icon name={icon} className="h-5 w-5" />
+          </span>
+        )}
         {label}
       </div>
       <div className="mt-2 text-2xl font-extrabold text-ink">{value}</div>
@@ -76,11 +81,11 @@ export function Progress({ value, max, tone = "green" }: { value: number; max: n
   );
 }
 
-export function Placeholder({ label, icon = "📷", className }: { label: string; icon?: string; className?: string }) {
+export function Placeholder({ label, icon = "camera", className }: { label: string; icon?: IconName; className?: string }) {
   return (
     <div className={cn("flex flex-col items-center justify-center gap-1 bg-gradient-to-br from-tunas-100 via-tunas-50 to-orange-50 text-tunas-700", className)}>
-      <span className="text-4xl" aria-hidden>
-        {icon}
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/70 text-tunas-600 shadow-sm">
+        <Icon name={icon} className="h-8 w-8" />
       </span>
       <span className="px-2 text-center text-xs font-semibold">{label}</span>
     </div>

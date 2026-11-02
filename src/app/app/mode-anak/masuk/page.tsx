@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { requireParent } from "@/lib/auth";
@@ -14,7 +15,7 @@ export default async function MasukModeAnak() {
   return (
     <div className="mx-auto max-w-md space-y-5 px-4 py-8">
       <div className="text-center">
-        <p className="text-5xl">⭐</p>
+        <Icon name="star" className="mx-auto h-14 w-14 text-oranye-500" />
         <h1 className="text-3xl font-extrabold text-tunas-900">Mode Anak</h1>
         <p className="mt-1 text-ink-soft">Anak bisa mencatat kegiatan positifnya sendiri dan mengumpulkan bintang. Anak tidak bisa melihat analitik atau insight.</p>
       </div>
@@ -29,8 +30,8 @@ export default async function MasukModeAnak() {
           .
         </p>
       )}
-      <Link href="/app" className="block text-center font-bold text-ink-soft">
-        ← Kembali
+      <Link href="/app" className="flex items-center justify-center gap-1 font-bold text-ink-soft">
+        <Icon name="arrow-left" className="h-4 w-4" /> Kembali
       </Link>
     </div>
   );

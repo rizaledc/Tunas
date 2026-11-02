@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild, getAgreement } from "@/lib/parent";
@@ -26,7 +27,7 @@ export default async function KesepakatanPage() {
         action={
           agreement && (
             <Link href="/app/kesepakatan/poster" className="btn-outline btn-sm">
-              🖨️ Poster
+              <Icon name="printer" className="h-4 w-4" /> Poster
             </Link>
           )
         }

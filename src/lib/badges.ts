@@ -6,14 +6,14 @@ export function computeBadges(logs: ChildLog[], today: string) {
   const recent = new Set(logs.filter((l) => l.log_date >= addDays(today, -6)).map((l) => l.log_date)).size;
   return {
     stars,
-    badges: [
-      { icon: "🌟", name: "Bintang Pertama", desc: "Mencatat kegiatan pertama", earned: stars >= 1 },
-      { icon: "💪", name: "Rajin", desc: "Mengumpulkan 5 bintang", earned: stars >= 5 },
-      { icon: "🧭", name: "Penjelajah", desc: "Mencoba 3 jenis kegiatan", earned: cats >= 3 },
-      { icon: "📅", name: "Seminggu Hebat", desc: "Mencatat 5 hari dalam seminggu", earned: recent >= 5 },
-      { icon: "🏆", name: "Juara", desc: "Mengumpulkan 15 bintang", earned: stars >= 15 },
-      { icon: "🚀", name: "Bintang Super", desc: "Mengumpulkan 30 bintang", earned: stars >= 30 },
-    ],
+    badges: ([
+      { icon: "star", name: "Bintang Pertama", desc: "Mencatat kegiatan pertama", earned: stars >= 1 },
+      { icon: "flame", name: "Rajin", desc: "Mengumpulkan 5 bintang", earned: stars >= 5 },
+      { icon: "compass", name: "Penjelajah", desc: "Mencoba 3 jenis kegiatan", earned: cats >= 3 },
+      { icon: "calendar-check", name: "Seminggu Hebat", desc: "Mencatat 5 hari dalam seminggu", earned: recent >= 5 },
+      { icon: "trophy", name: "Juara", desc: "Mengumpulkan 15 bintang", earned: stars >= 15 },
+      { icon: "rocket", name: "Bintang Super", desc: "Mengumpulkan 30 bintang", earned: stars >= 30 },
+    ] as const),
   };
 }
 

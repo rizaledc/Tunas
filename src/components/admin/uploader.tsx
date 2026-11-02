@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@/components/icons";
 import { useEffect, useRef, useState } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
@@ -93,7 +94,7 @@ export function MultiUpload({ name = "uploaded", folder }: { name?: string; fold
     <div className="space-y-2" ref={ref}>
       <input type="hidden" name={name} value={JSON.stringify(items)} />
       <label className="btn-outline cursor-pointer">
-        📷 Pilih foto (bisa banyak)
+        <Icon name="camera" className="h-5 w-5" /> Pilih foto (bisa banyak)
         <input
           type="file"
           multiple

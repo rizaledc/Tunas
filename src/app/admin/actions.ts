@@ -366,7 +366,7 @@ export async function saveReminder(_: ActionState, fd: FormData): Promise<Action
 export async function saveCategory(_: ActionState, fd: FormData): Promise<ActionState> {
   const me = await requireAdmin("superadmin");
   const id = str(fd, "id");
-  const row = { type: str(fd, "type") === "digital" ? "digital" : "positif", name: str(fd, "name"), icon: str(fd, "icon") || "⭐", sort: int(fd, "sort", 0), active: str(fd, "active") !== "off" };
+  const row = { type: str(fd, "type") === "digital" ? "digital" : "positif", name: str(fd, "name"), icon: str(fd, "icon") || "star", sort: int(fd, "sort", 0), active: str(fd, "active") !== "off" };
   if (!row.name) return { error: "Nama kategori wajib." };
   const { error } = id ? await db().from("categories").update(row).eq("id", id) : await db().from("categories").insert(row);
   if (error) return { error: "Gagal menyimpan kategori." };

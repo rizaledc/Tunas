@@ -33,20 +33,20 @@ export default async function MonitoringAiPage() {
 
   return (
     <div className="space-y-4">
-      <PageTitle title="Monitoring AI" subtitle={`Model: ${cfg["ai.model"]} · maks ${cfg["ai.max_per_day"]}/anak/hari · max_tokens ${cfg["ai.max_tokens"]}${cfg["ai.enabled"] ? "" : " · ⚠️ AI dinonaktifkan"}`} />
+      <PageTitle title="Monitoring AI" subtitle={`Model: ${cfg["ai.model"]} · maks ${cfg["ai.max_per_day"]}/anak/hari · max_tokens ${cfg["ai.max_tokens"]}${cfg["ai.enabled"] ? "" : " · AI dinonaktifkan"}`} />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Stat icon="✨" label="Analisis 30 hari" value={list.length} hint={`${fallback} memakai cadangan rule-based`} />
-        <Stat icon="🔢" label="Token terpakai" value={(tokensIn + tokensOut).toLocaleString("id-ID")} hint={`in ${tokensIn.toLocaleString("id-ID")} · out ${tokensOut.toLocaleString("id-ID")}`} tone="blue" />
-        <Stat icon="💵" label="Biaya 30 hari" value={`$${cost.toFixed(4)}`} hint={list.length ? `≈ $${(cost / Math.max(1, list.length - fallback)).toFixed(5)}/analisis` : undefined} tone="orange" />
+        <Stat icon="sparkle" label="Analisis 30 hari" value={list.length} hint={`${fallback} memakai cadangan rule-based`} />
+        <Stat icon="hash" label="Token terpakai" value={(tokensIn + tokensOut).toLocaleString("id-ID")} hint={`in ${tokensIn.toLocaleString("id-ID")} · out ${tokensOut.toLocaleString("id-ID")}`} tone="blue" />
+        <Stat icon="cash" label="Biaya 30 hari" value={`$${cost.toFixed(4)}`} hint={list.length ? `≈ $${(cost / Math.max(1, list.length - fallback)).toFixed(5)}/analisis` : undefined} tone="orange" />
         <Stat
-          icon="🏦"
+          icon="wallet"
           label="Saldo / limit API key"
           value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(2)}` : "tanpa limit") : "—"}
           hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "OPENROUTER_API_KEY belum diatur"}
           tone={balance?.remaining !== null && balance && balance.remaining < 2 ? "red" : "green"}
         />
-        <Stat icon="👍" label="Membantu" value={up} tone="green" />
-        <Stat icon="👎" label="Tidak membantu" value={down} tone="red" hint={up + down ? `${Math.round((up / (up + down)) * 100)}% positif` : "belum ada rating"} />
+        <Stat icon="thumbsUp" label="Membantu" value={up} tone="green" />
+        <Stat icon="thumbsDown" label="Tidak membantu" value={down} tone="red" hint={up + down ? `${Math.round((up / (up + down)) * 100)}% positif` : "belum ada rating"} />
       </div>
       <section className="card">
         <h2 className="font-extrabold">Analisis per hari</h2>
@@ -60,7 +60,7 @@ export default async function MonitoringAiPage() {
           return (
             <div key={i} className="card text-sm">
               <p className="text-xs text-ink-soft">
-                {formatTanggal(s.created_at)} · {s.model} · {s.tokens_out} token keluar {s.rating === 1 ? "· 👍" : s.rating === -1 ? "· 👎" : ""}
+                {formatTanggal(s.created_at)} · {s.model} · {s.tokens_out} token keluar {s.rating === 1 ? "· membantu" : s.rating === -1 ? "· tidak membantu" : ""}
               </p>
               <p className="mt-1 font-bold">{o.ringkasan}</p>
               <p className="mt-1">

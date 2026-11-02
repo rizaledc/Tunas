@@ -4,7 +4,7 @@ import { Empty } from "@/components/blocks";
 export function NoChild() {
   return (
     <Empty
-      icon="👧"
+      icon="child"
       title="Tambahkan profil anak dulu"
       text="Cukup nama panggilan, tahun lahir, dan jenjang sekolah."
       action={

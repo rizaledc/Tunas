@@ -1,3 +1,4 @@
+import { Icon, CategoryIcon } from "@/components/icons";
 import Link from "next/link";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild, getCategories } from "@/lib/parent";
@@ -39,14 +40,14 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
       <form className="card mb-4 grid grid-cols-2 gap-2" method="get">
         <select name="jenis" defaultValue={jenis ?? ""} className="input" aria-label="Filter jenis">
           <option value="">Semua jenis</option>
-          <option value="digital">📱 Digital</option>
-          <option value="positif">🌳 Positif</option>
+          <option value="digital">Digital</option>
+          <option value="positif">Positif</option>
         </select>
         <select name="kategori" defaultValue={kategori ?? ""} className="input" aria-label="Filter kategori">
           <option value="">Semua kategori</option>
           {cats.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.icon} {c.name}
+              {c.type === "digital" ? "Digital · " : "Positif · "}{c.name}
             </option>
           ))}
         </select>
@@ -60,7 +61,7 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
       </form>
 
       {groups.size === 0 ? (
-        <Empty icon="📋" title="Belum ada catatan" action={<Link href="/app/catat" className="btn-primary mt-2">Catat sekarang</Link>} />
+        <Empty icon="list" title="Belum ada catatan" action={<Link href="/app/catat" className="btn-primary mt-2">Catat sekarang</Link>} />
       ) : (
         <div className="space-y-4">
           {[...groups.entries()].map(([date, items]) => {
@@ -71,7 +72,7 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                 <div className="mb-2 flex items-baseline justify-between">
                   <h2 className="font-extrabold">{formatHari(date)}</h2>
                   <p className="text-xs text-ink-soft">
-                    📱 {formatMenit(dig)} · 🌳 {formatMenit(pos)}
+                    <Icon name="device" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(dig)} · <Icon name="leaf" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(pos)}
                   </p>
                 </div>
                 <ul className="space-y-2">
@@ -79,18 +80,20 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                     const cat = cats.find((c) => c.id === l.category_id);
                     return (
                       <li key={l.id} className="card flex items-start gap-3 p-3">
-                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-2xl ${l.type === "digital" ? "bg-blue-50" : "bg-tunas-50"}`}>{cat?.icon ?? "•"}</span>
+                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${l.type === "digital" ? "bg-blue-50 text-sky-brand" : "bg-tunas-50 text-tunas-600"}`}>
+                          <CategoryIcon icon={cat?.icon} className="h-6 w-6" />
+                        </span>
                         <div className="min-w-0 flex-1">
                           <p className="font-bold">
                             {cat?.name ?? "Lainnya"} · {formatMenit(l.duration_min)}
-                            {l.input_by === "child" && <span className="ml-1 text-xs text-oranye-600">⭐ dicatat anak</span>}
+                            {l.input_by === "child" && <span className="ml-1 inline-flex items-center gap-0.5 text-xs text-oranye-600"><Icon name="star-solid" className="h-3 w-3" /> dicatat anak</span>}
                             {l.source === "logbook_import" && <span className="ml-1 text-xs text-ink-soft">(logbook)</span>}
                           </p>
                           <p className="text-sm text-ink-soft">
                             {l.start_at && `${isoToWibTime(l.start_at)}–${isoToWibTime(l.end_at)} · `}
                             {l.app_name && `${l.app_name} · `}
                             {l.type === "digital" && (l.accompanied ? "didampingi" : l.accompanied === false ? "tidak didampingi" : "")}
-                            {l.type === "digital" && l.follows_agreement === false && " · ⚠️ di luar kesepakatan"}
+                            {l.type === "digital" && l.follows_agreement === false && " · di luar kesepakatan"}
                             {l.with_whom && `bersama ${l.with_whom}`}
                           </p>
                           {l.note && <p className="mt-1 text-sm">{l.note}</p>}

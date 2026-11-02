@@ -70,7 +70,7 @@ create table public.categories (
   id uuid primary key default gen_random_uuid(),
   type text not null check (type in ('digital','positif')),
   name text not null,
-  icon text not null default '⭐',
+  icon text not null default 'star',
   active boolean not null default true,
   sort int not null default 0
 );

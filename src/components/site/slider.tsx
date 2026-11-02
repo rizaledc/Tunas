@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ export function EventSlider({ items }: { items: Item[] }) {
     const t = setInterval(() => setI((x) => (x + 1) % items.length), 6000);
     return () => clearInterval(t);
   }, [items.length]);
-  if (!items.length) return <Placeholder label="Kegiatan unggulan akan tampil di sini" icon="🎉" className="aspect-[16/10] rounded-2xl" />;
+  if (!items.length) return <Placeholder label="Kegiatan unggulan akan tampil di sini" icon="celebrate" className="aspect-[16/10] rounded-2xl" />;
   const it = items[i];
   return (
     <div className="relative overflow-hidden rounded-2xl bg-white shadow-sm">
@@ -21,7 +22,7 @@ export function EventSlider({ items }: { items: Item[] }) {
         {it.cover ? (
           <Image src={it.cover} alt={it.title} fill sizes="(min-width: 768px) 60vw, 100vw" className="object-cover" />
         ) : (
-          <Placeholder label="Foto kegiatan" icon="🎨" className="h-full w-full" />
+          <Placeholder label="Foto kegiatan" icon="palette" className="h-full w-full" />
         )}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">
           <p className="text-sm font-semibold">{it.dateLabel}</p>
@@ -33,11 +34,11 @@ export function EventSlider({ items }: { items: Item[] }) {
       </div>
       {items.length > 1 && (
         <>
-          <button aria-label="Sebelumnya" onClick={() => setI((i - 1 + items.length) % items.length)} className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 font-bold">
-            ‹
+          <button aria-label="Sebelumnya" onClick={() => setI((i - 1 + items.length) % items.length)} className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/85 p-2 text-ink shadow">
+            <Icon name="chevron-left" className="h-5 w-5" />
           </button>
-          <button aria-label="Berikutnya" onClick={() => setI((i + 1) % items.length)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 font-bold">
-            ›
+          <button aria-label="Berikutnya" onClick={() => setI((i + 1) % items.length)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/85 p-2 text-ink shadow">
+            <Icon name="chevron-right" className="h-5 w-5" />
           </button>
           <div className="absolute top-3 right-3 flex gap-1">
             {items.map((_, k) => (

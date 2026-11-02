@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { addDays, todayStr } from "@/lib/date";
 import { PageTitle } from "@/components/blocks";
@@ -11,7 +12,7 @@ export default async function LaporanPage() {
     <div className="space-y-4">
       <PageTitle title="Laporan & Ekspor" subtitle="Unduh rekap dalam format Excel atau PDF." />
       <section className="card">
-        <h2 className="font-extrabold">📊 Rekap bulanan komunitas</h2>
+        <h2 className="flex items-center gap-2 font-extrabold"><Icon name="chart" className="text-tunas-600" /> Rekap bulanan komunitas</h2>
         <p className="text-sm text-ink-soft">Angka agregat; kelompok berisi kurang dari 5 keluarga disembunyikan.</p>
         <form action="/api/admin/laporan" className="mt-3 flex flex-wrap items-end gap-2">
           <input type="hidden" name="jenis" value="bulanan" />
@@ -28,7 +29,7 @@ export default async function LaporanPage() {
         </form>
       </section>
       <section className="card">
-        <h2 className="font-extrabold">📅 Rekap kehadiran kegiatan</h2>
+        <h2 className="flex items-center gap-2 font-extrabold"><Icon name="calendar-check" className="text-tunas-600" /> Rekap kehadiran kegiatan</h2>
         <form action="/api/admin/laporan" className="mt-3 flex flex-wrap gap-2">
           <input type="hidden" name="jenis" value="kehadiran" />
           <button name="format" value="xlsx" className="btn-green">
@@ -41,7 +42,7 @@ export default async function LaporanPage() {
       </section>
       {me.role === "superadmin" && (
         <section className="card">
-          <h2 className="font-extrabold">🔬 Data anonim untuk artikel ilmiah</h2>
+          <h2 className="flex items-center gap-2 font-extrabold"><Icon name="flask" className="text-tunas-600" /> Data anonim untuk artikel ilmiah</h2>
           <p className="text-sm text-ink-soft">Khusus superadmin. Kode anak/responden berupa pseudonim; tanpa nama, nomor HP, atau RT.</p>
           <form action="/api/admin/laporan" className="mt-3 flex flex-wrap items-end gap-2">
             <input type="hidden" name="jenis" value="anonim" />

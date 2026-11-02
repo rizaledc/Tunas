@@ -52,7 +52,7 @@ export function PushToggle({ enabled }: { enabled: boolean }) {
               if (next && !(await enable())) return;
               await setReminder(next);
               setOn(next);
-              if (next) setMsg("Pengingat aktif di perangkat ini. 🔔");
+              if (next) setMsg("Pengingat aktif di perangkat ini.");
             });
           }}
         />

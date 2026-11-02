@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { Logo, TunasBadge } from "@/components/logo";
 import { getSetting } from "@/lib/settings";
@@ -12,14 +13,14 @@ export async function SiteFooter() {
           <p className="mt-3 max-w-md text-sm">
             Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak — luaran Teknologi Tepat Guna PKM Telkom University bersama Komunitas TUNAS (Tunggu Anak Siap) Banyumas.
           </p>
-          <p className="mt-3 text-sm">📍 {contact.address}</p>
-          <p className="mt-1 text-sm">
-            💬 WhatsApp:{" "}
+          <p className="mt-3 flex gap-2 text-sm"><Icon name="pin" className="mt-0.5 h-4 w-4" /> {contact.address}</p>
+          <p className="mt-1 flex items-center gap-2 text-sm">
+            <Icon name="chat" className="h-4 w-4" /> WhatsApp:{" "}
             <a className="underline" href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
               +{contact.whatsapp}
             </a>
           </p>
-          <p className="mt-1 text-sm">✉️ {contact.email}</p>
+          <p className="mt-1 flex items-center gap-2 text-sm"><Icon name="mail" className="h-4 w-4" /> {contact.email}</p>
         </div>
         <div>
           <p className="mb-2 font-extrabold text-white">Menu</p>

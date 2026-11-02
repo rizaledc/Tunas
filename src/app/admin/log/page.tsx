@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { formatTanggal } from "@/lib/date";
@@ -49,14 +50,14 @@ export default async function LogPage({ searchParams }: { searchParams: Promise<
         <div className="mt-3 flex justify-between">
           {page > 0 ? (
             <a className="btn-ghost btn-sm" href={`?${jenis ? `jenis=${jenis}&` : ""}hal=${page - 1}`}>
-              ← Sebelumnya
+              <Icon name="arrow-left" className="h-4 w-4" /> Sebelumnya
             </a>
           ) : (
             <span />
           )}
           {(logs?.length ?? 0) === 100 && (
             <a className="btn-ghost btn-sm" href={`?${jenis ? `jenis=${jenis}&` : ""}hal=${page + 1}`}>
-              Berikutnya →
+              Berikutnya <Icon name="arrow-right" className="h-4 w-4" />
             </a>
           )}
         </div>

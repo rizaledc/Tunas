@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { getArticles, getEvents, getPhotos, countActiveFamilies } from "@/lib/content";
@@ -12,12 +13,12 @@ import { excerpt } from "@/lib/markdown";
 export const revalidate = 300;
 
 const FEATURES = [
-  { icon: "📝", title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
-  { icon: "📊", title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
-  { icon: "✨", title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan — bukan perintah." },
-  { icon: "🤝", title: "Kesepakatan Keluarga", text: "Tetapkan target waktu layar dan jam bebas gawai, lalu cetak posternya." },
-  { icon: "⭐", title: "Mode Anak", text: "Anak mencatat kegiatannya sendiri dan mengumpulkan bintang." },
-  { icon: "🏘️", title: "Pantau Komunitas", text: "Pengurus TUNAS melihat data gabungan untuk merencanakan kegiatan." },
+  { icon: "pencil" as const, title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
+  { icon: "chart" as const, title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
+  { icon: "sparkle" as const, title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan — bukan perintah." },
+  { icon: "agreement" as const, title: "Kesepakatan Keluarga", text: "Tetapkan target waktu layar dan jam bebas gawai, lalu cetak posternya." },
+  { icon: "star" as const, title: "Mode Anak", text: "Anak mencatat kegiatannya sendiri dan mengumpulkan bintang." },
+  { icon: "community" as const, title: "Pantau Komunitas", text: "Pengurus TUNAS melihat data gabungan untuk merencanakan kegiatan." },
 ];
 
 const ROADMAP = [
@@ -62,7 +63,7 @@ export default async function LandingPage() {
             {hero.image ? (
               <Image src={hero.image} alt="Kegiatan anak-anak Komunitas TUNAS" fill priority sizes="(min-width:768px) 50vw, 100vw" className="object-cover" />
             ) : (
-              <Placeholder label="Anak-anak TUNAS merawat lele" icon="🐟" className="h-full w-full" />
+              <Placeholder label="Anak-anak TUNAS merawat lele" icon="fish" className="h-full w-full" />
             )}
           </div>
         </div>
@@ -74,7 +75,7 @@ export default async function LandingPage() {
           {stats.map((s) => (
             <div key={s.label} className="card text-center">
               <p className="text-2xl font-extrabold text-tunas-700">
-                {s.before && <span className="text-base text-ink-soft line-through decoration-1">{s.before}</span>} {s.before && "→ "}
+                {s.before && <span className="text-base text-ink-soft line-through decoration-1">{s.before}</span>} {s.before && <Icon name="arrow-right" className="h-5 w-5 align-[-2px] text-oranye-500" />}{" "}
                 {s.after}
               </p>
               <p className="mt-1 text-sm font-semibold text-ink-soft">{s.label}</p>
@@ -110,7 +111,7 @@ export default async function LandingPage() {
                       <span>
                         <span className="block font-bold">{e.title}</span>
                         <span className="block text-sm text-ink-soft">
-                          🕘 {formatTanggal(e.date, { hour: "2-digit", minute: "2-digit" })} WIB · {e.location}
+                          <Icon name="clock" className="h-3.5 w-3.5 align-[-2px]" /> {formatTanggal(e.date, { hour: "2-digit", minute: "2-digit" })} WIB · {e.location}
                         </span>
                       </span>
                     </Link>
@@ -118,8 +119,8 @@ export default async function LandingPage() {
                 ))}
               </ul>
             )}
-            <Link href="/kegiatan" className="mt-3 inline-block font-bold text-sky-brand">
-              Semua kegiatan →
+            <Link href="/kegiatan" className="mt-3 inline-flex items-center gap-1 font-bold text-sky-brand">
+              Semua kegiatan <Icon name="arrow-right" className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -133,8 +134,8 @@ export default async function LandingPage() {
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
               <div key={f.title} className="card flex gap-3">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-tunas-50 text-2xl" aria-hidden>
-                  {f.icon}
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-tunas-50 text-tunas-600">
+                  <Icon name={f.icon} className="h-7 w-7" />
                 </span>
                 <div>
                   <p className="font-extrabold">{f.title}</p>
@@ -194,8 +195,8 @@ export default async function LandingPage() {
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-4 flex items-end justify-between">
           <h2 className="text-2xl font-extrabold text-tunas-900">Galeri Kegiatan</h2>
-          <Link href="/galeri" className="font-bold text-sky-brand">
-            Lihat semua →
+          <Link href="/galeri" className="inline-flex items-center gap-1 font-bold text-sky-brand">
+            Lihat semua <Icon name="arrow-right" className="h-4 w-4" />
           </Link>
         </div>
         {photos.length ? <GalleryGrid photos={photos} limit={8} /> : <p className="card text-center text-ink-soft">Foto kegiatan akan segera diunggah oleh pengurus.</p>}
@@ -206,13 +207,13 @@ export default async function LandingPage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-4 flex items-end justify-between">
             <h2 className="text-2xl font-extrabold text-tunas-900">Artikel & Tips</h2>
-            <Link href="/artikel" className="font-bold text-sky-brand">
-              Semua artikel →
+            <Link href="/artikel" className="inline-flex items-center gap-1 font-bold text-sky-brand">
+              Semua artikel <Icon name="arrow-right" className="h-4 w-4" />
             </Link>
           </div>
           {articles.length === 0 ? (
             <div className="card text-center">
-              <p className="text-3xl">📚</p>
+              <Icon name="book-open" className="mx-auto h-10 w-10 text-tunas-600" />
               <p className="font-bold">Artikel pertama sedang ditulis</p>
               <p className="text-ink-soft">Nantikan tips digital parenting dari tim TUNAS dan Telkom University.</p>
             </div>
@@ -221,7 +222,7 @@ export default async function LandingPage() {
               {articles.map((a) => (
                 <Link key={a.id} href={`/artikel/${a.slug}`} className="card overflow-hidden p-0 hover:ring-2 hover:ring-tunas-200">
                   <div className="relative aspect-[16/9]">
-                    {a.cover ? <Image src={a.cover} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Tips digital parenting" icon="💡" className="h-full w-full" />}
+                    {a.cover ? <Image src={a.cover} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Tips digital parenting" icon="bulb" className="h-full w-full" />}
                   </div>
                   <div className="p-4">
                     <p className="text-xs font-semibold text-ink-soft">{a.published_at && formatTanggal(a.published_at)}</p>
@@ -247,7 +248,7 @@ export default async function LandingPage() {
               Daftar Sekarang
             </Link>
             <a href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent("Halo pengurus TUNAS, saya ingin bergabung dengan SAHABAT ANAK.")}`} target="_blank" rel="noopener noreferrer" className="btn border-2 border-white text-white hover:bg-white/10">
-              💬 WhatsApp Pengurus
+              <Icon name="chat" className="h-5 w-5" /> WhatsApp Pengurus
             </a>
           </div>
         </div>

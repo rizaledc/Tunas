@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@/components/icons";
 import { useRef, useState } from "react";
 import { renderMarkdown } from "@/lib/markdown";
 
@@ -37,10 +38,10 @@ export function ArticleEditor({ defaultValue }: { defaultValue: string }) {
           1. Nomor
         </button>
         <button type="button" className="btn-ghost btn-sm" onClick={() => wrap("[", "](https://)")}>
-          🔗 Tautan
+          <Icon name="link" className="h-4 w-4" /> Tautan
         </button>
         <button type="button" className="btn-ghost btn-sm ml-auto" onClick={() => setPreview(!preview)}>
-          {preview ? "✏️ Tulis" : "👁️ Pratinjau"}
+          <Icon name={preview ? "pencil" : "eye"} className="h-4 w-4" /> {preview ? "Tulis" : "Pratinjau"}
         </button>
       </div>
       <input type="hidden" name="body" value={value} />

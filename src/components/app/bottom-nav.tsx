@@ -1,14 +1,15 @@
 "use client";
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { href: "/app", label: "Beranda", icon: "🏠" },
-  { href: "/app/riwayat", label: "Riwayat", icon: "📋" },
-  { href: "/app/catat", label: "Catat", icon: "+", center: true },
-  { href: "/app/analitik", label: "Analitik", icon: "📊" },
-  { href: "/app/profil", label: "Profil", icon: "👤" },
+  { href: "/app", label: "Beranda", icon: "home" as const },
+  { href: "/app/riwayat", label: "Riwayat", icon: "list" as const },
+  { href: "/app/catat", label: "Catat", icon: "plus" as const, center: true },
+  { href: "/app/analitik", label: "Analitik", icon: "chart" as const },
+  { href: "/app/profil", label: "Profil", icon: "user" as const },
 ];
 
 export function BottomNav() {
@@ -22,7 +23,9 @@ export function BottomNav() {
             return (
               <li key={it.href} className="-mt-6">
                 <Link href={it.href} className="flex flex-col items-center gap-0.5 text-xs font-bold text-oranye-600" aria-current={active ? "page" : undefined}>
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-oranye-500 text-4xl leading-none font-bold text-white shadow-lg ring-4 ring-white">+</span>
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-oranye-500 text-white shadow-lg ring-4 ring-white">
+                    <Icon name="plus" className="h-8 w-8" strokeWidth={2.5} />
+                  </span>
                   {it.label}
                 </Link>
               </li>
@@ -34,9 +37,7 @@ export function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={cn("flex min-w-16 flex-col items-center gap-0.5 py-2 text-xs font-bold", active ? "text-tunas-700" : "text-ink-soft")}
               >
-                <span className={cn("text-2xl", !active && "opacity-70 grayscale")} aria-hidden>
-                  {it.icon}
-                </span>
+                <Icon name={it.icon} className="h-7 w-7" />
                 {it.label}
               </Link>
             </li>

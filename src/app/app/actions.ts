@@ -80,7 +80,7 @@ export async function saveAgreement(_: ActionState, fd: FormData): Promise<Actio
   );
   if (error) return { error: "Gagal menyimpan kesepakatan." };
   revalidatePath("/app", "layout");
-  return { ok: true, message: "Kesepakatan keluarga tersimpan. 🎉" };
+  return { ok: true, message: "Kesepakatan keluarga tersimpan." };
 }
 
 // ---------- catatan aktivitas ----------
@@ -138,7 +138,7 @@ export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState
   if (error) return { error: "Gagal menyimpan catatan." };
   revalidatePath("/app", "layout");
   if (id) redirect("/app/riwayat");
-  return { ok: true, message: `Tersimpan: ${duration} menit ${type === "digital" ? "aktivitas digital" : "aktivitas positif"}. 👍` };
+  return { ok: true, message: `Tersimpan: ${duration} menit ${type === "digital" ? "aktivitas digital" : "aktivitas positif"}.` };
 }
 
 export async function deleteLog(fd: FormData) {
@@ -166,7 +166,7 @@ export async function saveCheckin(_: ActionState, fd: FormData): Promise<ActionS
   );
   if (error) return { error: "Gagal menyimpan check-in." };
   revalidatePath("/app", "layout");
-  return { ok: true, message: "Check-in hari ini tersimpan. Terima kasih! 🌟" };
+  return { ok: true, message: "Check-in hari ini tersimpan. Terima kasih!" };
 }
 
 // ---------- insight ----------
@@ -182,7 +182,7 @@ export async function runInsight(_: ActionState, fd: FormData): Promise<ActionSt
       ? "Data belum berubah sejak analisis terakhir, jadi ini hasil yang sama."
       : res.fallback
         ? "Layanan AI sedang tidak tersedia. Ini ringkasan otomatis dari angka catatan."
-        : "Insight baru sudah siap. ✨",
+        : "Insight baru sudah siap.",
   };
 }
 
@@ -345,7 +345,7 @@ export async function childLog(_: ActionState, fd: FormData): Promise<ActionStat
   });
   if (error) return { error: "Yah, gagal menyimpan. Coba lagi ya." };
   revalidatePath("/app/mode-anak");
-  return { ok: true, message: "Hore! Kamu dapat 1 bintang ⭐" };
+  return { ok: true, message: "Hore! Kamu dapat 1 bintang!" };
 }
 
 // ---------- persetujuan data ----------

@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -37,7 +38,7 @@ export default function TentangPage() {
             "Tim PKM mendapat data evaluasi untuk laporan dan artikel ilmiah.",
           ].map((t) => (
             <li key={t} className="flex gap-2">
-              <span aria-hidden>✅</span>
+              <Icon name="check-circle" className="mt-0.5 h-5 w-5 text-tunas-600" />
               {t}
             </li>
           ))}

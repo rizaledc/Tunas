@@ -33,7 +33,7 @@ export const DEFAULT_SETTINGS = {
     { min_age: 6, max_age: 12, max_min: 120, note: "Maksimal 2 jam per hari untuk hiburan (draf, perlu ditetapkan tim)" },
     { min_age: 13, max_age: 18, max_min: 120, note: "Sekitar 2 jam per hari untuk hiburan (draf, perlu ditetapkan tim)" },
   ] as ScreenRef[],
-  "reminder.message": "Sudah mencatat aktivitas si kecil hari ini? Cukup 1 menit 😊",
+  "reminder.message": "Sudah mencatat aktivitas si kecil hari ini? Cukup 1 menit.",
   "public.consent": {
     version: "1.0",
     text: `Dengan mendaftar, saya menyetujui bahwa:

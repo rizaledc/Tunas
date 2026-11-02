@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild, getAgreement } from "@/lib/parent";
@@ -38,7 +39,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-4">
-      {terimakasih && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Terima kasih sudah mengisi kuesioner! 🙏</p>}
+      {terimakasih && <p className="rounded-xl bg-tunas-50 p-3 font-semibold text-tunas-700">Terima kasih sudah mengisi kuesioner!</p>}
       <div>
         <p className="text-ink-soft">{formatHari(today)}</p>
         <h1 className="text-2xl font-extrabold text-tunas-900">Ringkasan {child.nickname} hari ini</h1>
@@ -46,7 +47,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       {openSurvey && (
         <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-sky-brand bg-blue-50">
-          <span className="text-3xl">📝</span>
+          <Icon name="clipboard-check" className="h-9 w-9 text-sky-brand" />
           <span>
             <span className="block font-extrabold">Isi kuesioner: {openSurvey.name}</span>
             <span className="text-sm text-ink-soft">Bantu tim memperbaiki aplikasi (± 3 menit).</span>
@@ -56,7 +57,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       {(logs ?? []).length === 0 && (
         <div className="card flex items-center gap-3 border-2 border-oranye-400 bg-orange-50">
-          <span className="text-3xl">⏰</span>
+          <Icon name="alarm" className="h-9 w-9 text-oranye-500" />
           <div className="flex-1">
             <p className="font-extrabold">Belum ada catatan hari ini</p>
             <p className="text-sm text-ink-soft">Cukup 1 menit untuk mencatat.</p>
@@ -69,7 +70,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="card">
         <div className="flex items-baseline justify-between">
-          <p className="font-bold text-sky-brand">📱 Screen time</p>
+          <p className="flex items-center gap-1.5 font-bold text-sky-brand"><Icon name="device" /> Screen time</p>
           <p className="text-sm text-ink-soft">target {formatMenit(target)}</p>
         </div>
         <p className="mt-1 text-3xl font-extrabold">
@@ -83,11 +84,11 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-2 gap-3">
         <div className="card">
-          <p className="text-sm font-bold text-tunas-700">🌳 Aktivitas positif</p>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-tunas-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
           <p className="mt-1 text-2xl font-extrabold">{formatMenit(positif)}</p>
         </div>
         <div className="card">
-          <p className="text-sm font-bold text-oranye-600">⚖️ Keseimbangan</p>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-oranye-600"><Icon name="scale" className="h-4 w-4" /> Keseimbangan</p>
           <p className="mt-1 text-2xl font-extrabold">{digital + positif ? `${balance}%` : "–"}</p>
           <p className="text-xs text-ink-soft">porsi aktivitas positif</p>
         </div>
@@ -95,13 +96,13 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-3 gap-2">
         <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
-          <span className="text-2xl">📱</span>Catat gawai
+          <Icon name="device" className="h-7 w-7 text-sky-brand" />Catat gawai
         </Link>
         <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
-          <span className="text-2xl">🎨</span>Catat positif
+          <Icon name="palette" className="h-7 w-7 text-tunas-600" />Catat positif
         </Link>
         <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-tunas-500"}`}>
-          <span className="text-2xl">{checkin ? "✅" : "😊"}</span>Check-in
+          <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-oranye-500" />Check-in
         </Link>
       </div>
 
@@ -112,10 +113,10 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
           <form action={saveReflectionOutcome} className="mt-3 flex flex-wrap gap-2">
             <input type="hidden" name="id" value={pending.id} />
             <button name="outcome" value="berhasil" className="btn-green btn-sm">
-              👍 Berhasil
+              <Icon name="thumbsUp" className="h-4 w-4" /> Berhasil
             </button>
             <button name="outcome" value="sebagian" className="btn-outline btn-sm">
-              🙂 Sebagian
+              <Icon name="face-smile" className="h-4 w-4" /> Sebagian
             </button>
             <button name="outcome" value="belum" className="btn-ghost btn-sm ring-1 ring-gray-200">
               Belum
@@ -126,9 +127,9 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="card">
         <div className="flex items-center justify-between">
-          <p className="font-extrabold">✨ Insight terbaru</p>
-          <Link href="/app/insight" className="text-sm font-bold text-sky-brand">
-            Lihat →
+          <p className="flex items-center gap-1.5 font-extrabold"><Icon name="sparkle" className="text-oranye-500" /> Insight terbaru</p>
+          <Link href="/app/insight" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+            Lihat <Icon name="arrow-right" className="h-4 w-4" />
           </Link>
         </div>
         {out ? (
@@ -143,11 +144,13 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/app/kesepakatan" className="card text-sm font-bold">
-          🤝 Kesepakatan keluarga
+          <Icon name="agreement" className="mb-1 block h-6 w-6 text-tunas-600" />
+          Kesepakatan keluarga
           <span className="block font-normal text-ink-soft">{agreement ? `Target ${formatMenit(agreement.target_screen_min)}/hari` : "Belum dibuat"}</span>
         </Link>
         <Link href="/app/mode-anak/masuk" className="card text-sm font-bold">
-          ⭐ Mode anak
+          <Icon name="star" className="mb-1 block h-6 w-6 text-oranye-500" />
+          Mode anak
           <span className="block font-normal text-ink-soft">Anak mencatat sendiri</span>
         </Link>
       </div>

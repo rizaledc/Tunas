@@ -22,7 +22,7 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
     { key: "artikel", label: "Artikel", href: "/admin/konten?tab=artikel" },
     { key: "galeri", label: "Galeri", href: "/admin/konten?tab=galeri" },
     { key: "panduan", label: "Panduan & Modul", href: "/admin/konten?tab=panduan" },
-    { key: "kegiatan", label: "Kegiatan/Agenda →", href: "/admin/kegiatan" },
+    { key: "kegiatan", label: "Kegiatan/Agenda", href: "/admin/kegiatan" },
   ];
 
   return (

@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,8 +19,8 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
   if (!a) notFound();
   return (
     <article className="mx-auto max-w-3xl px-4 py-10">
-      <Link href="/artikel" className="text-sm font-bold text-sky-brand">
-        ← Semua artikel
+      <Link href="/artikel" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+        <Icon name="arrow-left" className="h-4 w-4" /> Semua artikel
       </Link>
       <h1 className="mt-2 text-3xl font-extrabold text-tunas-900">{a.title}</h1>
       {a.published_at && <p className="mt-1 text-sm text-ink-soft">{formatTanggal(a.published_at)}</p>}

@@ -19,7 +19,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ id: str
     supabase.from("survey_responses").select("id").eq("survey_id", id).eq("user_id", parent.id).maybeSingle(),
   ]);
   if (!s) notFound();
-  if (done) return <p className="card text-center">Anda sudah mengisi kuesioner ini. Terima kasih! 🙏</p>;
+  if (done) return <p className="card text-center">Anda sudah mengisi kuesioner ini. Terima kasih!</p>;
   if (!s.is_open) return <p className="card text-center">Kuesioner ini sudah ditutup.</p>;
   const qs = s.questions as Question[];
   return (

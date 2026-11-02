@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,12 +29,12 @@ function EventList({ items, empty }: { items: Awaited<ReturnType<typeof getEvent
       {items.map((e) => (
         <Link key={e.id} href={`/kegiatan/${e.slug}`} className="card overflow-hidden p-0 hover:ring-2 hover:ring-tunas-200">
           <div className="relative aspect-[16/9]">
-            {e.cover_photo ? <Image src={e.cover_photo} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Kegiatan TUNAS" icon="🎈" className="h-full w-full" />}
+            {e.cover_photo ? <Image src={e.cover_photo} alt="" fill sizes="33vw" className="object-cover" /> : <Placeholder label="Kegiatan TUNAS" icon="balloon" className="h-full w-full" />}
           </div>
           <div className="p-4">
             <p className="text-sm font-semibold text-oranye-600">{formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</p>
             <p className="font-extrabold">{e.title}</p>
-            {e.location && <p className="text-sm text-ink-soft">📍 {e.location}</p>}
+            {e.location && <p className="flex items-center gap-1 text-sm text-ink-soft"><Icon name="pin" className="h-4 w-4" /> {e.location}</p>}
           </div>
         </Link>
       ))}

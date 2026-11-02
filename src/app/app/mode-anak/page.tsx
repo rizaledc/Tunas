@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { redirect } from "next/navigation";
 import { requireParent } from "@/lib/auth";
 import { getChildModeId } from "@/lib/child-mode";
@@ -24,9 +25,9 @@ export default async function ModeAnakPage() {
   return (
     <div className="mx-auto max-w-lg space-y-6 px-4 py-6">
       <div className="text-center">
-        <p className="text-5xl">👋</p>
+        <Icon name="hand" className="mx-auto h-14 w-14 text-oranye-500" />
         <h1 className="text-3xl font-extrabold text-tunas-900">Halo, {child.nickname}!</h1>
-        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-2xl font-extrabold text-oranye-600 shadow">⭐ {stars} bintang</p>
+        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-2xl font-extrabold text-oranye-600 shadow"><Icon name="star-solid" className="h-7 w-7 text-yellow-400" /> {stars} bintang</p>
       </div>
       <ChildLogForm categories={cats.filter((c) => c.type === "positif")} />
       <section>
@@ -34,7 +35,7 @@ export default async function ModeAnakPage() {
         <div className="grid grid-cols-3 gap-3">
           {badges.map((b) => (
             <div key={b.name} className={`rounded-3xl bg-white p-3 text-center shadow-sm ${b.earned ? "" : "opacity-40 grayscale"}`} title={b.desc}>
-              <p className="text-4xl">{b.icon}</p>
+              <Icon name={b.icon} className="mx-auto h-10 w-10 text-oranye-500" />
               <p className="text-sm leading-tight font-extrabold">{b.name}</p>
               <p className="text-[11px] leading-tight text-ink-soft">{b.desc}</p>
             </div>

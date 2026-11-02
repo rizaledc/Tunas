@@ -1,3 +1,4 @@
+import { Icon, type IconName } from "@/components/icons";
 import Link from "next/link";
 import { requireParent } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -17,18 +18,18 @@ export default async function ProfilPage() {
       <PageTitle title="Profil" subtitle={parent.no_hp ? `+${parent.no_hp}` : parent.email ?? ""} />
 
       <nav className="grid grid-cols-2 gap-2">
-        {[
-          ["/app/anak", "👧", "Profil anak & PIN"],
-          ["/app/kesepakatan", "🤝", "Kesepakatan"],
-          ["/app/insight", "✨", "Insight"],
-          ["/app/checkin", "😊", "Check-in harian"],
-          ["/app/kegiatan", "📅", "Kegiatan TUNAS"],
-          ["/app/mode-anak/masuk", "⭐", "Mode anak"],
-          ["/panduan", "📘", "Panduan"],
-          ["/privasi", "🔒", "Privasi"],
-        ].map(([href, icon, label]) => (
+        {([
+          ["/app/anak", "child", "Profil anak & PIN"],
+          ["/app/kesepakatan", "agreement", "Kesepakatan"],
+          ["/app/insight", "sparkle", "Insight"],
+          ["/app/checkin", "face-smile", "Check-in harian"],
+          ["/app/kegiatan", "calendar", "Kegiatan TUNAS"],
+          ["/app/mode-anak/masuk", "star", "Mode anak"],
+          ["/panduan", "book", "Panduan"],
+          ["/privasi", "lock", "Privasi"],
+        ] as Array<[string, IconName, string]>).map(([href, icon, label]) => (
           <Link key={href} href={href} className="card flex items-center gap-2 p-3 font-bold">
-            <span className="text-xl">{icon}</span>
+            <Icon name={icon} className="h-6 w-6 text-tunas-600" />
             {label}
           </Link>
         ))}
@@ -73,10 +74,10 @@ export default async function ProfilPage() {
         </p>
         <div className="flex flex-wrap gap-2">
           <a href="/api/data-saya?format=xlsx" className="btn-outline btn-sm">
-            ⬇️ Unduh (Excel)
+            <Icon name="download" className="h-4 w-4" /> Unduh (Excel)
           </a>
           <a href="/api/data-saya?format=json" className="btn-outline btn-sm">
-            ⬇️ Unduh (JSON)
+            <Icon name="download" className="h-4 w-4" /> Unduh (JSON)
           </a>
         </div>
         <details className="rounded-xl bg-red-50 p-3">
@@ -90,7 +91,7 @@ export default async function ProfilPage() {
       </section>
 
       <form action="/keluar" method="post">
-        <button className="btn-ghost w-full ring-1 ring-gray-200">Keluar</button>
+        <button className="btn-ghost w-full ring-1 ring-gray-200"><Icon name="logout" /> Keluar</button>
       </form>
     </div>
   );

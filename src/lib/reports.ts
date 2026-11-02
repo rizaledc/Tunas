@@ -54,14 +54,14 @@ export async function monthlyReport(month: string): Promise<Report> {
     weeks.push({
       minggu: `${formatTanggal(w, { day: "numeric", month: "short" })} – ${formatTanggal(end, { day: "numeric", month: "short" })}`,
       keluarga_mencatat: new Set([...ids].map((id) => base.children.find((c) => c.id === id)?.family_id)).size,
-      screen_time_mnt: gw.suppressed ? "🔒" : gw.avgScreen,
-      positif_mnt: gw.suppressed ? "🔒" : gw.avgPositive,
-      patuh_persen: gw.suppressed ? "🔒" : gw.compliancePct,
+      screen_time_mnt: gw.suppressed ? "disembunyikan" : gw.avgScreen,
+      positif_mnt: gw.suppressed ? "disembunyikan" : gw.avgPositive,
+      patuh_persen: gw.suppressed ? "disembunyikan" : gw.compliancePct,
     });
   }
   const levels = Object.entries(SCHOOL_LEVELS).map(([k, v]) => {
     const gl = groupStats(base, filterChildren(base, { level: k }), { source: "app" });
-    return { jenjang: v, keluarga: gl.families, screen_time_mnt: gl.suppressed ? "🔒" : gl.avgScreen, positif_mnt: gl.suppressed ? "🔒" : gl.avgPositive, patuh_persen: gl.suppressed ? "🔒" : gl.compliancePct };
+    return { jenjang: v, keluarga: gl.families, screen_time_mnt: gl.suppressed ? "disembunyikan" : gl.avgScreen, positif_mnt: gl.suppressed ? "disembunyikan" : gl.avgPositive, patuh_persen: gl.suppressed ? "disembunyikan" : gl.compliancePct };
   });
   const purposes = g.suppressed ? [] : g.purposes.map((p) => ({ tujuan_gawai: p.name, total_menit: p.value }));
   const positives = g.suppressed ? [] : g.positives.map((p) => ({ aktivitas_positif: p.name, total_menit: p.value }));
@@ -151,7 +151,7 @@ export function toPdf(report: Report): Buffer {
     autoTable(doc, {
       startY: y + 20,
       head: [cols.map((c) => c.replace(/_/g, " "))],
-      body: s.rows.map((r) => cols.map((c) => String(r[c] ?? "").replace("🔒", "(disembunyikan)"))),
+      body: s.rows.map((r) => cols.map((c) => String(r[c] ?? ""))),
       styles: { fontSize: 8 },
       headStyles: { fillColor: [35, 130, 74] },
       margin: { left: 40, right: 40 },

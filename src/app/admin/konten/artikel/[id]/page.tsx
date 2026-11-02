@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icons";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
@@ -21,8 +22,8 @@ export default async function ArticleEditPage({ params }: { params: Promise<{ id
   }
   return (
     <div>
-      <Link href="/admin/konten?tab=artikel" className="text-sm font-bold text-sky-brand">
-        ← Daftar artikel
+      <Link href="/admin/konten?tab=artikel" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+        <Icon name="arrow-left" className="h-4 w-4" /> Daftar artikel
       </Link>
       <PageTitle title={a ? "Ubah Artikel" : "Artikel Baru"} />
       <ActionForm action={saveArticle} className="card space-y-3">
