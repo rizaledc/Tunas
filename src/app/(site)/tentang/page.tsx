@@ -10,10 +10,10 @@ export const revalidate = 300;
 export const metadata: Metadata = pageMeta("/tentang", "Tentang Program", "Latar belakang, makna logo, dan alur program SAHABAT ANAK.");
 
 const MEANING = [
-  { title: "Daun besar marun", text: "Orang tua yang menaungi, sekaligus dunia nyata dan alam tempat anak bermain." },
+  { title: "Daun besar putih", text: "Orang tua yang menaungi dan menjaga, memberi ruang aman bagi anak untuk tumbuh. Di latar terang, daun ini berwarna marun." },
   { title: "Daun kecil merah", text: "Anak yang sedang tumbuh: hangat, ceria, dan penuh rasa ingin tahu." },
   { title: "Satu titik tumbuh", text: "Keduanya berangkat dari akar yang sama, yaitu keluarga dan komunitas tempat anak tumbuh." },
-  { title: "Membentuk tanda centang", text: "Keseimbangan digital yang dicapai berdua dan disepakati bersama, bukan diperintahkan." },
+  { title: "Bersama membentuk tunas", text: "Dua daun yang tumbuh berdampingan membentuk tunas: awal pertumbuhan yang dirawat bersama hingga seimbang." },
 ];
 
 export default async function TentangPage() {
