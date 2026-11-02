@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: { bodySizeLimit: "4mb" },
+    // Hosting bersama (mis. Hostinger) melaporkan puluhan CPU tetapi membatasi jumlah
+    // thread/proses. Batasi worker build agar tidak gagal "can't spawn worker thread".
+    cpus: Number(process.env.BUILD_CPUS) || 2,
+    memoryBasedWorkersCount: false,
   },
   async headers() {
     return [

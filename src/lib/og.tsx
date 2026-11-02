@@ -4,6 +4,9 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
 
+// Batasi thread libvips: server hosting bersama membatasi jumlah thread per akun.
+sharp.concurrency(2);
+
 /** Ukuran standar pratinjau tautan (WhatsApp, Facebook, X, Telegram, LinkedIn). */
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_TYPE = "image/jpeg";
