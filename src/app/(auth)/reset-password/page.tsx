@@ -5,8 +5,8 @@ export const metadata: Metadata = { title: "Buat Password Baru" };
 
 export default function ResetPasswordPage() {
   return (
-    <div className="card mt-4 p-6">
-      <h1 className="text-2xl font-extrabold text-daun-900">Buat Password Baru</h1>
+    <div className="card rounded-3xl p-7 sm:p-9">
+      <h1 className="display text-3xl text-ink">Buat Password Baru</h1>
       <NewPasswordForm />
     </div>
   );

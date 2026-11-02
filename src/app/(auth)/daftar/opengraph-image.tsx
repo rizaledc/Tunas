@@ -8,6 +8,6 @@ export default async function Image() {
   return shareImage({
     kicker: "Undangan",
     title: "Anda diundang bergabung dengan SAHABAT ANAK",
-    subtitle: "Daftar dengan kode undangan, lalu mulai mencatat aktivitas si kecil — cukup 1 menit sehari.",
+    subtitle: "Daftar dengan kode undangan, lalu mulai mencatat aktivitas si kecil. Cukup 1 menit sehari.",
   });
 }

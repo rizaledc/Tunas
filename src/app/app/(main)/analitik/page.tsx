@@ -15,7 +15,7 @@ function Delta({ now, before, invert = false, unit = "mnt" }: { now: number; bef
   const d = Math.round(((now - before) / before) * 100);
   const good = invert ? d <= 0 : d >= 0;
   return (
-    <span className={cn("text-sm font-bold", good ? "text-daun-700" : "text-merah-600")}>
+    <span className={cn("text-sm font-bold", good ? "text-marun-700" : "text-merah-600")}>
       {d >= 0 ? "▲" : "▼"} {Math.abs(d)}% <span className="font-normal text-ink-soft">dari {before} {unit}</span>
     </span>
   );
@@ -123,7 +123,7 @@ export default async function AnalitikPage({ searchParams }: { searchParams: Pro
             <span
               key={d}
               title={formatTanggal(d)}
-              className={cn("flex aspect-square items-center justify-center rounded-lg font-bold", filled.has(d) ? "bg-daun-500 text-white" : "bg-gray-100 text-ink-soft", d === today && "ring-2 ring-oranye-500")}
+              className={cn("flex aspect-square items-center justify-center rounded-lg font-bold", filled.has(d) ? "bg-marun-500 text-white" : "bg-gray-100 text-ink-soft", d === today && "ring-2 ring-aksen-500")}
             >
               {Number(d.slice(8))}
             </span>

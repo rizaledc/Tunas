@@ -1,5 +1,5 @@
 /**
- * Perhitungan indikator — murni (tanpa I/O) supaya mudah diuji.
+ * Perhitungan indikator: murni (tanpa I/O) supaya mudah diuji.
  * AI hanya membaca hasil fungsi ini, tidak menghitung sendiri.
  */
 import { addDays, dateRange, wibHour } from "./date";
@@ -248,7 +248,7 @@ export function ruleBasedInsight(ind: Indicators): InsightOutput {
 
   const ekstrem = (acuan !== undefined && ind.rata_screen_min_per_hari > acuan * 2) || menolak >= 5;
   const konsultasi = "Jika pola ini berlanjut, tidak ada salahnya berbincang dengan guru, psikolog, atau tenaga kesehatan.";
-  if (baik.length === 0) baik.push("Ayah/Bunda sudah meluangkan waktu untuk mencatat — itu langkah awal yang baik.");
+  if (baik.length === 0) baik.push("Ayah/Bunda sudah meluangkan waktu untuk mencatat. Itu langkah awal yang baik.");
 
   const top = ind.aktivitas_positif_teratas[0]?.kategori;
   return {
@@ -266,13 +266,15 @@ export function ruleBasedInsight(ind: Indicators): InsightOutput {
 export function parseInsight(raw: unknown): InsightOutput | null {
   if (!raw || typeof raw !== "object") return null;
   const o = raw as Record<string, unknown>;
-  const arr = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string").slice(0, 4) : []);
+  // Rapikan tanda pisah panjang dari keluaran AI menjadi koma.
+  const clean = (t: string) => t.replace(/\s*—\s*/g, ", ").replace(/,\s*,/g, ",").trim();
+  const arr = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string").slice(0, 4).map(clean) : []);
   if (typeof o.ringkasan !== "string" || typeof o.ide_obrolan !== "string") return null;
   return {
-    ringkasan: o.ringkasan,
+    ringkasan: clean(o.ringkasan),
     sudah_baik: arr(o.sudah_baik),
     perlu_diperhatikan: arr(o.perlu_diperhatikan),
     saran: arr(o.saran),
-    ide_obrolan: o.ide_obrolan,
+    ide_obrolan: clean(o.ide_obrolan),
   };
 }

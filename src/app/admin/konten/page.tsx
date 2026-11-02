@@ -78,12 +78,12 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
               </div>
               <div>
                 <p className="label">Pratinjau</p>
-                <div className="overflow-hidden rounded-xl bg-[#e7ffdb] p-2 shadow-inner">
+                <div className="overflow-hidden rounded-xl bg-[#e9e1d6] p-2 shadow-inner">
                   <div className="overflow-hidden rounded-lg bg-white">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={`/opengraph-image?v=${encodeURIComponent(`${s["public.share"].image}|${s["public.share"].description}|${s["public.hero"].title}`.length + (s["public.share"].image || s["public.share"].description || s["public.hero"].title).slice(-16))}`} alt="Pratinjau kartu tautan" className="aspect-[1200/630] w-full object-cover" />
-                    <div className="space-y-0.5 bg-[#f0f2f5] px-3 py-2 text-xs">
-                      <p className="font-bold text-ink">SAHABAT ANAK — Dampingi Aktivitas Anak, Seimbangkan Dunia Digitalnya</p>
+                    <div className="space-y-0.5 bg-[#f3f0ec] px-3 py-2 text-xs">
+                      <p className="font-bold text-ink">SAHABAT ANAK: Dampingi Aktivitas Anak, Seimbangkan Dunia Digitalnya</p>
                       <p className="line-clamp-2 text-ink-soft">{s["public.share"].description || "Catat aktivitas digital dan non-digital anak, lihat keseimbangannya, dan dapatkan saran pendampingan."}</p>
                     </div>
                   </div>
@@ -127,7 +127,7 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
           </label>
           <SingleUpload name="image" defaultValue={s["public.tentang"].image} folder="tentang" label="Unggah foto (opsional)" />
           <label className="flex items-center gap-2 text-sm font-bold">
-            <input type="checkbox" name="show_logo" defaultChecked={s["public.tentang"].show_logo} className="h-5 w-5 accent-daun-600" /> Tampilkan bagian &quot;Makna Logo&quot;
+            <input type="checkbox" name="show_logo" defaultChecked={s["public.tentang"].show_logo} className="h-5 w-5 accent-marun-600" /> Tampilkan bagian &quot;Makna Logo&quot;
           </label>
           <ArticleEditor defaultValue={s["public.tentang"].body} />
           <SubmitButton className="btn-green">Simpan</SubmitButton>
@@ -184,7 +184,7 @@ async function ArticleList({ db }: { db: ReturnType<typeof createAdminClient> })
               <td className="font-bold">{a.title}</td>
               <td>{a.published_at ? `Terbit ${formatTanggal(a.published_at)}` : "Draf"}</td>
               <td className="flex gap-1">
-                <Link href={`/admin/konten/artikel/${a.id}`} className="btn-ghost btn-sm text-sky-brand">
+                <Link href={`/admin/konten/artikel/${a.id}`} className="btn-ghost btn-sm text-marun-600">
                   Ubah
                 </Link>
                 <form action={deleteArticle}>
@@ -219,7 +219,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
             ))}
           </select>
           <select name="event_id" className="input">
-            <option value="">— tanpa kegiatan —</option>
+            <option value="">Tanpa kegiatan</option>
             {events?.map((e) => (
               <option key={e.id} value={e.id}>
                 {e.title}
@@ -229,7 +229,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
           <input name="caption" placeholder="Keterangan (opsional)" className="input" />
         </div>
         <label className="flex items-start gap-2 text-sm">
-          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-daun-600" />
+          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-marun-600" />
           <span>
             <strong>Izin publikasi sudah ada</strong> dari orang tua anak yang wajahnya tampak. Tanpa centang, foto disimpan tetapi tidak tampil di website.
           </span>
@@ -258,7 +258,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
                 ))}
               </select>
               <select name="event_id" defaultValue={p.event_id ?? ""} className="input py-1 text-sm">
-                <option value="">— tanpa kegiatan —</option>
+                <option value="">Tanpa kegiatan</option>
                 {events?.map((e) => (
                   <option key={e.id} value={e.id}>
                     {e.title}
@@ -296,7 +296,7 @@ function LandingEditor({ L }: { L: (typeof DEFAULT_SETTINGS)["public.landing"] }
         <div className="flex flex-wrap gap-2">
           {Object.entries(labels).map(([k, v]) => (
             <label key={k} className="chip">
-              <input type="checkbox" name={`show_${k}`} defaultChecked={show[k as keyof typeof show]} className="h-4 w-4 accent-daun-600" /> {v}
+              <input type="checkbox" name={`show_${k}`} defaultChecked={show[k as keyof typeof show]} className="h-4 w-4 accent-marun-600" /> {v}
             </label>
           ))}
         </div>

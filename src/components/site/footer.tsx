@@ -6,35 +6,36 @@ import { getSetting } from "@/lib/settings";
 export async function SiteFooter() {
   const [contact, brand, landing] = await Promise.all([getSetting("public.contact"), getSetting("public.brand"), getSetting("public.landing")]);
   return (
-    <footer className="bg-daun-900 text-white/85">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-4">
-        <div className="md:col-span-2">
+    <footer className="relative overflow-hidden bg-gelap-950 text-white/70">
+      <div className="h-1 bg-gradient-to-r from-marun-700 via-aksen-500 to-marun-700" aria-hidden />
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-[1.6fr_1fr_1fr]">
+        <div>
           <Logo light brand={brand} />
-          <p className="mt-3 max-w-md text-sm">
-            {landing.footer_text}
-          </p>
-          {contact.address && (
-            <p className="mt-3 flex gap-2 text-sm">
-              <Icon name="pin" className="mt-0.5 h-4 w-4" /> {contact.address}
-            </p>
-          )}
-          {contact.whatsapp && (
-            <p className="mt-1 flex items-center gap-2 text-sm">
-              <Icon name="chat" className="h-4 w-4" /> WhatsApp:{" "}
-              <a className="underline" href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
-                +{contact.whatsapp}
-              </a>
-            </p>
-          )}
-          {contact.email && (
-            <p className="mt-1 flex items-center gap-2 text-sm">
-              <Icon name="mail" className="h-4 w-4" /> {contact.email}
-            </p>
-          )}
+          <p className="mt-6 max-w-sm text-sm leading-relaxed">{landing.footer_text}</p>
+          <ul className="mt-6 space-y-2 text-sm">
+            {contact.address && (
+              <li className="flex gap-3">
+                <Icon name="pin" className="mt-0.5 h-4 w-4 text-aksen-400" /> {contact.address}
+              </li>
+            )}
+            {contact.whatsapp && (
+              <li className="flex items-center gap-3">
+                <Icon name="chat" className="h-4 w-4 text-aksen-400" />
+                <a className="hover:text-white" href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+                  +{contact.whatsapp}
+                </a>
+              </li>
+            )}
+            {contact.email && (
+              <li className="flex items-center gap-3">
+                <Icon name="mail" className="h-4 w-4 text-aksen-400" /> {contact.email}
+              </li>
+            )}
+          </ul>
         </div>
         <div>
-          <p className="mb-2 font-extrabold text-white">Menu</p>
-          <ul className="space-y-1 text-sm">
+          <p className="eyebrow mb-5 text-white">Jelajahi</p>
+          <ul className="space-y-3 text-sm">
             {[
               ["/tentang", "Tentang"],
               ["/kegiatan", "Kegiatan"],
@@ -43,7 +44,7 @@ export async function SiteFooter() {
               ["/panduan", "Panduan"],
             ].map(([h, l]) => (
               <li key={h}>
-                <Link href={h} className="hover:underline">
+                <Link href={h} className="transition hover:text-white">
                   {l}
                 </Link>
               </li>
@@ -51,31 +52,38 @@ export async function SiteFooter() {
           </ul>
         </div>
         <div>
-          <p className="mb-2 font-extrabold text-white">Aplikasi</p>
-          <ul className="space-y-2 text-sm">
+          <p className="eyebrow mb-5 text-white">Aplikasi</p>
+          <ul className="space-y-3 text-sm">
             <li>
-              <Link href="/login" className="inline-flex items-center gap-2 hover:underline">
-                <Icon name="user" className="h-4 w-4" /> Masuk
+              <Link href="/login" className="inline-flex items-center gap-2 transition hover:text-white">
+                <Icon name="user" className="h-4 w-4 text-emas-400" /> Masuk
               </Link>
             </li>
             <li>
-              <Link href="/daftar" className="inline-flex items-center gap-2 hover:underline">
-                <Icon name="plus" className="h-4 w-4" /> Daftar dengan kode undangan
+              <Link href="/daftar" className="inline-flex items-center gap-2 transition hover:text-white">
+                <Icon name="plus" className="h-4 w-4 text-emas-400" /> Daftar dengan kode undangan
               </Link>
             </li>
             <li>
-              <Link href="/privasi" className="inline-flex items-center gap-2 hover:underline">
-                <Icon name="shield" className="h-4 w-4" /> Kebijakan privasi
+              <Link href="/privasi" className="inline-flex items-center gap-2 transition hover:text-white">
+                <Icon name="shield" className="h-4 w-4 text-emas-400" /> Kebijakan privasi
               </Link>
             </li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs text-white/60">
-        © {new Date().getFullYear()} SAHABAT ANAK ·{" "}
-        <Link href="/privasi" className="underline">
-          Privasi
-        </Link>
+      <div className="mx-auto max-w-6xl px-4">
+        <p className="display pointer-events-none -mb-3 select-none whitespace-nowrap text-[13.5vw] leading-[0.8] text-white/[0.05] lg:text-[9.6rem]" aria-hidden>
+          SAHABAT ANAK
+        </p>
+      </div>
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-white/45">
+          <span>© {new Date().getFullYear()} SAHABAT ANAK</span>
+          <Link href="/privasi" className="hover:text-white">
+            Privasi & persetujuan data
+          </Link>
+        </div>
       </div>
     </footer>
   );

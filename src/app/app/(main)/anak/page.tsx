@@ -39,7 +39,7 @@ function ChildForm({ child }: { child?: Child }) {
         </div>
       </div>
       <div>
-        <label className="label">PIN mode anak (4 angka){child?.pin_hash && " — kosongkan jika tidak diubah"}</label>
+        <label className="label">PIN mode anak (4 angka){child?.pin_hash && ", kosongkan jika tidak diubah"}</label>
         <input name="pin" inputMode="numeric" pattern="\d{4}" maxLength={4} className="input tracking-[0.5em]" placeholder="••••" autoComplete="off" />
       </div>
       <SubmitButton className="btn-green w-full">{child ? "Simpan" : "Tambah Anak"}</SubmitButton>
@@ -54,12 +54,12 @@ export default async function AnakPage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-4">
       <PageTitle title="Profil Anak" subtitle="Data anak disimpan minimal: tanpa NIK, alamat, atau foto." />
-      {baru && <p className="rounded-xl bg-daun-50 p-3 font-semibold text-daun-700">Selamat datang! Tambahkan profil anak untuk mulai mencatat.</p>}
+      {baru && <p className="rounded-xl bg-marun-50 p-3 font-semibold text-marun-700">Selamat datang! Tambahkan profil anak untuk mulai mencatat.</p>}
       {children.map((c) => (
         <details key={c.id} className="card">
           <summary className="flex cursor-pointer items-center justify-between font-extrabold">
             <span>
-              <Icon name="child" className="h-5 w-5 align-[-3px] text-daun-600" /> {c.nickname} <span className="font-normal text-ink-soft">· {SCHOOL_LEVELS[c.school_level]} · lahir {c.birth_year}</span>
+              <Icon name="child" className="h-5 w-5 align-[-3px] text-marun-600" /> {c.nickname} <span className="font-normal text-ink-soft">· {SCHOOL_LEVELS[c.school_level]} · lahir {c.birth_year}</span>
             </span>
             <span className="text-xs text-ink-soft">{c.pin_hash ? <span className="inline-flex items-center gap-1"><Icon name="lock" className="h-3.5 w-3.5" /> PIN aktif</span> : "PIN belum diatur"}</span>
           </summary>
@@ -73,7 +73,7 @@ export default async function AnakPage({ searchParams }: { searchParams: Promise
         </details>
       ))}
       <div className="card">
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-extrabold"><Icon name="plus" className="text-daun-600" /> Tambah anak</h2>
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-extrabold"><Icon name="plus" className="text-marun-600" /> Tambah anak</h2>
         <ChildForm />
       </div>
     </div>

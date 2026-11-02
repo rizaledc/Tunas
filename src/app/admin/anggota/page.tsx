@@ -64,7 +64,7 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
           <h2 className="mb-1 font-extrabold">Impor anggota dari Excel</h2>
           <p className="mb-3 text-sm text-ink-soft">
             Kolom: <code>nama</code>, <code>no_hp</code>, <code>email</code> (opsional), <code>rt</code>.{" "}
-            <a href="/api/admin/template?jenis=anggota" className="font-bold text-sky-brand">
+            <a href="/api/admin/template?jenis=anggota" className="font-bold text-marun-600">
               Unduh template
             </a>
           </p>
@@ -94,7 +94,7 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
                   <td>
                     {i.used_count}/{i.max_uses}
                   </td>
-                  <td>{i.expires_at ? formatTanggal(i.expires_at) : "—"}</td>
+                  <td>{i.expires_at ? formatTanggal(i.expires_at) : "-"}</td>
                   <td>{i.note}</td>
                   <td className="font-mono text-xs">
                     {site}/daftar?kode={i.code}
@@ -137,14 +137,14 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
               <tr key={m.id}>
                 <td className="font-bold">
                   {m.nama}
-                  {!m.consent && <span className="block text-xs font-normal text-oranye-600">belum menyetujui consent</span>}
+                  {!m.consent && <span className="block text-xs font-normal text-aksen-600">belum menyetujui consent</span>}
                 </td>
                 <td className="text-xs">{m.no_hp ? `0${m.no_hp.slice(2)}` : !isSyntheticEmail(m.email) ? m.email : ""}</td>
-                <td>{m.rt ?? "—"}</td>
+                <td>{m.rt ?? "-"}</td>
                 <td>{m.kids}</td>
                 <td>{m.last_active_at ? formatTanggal(m.last_active_at, { day: "numeric", month: "short", year: "numeric" }) : "belum pernah"}</td>
                 <td>
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${m.status === "active" ? "bg-daun-50 text-daun-700" : "bg-gray-200"}`}>{m.status === "active" ? "Aktif" : "Nonaktif"}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${m.status === "active" ? "bg-marun-50 text-marun-700" : "bg-gray-200"}`}>{m.status === "active" ? "Aktif" : "Nonaktif"}</span>
                 </td>
                 <td className="space-y-1">
                   <form action={setUserStatus}>

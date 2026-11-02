@@ -13,7 +13,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   const hidden = `Disembunyikan (< ${k.minFamilies} keluarga)`;
   return (
     <div className="space-y-6">
-      <PageTitle title="Dashboard" subtitle="Angka gabungan komunitas — tanpa data per keluarga." />
+      <PageTitle title="Dashboard" subtitle="Angka gabungan komunitas, tanpa data per keluarga." />
       {akses === "ditolak" && <p className="rounded-xl bg-red-50 p-3 font-semibold text-merah-600">Menu tersebut khusus superadmin.</p>}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Stat icon="home" label="Keluarga terdaftar" value={k.families} />
@@ -30,14 +30,14 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         <TrendChart
           data={k.trend}
           lines={[
-            { key: "screen", name: "Screen time", color: "#1e5aa8" },
-            { key: "positif", name: "Aktivitas positif", color: "#23824a" },
-            { key: "keluarga", name: "Keluarga mencatat", color: "#f28c28" },
+            { key: "screen", name: "Screen time", color: "#333333" },
+            { key: "positif", name: "Aktivitas positif", color: "#940000" },
+            { key: "keluarga", name: "Keluarga mencatat", color: "#e8b54d" },
           ]}
         />
       </section>
       <section className="card">
-        <h2 className="mb-2 flex items-center gap-2 font-extrabold"><Icon name="warning" className="text-oranye-500" /> Peringatan</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-extrabold"><Icon name="warning" className="text-aksen-500" /> Peringatan</h2>
         {k.alerts.length ? (
           <ul className="list-disc space-y-1 pl-5">
             {k.alerts.map((a) => (

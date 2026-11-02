@@ -9,8 +9,8 @@ export const metadata: Metadata = pageMeta("/daftar", "Undangan Bergabung", "And
 export default async function DaftarPage({ searchParams }: { searchParams: Promise<{ kode?: string }> }) {
   const [{ kode }, consent, auth] = await Promise.all([searchParams, getSetting("public.consent"), getSetting("public.auth")]);
   return (
-    <div className="card mt-4 p-6">
-      <h1 className="text-2xl font-extrabold text-daun-900">Daftar SAHABAT ANAK</h1>
+    <div className="card rounded-3xl p-7 sm:p-9">
+      <h1 className="display text-3xl text-ink">Daftar SAHABAT ANAK</h1>
       <p className="mb-5 text-ink-soft">Pendaftaran memakai kode undangan. Minta kode ke pengurus komunitas atau sekolah Anda.</p>
       {auth.google && (
         <>
@@ -23,7 +23,7 @@ export default async function DaftarPage({ searchParams }: { searchParams: Promi
       <RegisterForm consentText={consent.text} consentVersion={consent.version} code={kode} />
       <p className="mt-6 border-t pt-4 text-center text-sm">
         Sudah punya akun?{" "}
-        <Link href="/login" className="font-bold text-sky-brand">
+        <Link href="/login" className="font-bold text-marun-600">
           Masuk
         </Link>
       </p>

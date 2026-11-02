@@ -39,15 +39,15 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="space-y-4">
-      {terimakasih && <p className="rounded-xl bg-daun-50 p-3 font-semibold text-daun-700">Terima kasih sudah mengisi kuesioner!</p>}
+      {terimakasih && <p className="rounded-xl bg-marun-50 p-3 font-semibold text-marun-700">Terima kasih sudah mengisi kuesioner!</p>}
       <div>
         <p className="text-ink-soft">{formatHari(today)}</p>
-        <h1 className="text-2xl font-extrabold text-daun-900">Ringkasan {child.nickname} hari ini</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-ink">Ringkasan {child.nickname} hari ini</h1>
       </div>
 
       {openSurvey && (
-        <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-sky-brand bg-blue-50">
-          <Icon name="clipboard-check" className="h-9 w-9 text-sky-brand" />
+        <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-gelap-800 bg-black/[0.045]">
+          <Icon name="clipboard-check" className="h-9 w-9 text-marun-600" />
           <span>
             <span className="block font-extrabold">Isi kuesioner: {openSurvey.name}</span>
             <span className="text-sm text-ink-soft">Bantu tim memperbaiki aplikasi (± 3 menit).</span>
@@ -56,8 +56,8 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
       )}
 
       {(logs ?? []).length === 0 && (
-        <div className="card flex items-center gap-3 border-2 border-oranye-400 bg-orange-50">
-          <Icon name="alarm" className="h-9 w-9 text-oranye-500" />
+        <div className="card flex items-center gap-3 border-2 border-aksen-400 bg-emas-300/25">
+          <Icon name="alarm" className="h-9 w-9 text-aksen-500" />
           <div className="flex-1">
             <p className="font-extrabold">Belum ada catatan hari ini</p>
             <p className="text-sm text-ink-soft">Cukup 1 menit untuk mencatat.</p>
@@ -70,7 +70,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="card">
         <div className="flex items-baseline justify-between">
-          <p className="flex items-center gap-1.5 font-bold text-sky-brand"><Icon name="device" /> Screen time</p>
+          <p className="flex items-center gap-1.5 font-bold text-marun-600"><Icon name="device" /> Screen time</p>
           <p className="text-sm text-ink-soft">target {formatMenit(target)}</p>
         </div>
         <p className="mt-1 text-3xl font-extrabold">
@@ -84,11 +84,11 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-2 gap-3">
         <div className="card">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-daun-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-marun-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
           <p className="mt-1 text-2xl font-extrabold">{formatMenit(positif)}</p>
         </div>
         <div className="card">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-oranye-600"><Icon name="scale" className="h-4 w-4" /> Keseimbangan</p>
+          <p className="flex items-center gap-1.5 text-sm font-bold text-aksen-600"><Icon name="scale" className="h-4 w-4" /> Keseimbangan</p>
           <p className="mt-1 text-2xl font-extrabold">{digital + positif ? `${balance}%` : "–"}</p>
           <p className="text-xs text-ink-soft">porsi aktivitas positif</p>
         </div>
@@ -96,18 +96,18 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-3 gap-2">
         <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
-          <Icon name="device" className="h-7 w-7 text-sky-brand" />Catat gawai
+          <Icon name="device" className="h-7 w-7 text-marun-600" />Catat gawai
         </Link>
         <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
-          <Icon name="palette" className="h-7 w-7 text-daun-600" />Catat positif
+          <Icon name="palette" className="h-7 w-7 text-marun-600" />Catat positif
         </Link>
-        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-daun-500"}`}>
-          <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-oranye-500" />Check-in
+        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-marun-500"}`}>
+          <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-aksen-500" />Check-in
         </Link>
       </div>
 
       {pending && (
-        <div className="card border-2 border-daun-200">
+        <div className="card border-2 border-marun-200">
           <p className="font-extrabold">Bagaimana tindak lanjut minggu lalu?</p>
           <p className="mt-1 text-ink-soft">“{pending.action_text}”</p>
           <form action={saveReflectionOutcome} className="mt-3 flex flex-wrap gap-2">
@@ -127,8 +127,8 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="card">
         <div className="flex items-center justify-between">
-          <p className="flex items-center gap-1.5 font-extrabold"><Icon name="sparkle" className="text-oranye-500" /> Insight terbaru</p>
-          <Link href="/app/insight" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+          <p className="flex items-center gap-1.5 font-extrabold"><Icon name="sparkle" className="text-aksen-500" /> Insight terbaru</p>
+          <Link href="/app/insight" className="inline-flex items-center gap-1 text-sm font-bold text-marun-600">
             Lihat <Icon name="arrow-right" className="h-4 w-4" />
           </Link>
         </div>
@@ -144,12 +144,12 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/app/kesepakatan" className="card text-sm font-bold">
-          <Icon name="agreement" className="mb-1 block h-6 w-6 text-daun-600" />
+          <Icon name="agreement" className="mb-1 block h-6 w-6 text-marun-600" />
           Kesepakatan keluarga
           <span className="block font-normal text-ink-soft">{agreement ? `Target ${formatMenit(agreement.target_screen_min)}/hari` : "Belum dibuat"}</span>
         </Link>
         <Link href="/app/mode-anak/masuk" className="card text-sm font-bold">
-          <Icon name="star" className="mb-1 block h-6 w-6 text-oranye-500" />
+          <Icon name="star" className="mb-1 block h-6 w-6 text-aksen-500" />
           Mode anak
           <span className="block font-normal text-ink-soft">Anak mencatat sendiri</span>
         </Link>
@@ -157,12 +157,12 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
       {event && (
         <Link href="/app/kegiatan" className="card flex gap-3">
-          <span className="flex w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-oranye-500 py-2 text-white">
+          <span className="flex w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-aksen-500 py-2 text-white">
             <span className="text-xl leading-none font-extrabold">{formatTanggal(event.date, { day: "numeric" })}</span>
             <span className="text-xs">{formatTanggal(event.date, { month: "short" })}</span>
           </span>
           <span>
-            <span className="block text-xs font-bold text-oranye-600">AGENDA TERDEKAT</span>
+            <span className="block text-xs font-bold text-aksen-600">AGENDA TERDEKAT</span>
             <span className="block font-extrabold">{event.title}</span>
             <span className="text-sm text-ink-soft">{event.location}</span>
           </span>

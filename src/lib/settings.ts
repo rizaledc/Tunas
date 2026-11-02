@@ -16,6 +16,7 @@ Aturan:
 - Jika jumlah hari tercatat sedikit (kurang dari 4), katakan bahwa datanya masih sedikit dan hindari kesimpulan kuat.
 - Jika pola terlihat ekstrem (misalnya rata-rata layar jauh di atas acuan, sering menolak berhenti, sering memakai gawai menjelang tidur), sarankan dengan lembut untuk berkonsultasi ke guru, psikolog, atau tenaga kesehatan.
 - Jangan menyebut nama anak; sebut "anak" atau "si kecil".
+- Jangan memakai tanda pisah panjang (em dash); gunakan koma atau titik.
 
 Balas HANYA dengan JSON valid berformat:
 {"ringkasan":"2-3 kalimat","sudah_baik":["..."],"perlu_diperhatikan":["1-2 poin"],"saran":["2-3 langkah konkret"],"ide_obrolan":"1 pertanyaan pembuka untuk anak"}`;
@@ -28,7 +29,7 @@ export const DEFAULT_SETTINGS = {
   "ai.enabled": true,
   // API key OpenRouter, terenkripsi AES-256-GCM (lihat lib/openrouter.ts). Kosong = pakai env OPENROUTER_API_KEY.
   "ai.openrouter_key": "",
-  // Draf acuan — WAJIB ditetapkan tim (mis. IDAI/WHO) sebelum dipakai.
+  // Draf acuan: WAJIB ditetapkan tim (mis. IDAI/WHO) sebelum dipakai.
   "screen_time.reference": [
     { min_age: 0, max_age: 1, max_min: 0, note: "Di bawah 2 tahun sebaiknya tanpa layar kecuali video call keluarga (draf, perlu ditetapkan tim)" },
     { min_age: 2, max_age: 5, max_min: 60, note: "Maksimal 1 jam per hari dengan pendampingan (draf, perlu ditetapkan tim)" },
@@ -40,7 +41,7 @@ export const DEFAULT_SETTINGS = {
     version: "1.0",
     text: `Dengan mendaftar, saya menyetujui bahwa:
 1. Data yang saya isi (nama, nomor HP/email, RT) dan data anak (nama panggilan, tahun lahir, jenjang sekolah, catatan aktivitas) disimpan untuk keperluan pendampingan dalam program SAHABAT ANAK.
-2. Ringkasan angka aktivitas anak — tanpa nama atau identitas — dikirim ke layanan AI untuk dibuatkan saran.
+2. Ringkasan angka aktivitas anak (tanpa nama atau identitas) dikirim ke layanan AI untuk dibuatkan saran.
 3. Pengurus komunitas hanya melihat data gabungan (minimal 5 keluarga), bukan catatan harian keluarga saya.
 4. Pengelola program dapat memakai data anonim untuk evaluasi program dan penelitian.
 5. Saya dapat mengunduh dan menghapus seluruh data saya kapan saja melalui menu Profil.`,
@@ -67,11 +68,11 @@ export const DEFAULT_SETTINGS = {
     events_title: "Kegiatan Pendampingan",
     agenda_title: "Agenda Mendatang",
     features_title: "Fitur Aplikasi",
-    features_text: "Dirancang untuk HP Android, tombol besar, bahasa sederhana. Bukan aplikasi pemblokir — semua dicatat oleh Ayah dan Bunda.",
+    features_text: "Dirancang untuk HP Android, tombol besar, bahasa sederhana. Bukan aplikasi pemblokir, semua dicatat oleh Ayah dan Bunda.",
     features: [
       { icon: "pencil", title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
       { icon: "chart", title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
-      { icon: "sparkle", title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan — bukan perintah." },
+      { icon: "sparkle", title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan, bukan perintah." },
       { icon: "agreement", title: "Kesepakatan Keluarga", text: "Tetapkan target waktu layar dan jam bebas gawai, lalu cetak posternya." },
       { icon: "star", title: "Mode Anak", text: "Anak mencatat kegiatannya sendiri dan mengumpulkan bintang." },
       { icon: "community", title: "Pantau Komunitas", text: "Pengurus komunitas atau sekolah melihat data gabungan untuk merencanakan kegiatan." },
@@ -95,7 +96,7 @@ export const DEFAULT_SETTINGS = {
     cta_title: "Bergabung dengan SAHABAT ANAK",
     cta_text: "Dampingi tumbuh kembang anak bersama keluarga-keluarga lain di komunitas Anda.",
     cta_button: "Daftar Sekarang",
-    footer_text: "Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak — membantu keluarga mendampingi aktivitas digital dan non-digital anak secara seimbang.",
+    footer_text: "Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak. Membantu keluarga mendampingi aktivitas digital dan non-digital anak secara seimbang.",
     show: { stats: true, events: true, features: true, steps: true, roadmap: true, gallery: true, articles: true, cta: true },
   },
   "public.tentang": {
@@ -113,7 +114,7 @@ SAHABAT ANAK tidak memblokir aplikasi, tidak membaca isi HP anak, dan tidak mela
 
 - Orang tua mencatat aktivitas anak kurang dari 1 menit per catatan.
 - Orang tua melihat keseimbangan aktivitas digital dan non-digital dalam grafik.
-- Orang tua mendapat ringkasan dan saran pendampingan dari AI — bukan perintah.
+- Orang tua mendapat ringkasan dan saran pendampingan dari AI, bukan perintah.
 - Komunitas atau sekolah mendapat data gabungan untuk merencanakan kegiatan.
 - Pengelola program mendapat data evaluasi untuk laporan dan penelitian.
 
@@ -130,7 +131,7 @@ Orang tua mencatat sendiri, melihat polanya, lalu memutuskan sendiri langkah pen
 1. **Literasi digital orang tua**
 2. **Pendampingan keluarga** dalam penggunaan gawai
 3. **Aktivitas alternatif** anak di luar layar
-4. **SAHABAT ANAK** — aplikasi pencatatan, grafik, dan insight AI`,
+4. **SAHABAT ANAK**: aplikasi pencatatan, grafik, dan insight AI`,
     image: "",
     show_logo: true,
   },
@@ -138,7 +139,7 @@ Orang tua mencatat sendiri, melihat polanya, lalu memutuskan sendiri langkah pen
     body: `## Data apa yang disimpan?
 
 - Orang tua: nama, nomor HP, email, RT, dan password (tersimpan dalam bentuk hash). Jika masuk dengan Google, kami menerima nama dan email dari akun Google.
-- Anak: hanya nama panggilan, tahun lahir, dan jenjang sekolah — tanpa NIK, alamat, atau foto.
+- Anak: hanya nama panggilan, tahun lahir, dan jenjang sekolah, tanpa NIK, alamat, atau foto.
 - Catatan aktivitas, check-in harian, kesepakatan keluarga, insight, dan refleksi.
 
 ## Siapa yang bisa melihat?

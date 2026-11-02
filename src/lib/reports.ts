@@ -37,7 +37,7 @@ export async function monthlyReport(month: string): Promise<Report> {
     { indikator: "Jumlah catatan (aplikasi)", nilai: base.logs.filter((l) => l.source === "app").length },
     { indikator: "Hari-anak tercatat", nilai: g.childDays },
     { indikator: "Rata-rata screen time / hari (mnt)", nilai: hide(g.avgScreen) },
-    { indikator: "Rata-rata target kesepakatan (mnt)", nilai: hide(g.avgTarget ?? "—") },
+    { indikator: "Rata-rata target kesepakatan (mnt)", nilai: hide(g.avgTarget ?? "-") },
     { indikator: "Rata-rata aktivitas positif / hari (mnt)", nilai: hide(g.avgPositive) },
     { indikator: "Kepatuhan kesepakatan (%)", nilai: hide(g.compliancePct) },
     { indikator: "Gawai didampingi (%)", nilai: hide(g.accompaniedPct) },
@@ -66,7 +66,7 @@ export async function monthlyReport(month: string): Promise<Report> {
   const purposes = g.suppressed ? [] : g.purposes.map((p) => ({ tujuan_gawai: p.name, total_menit: p.value }));
   const positives = g.suppressed ? [] : g.positives.map((p) => ({ aktivitas_positif: p.name, total_menit: p.value }));
   return {
-    title: `Rekap Bulanan Komunitas — ${formatTanggal(from, { month: "long", year: "numeric" })}`,
+    title: `Rekap Bulanan Komunitas ${formatTanggal(from, { month: "long", year: "numeric" })}`,
     sheets: [
       { name: "Ringkasan", rows: summary },
       { name: "Per minggu", rows: weeks },

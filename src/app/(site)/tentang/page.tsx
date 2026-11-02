@@ -1,71 +1,75 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { pageMeta } from "@/lib/seo";
 import { LogoMark } from "@/components/logo";
 import { getSettings } from "@/lib/settings";
 import { renderMarkdown } from "@/lib/markdown";
+import { ArrowLink, Eyebrow, Headline } from "@/components/site/parts";
 
 export const revalidate = 300;
 export const metadata: Metadata = pageMeta("/tentang", "Tentang Program", "Latar belakang, makna logo, dan alur program SAHABAT ANAK.");
+
+const MEANING = [
+  { title: "Daun besar marun", text: "Orang tua yang menaungi, sekaligus dunia nyata dan alam tempat anak bermain." },
+  { title: "Daun kecil merah", text: "Anak yang sedang tumbuh: hangat, ceria, dan penuh rasa ingin tahu." },
+  { title: "Satu titik tumbuh", text: "Keduanya berangkat dari akar yang sama, yaitu keluarga dan komunitas tempat anak tumbuh." },
+  { title: "Membentuk tanda centang", text: "Keseimbangan digital yang dicapai berdua dan disepakati bersama, bukan diperintahkan." },
+];
 
 export default async function TentangPage() {
   const s = await getSettings(["public.tentang", "public.brand"]);
   const t = s["public.tentang"];
   const brand = s["public.brand"];
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <h1 className="text-3xl font-extrabold text-daun-900">{t.title}</h1>
-      <div className="prose-sa mt-3 text-lg text-ink-soft" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.intro) }} />
+    <>
+      <section className="sa-dark-texture relative overflow-hidden text-white">
+        <div className="mx-auto max-w-6xl px-4 pt-32 pb-20 md:pt-40">
+          <Eyebrow>Tentang program</Eyebrow>
+          <Headline as="h1" text={t.title} className="mt-5 text-4xl md:text-7xl" />
+          <div className="mt-8 max-w-2xl text-lg leading-relaxed text-white/70 [&_strong]:text-white" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.intro) }} />
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <ArrowLink href="/daftar">Daftar sekarang</ArrowLink>
+            <ArrowLink href="/panduan">Panduan pemakaian</ArrowLink>
+          </div>
+        </div>
+      </section>
 
       {t.image && (
-        <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-2xl">
-          <Image src={t.image} alt={t.title} fill sizes="(min-width:896px) 896px, 100vw" className="object-cover" />
+        <div className="bg-gelap-950 px-4 pb-4">
+          <div className="relative mx-auto aspect-[21/9] max-w-6xl overflow-hidden rounded-3xl">
+            <Image src={t.image} alt={t.title} fill sizes="(min-width:1152px) 1152px, 100vw" className="object-cover" />
+          </div>
         </div>
       )}
 
       {t.show_logo && (
-        <section className="card mt-8 grid items-center gap-6 md:grid-cols-[auto_1fr]">
-          <div className="flex justify-center gap-4">
-            {brand.logo ? (
-              <LogoMark src={brand.logo} className="h-28 w-28" />
-            ) : (
-              <>
-                <LogoMark tile={false} className="h-28 w-28" />
-                <LogoMark className="h-28 w-28" />
-              </>
-            )}
-          </div>
-          <div>
-            <h2 className="text-xl font-extrabold">Makna Logo</h2>
-            <ul className="mt-3 space-y-2 text-ink-soft">
-              <li>
-                <strong className="text-daun-700">Daun besar hijau</strong> — orang tua yang menaungi, sekaligus dunia nyata dan alam tempat anak bermain.
-              </li>
-              <li>
-                <strong className="text-oranye-600">Daun kecil oranye</strong> — anak yang sedang tumbuh: hangat, ceria, dan penuh rasa ingin tahu.
-              </li>
-              <li>
-                <strong className="text-ink">Satu titik tumbuh</strong> — keduanya berangkat dari akar yang sama, yaitu keluarga dan komunitas tempat anak tumbuh.
-              </li>
-              <li>
-                <strong className="text-ink">Membentuk tanda ✓</strong> — keseimbangan digital yang dicapai berdua dan disepakati bersama, bukan diperintahkan.
-              </li>
-            </ul>
+        <section className="bg-gelap-950 text-white">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 lg:grid-cols-[1fr_1.4fr]">
+            <div className="relative flex justify-center">
+              <div className="absolute inset-10 rounded-full bg-marun-600/40 blur-3xl" aria-hidden />
+              {brand.logo ? <LogoMark src={brand.logo} className="relative h-56 w-56" /> : <LogoMark tile={false} onDark className="relative h-64 w-64" />}
+            </div>
+            <div>
+              <Eyebrow>Identitas</Eyebrow>
+              <Headline text="Makna Logo" className="mt-5 text-4xl md:text-5xl" breakLine={false} />
+              <dl className="mt-10 grid gap-px overflow-hidden rounded-3xl bg-white/10 sm:grid-cols-2">
+                {MEANING.map((m) => (
+                  <div key={m.title} className="bg-gelap-950 p-6">
+                    <dt className="eyebrow text-emas-400">{m.title}</dt>
+                    <dd className="mt-3 text-sm leading-relaxed text-white/65">{m.text}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </section>
       )}
 
-      <div className="prose-sa mt-8 text-lg" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.body) }} />
-
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/daftar" className="btn-primary">
-          Daftar Sekarang
-        </Link>
-        <Link href="/panduan" className="btn-outline">
-          Panduan Pemakaian
-        </Link>
-      </div>
-    </div>
+      <section className="bg-surface">
+        <div className="mx-auto max-w-6xl px-4 py-20">
+          <div className="prose-sa prose-tentang rounded-3xl bg-white p-8 text-lg md:p-14" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.body) }} />
+        </div>
+      </section>
+    </>
   );
 }

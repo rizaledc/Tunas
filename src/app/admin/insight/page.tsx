@@ -43,19 +43,19 @@ export default async function MonitoringAiPage() {
         <Stat
           icon="wallet"
           label="Saldo / limit API key"
-          value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(2)}` : "tanpa limit") : "—"}
-          hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "API key belum diisi — Pengaturan → AI"}
+          value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(2)}` : "tanpa limit") : "-"}
+          hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "API key belum diisi, buka Pengaturan → AI"}
           tone={balance?.remaining !== null && balance && balance.remaining < 2 ? "red" : "green"}
         />
         <Stat icon="thumbsUp" label="Membantu" value={up} tone="green" />
         <Stat icon="thumbsDown" label="Tidak membantu" value={down} tone="red" hint={up + down ? `${Math.round((up / (up + down)) * 100)}% positif` : "belum ada rating"} />
       </div>
       {lastErr && (
-        <p className="card flex items-start gap-2 border-l-4 border-l-oranye-500 text-sm">
-          <Icon name="warning" className="mt-0.5 text-oranye-500" />
+        <p className="card flex items-start gap-2 border-l-4 border-l-aksen-500 text-sm">
+          <Icon name="warning" className="mt-0.5 text-aksen-500" />
           <span>
             <strong>Error AI terakhir</strong> ({formatTanggal(lastErr.created_at, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}): {String((lastErr.detail as { message?: string } | null)?.message ?? "")}{" "}
-            <a href="/admin/pengaturan?tab=ai" className="font-bold text-sky-brand underline">
+            <a href="/admin/pengaturan?tab=ai" className="font-bold text-marun-600 underline">
               Periksa pengaturan AI
             </a>
           </span>
@@ -63,7 +63,7 @@ export default async function MonitoringAiPage() {
       )}
       <section className="card">
         <h2 className="font-extrabold">Analisis per hari</h2>
-        <TrendChart data={perDay} lines={[{ key: "analisis", name: "Analisis", color: "#23824a" }, { key: "cadangan", name: "Cadangan rule-based", color: "#c8102e" }]} />
+        <TrendChart data={perDay} lines={[{ key: "analisis", name: "Analisis", color: "#940000" }, { key: "cadangan", name: "Cadangan rule-based", color: "#e60000" }]} />
       </section>
       <section className="space-y-3">
         <h2 className="font-extrabold">Contoh output anonim (cek kualitas)</h2>

@@ -42,7 +42,7 @@ export function PushToggle({ enabled }: { enabled: boolean }) {
         </span>
         <input
           type="checkbox"
-          className="h-7 w-12 accent-daun-600"
+          className="h-7 w-12 accent-marun-600"
           checked={on}
           disabled={pending}
           onChange={(e) => {

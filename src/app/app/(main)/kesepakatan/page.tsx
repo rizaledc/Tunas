@@ -33,8 +33,8 @@ export default async function KesepakatanPage() {
         }
       />
       {ref && (
-        <div className="card mb-4 bg-blue-50 text-sm">
-          <p className="font-bold text-sky-brand">Acuan untuk usia {age} tahun</p>
+        <div className="card mb-4 bg-black/[0.045] text-sm">
+          <p className="font-bold text-marun-600">Acuan untuk usia {age} tahun</p>
           <p>
             Maksimal {ref.max_min} menit/hari. {ref.note}
           </p>

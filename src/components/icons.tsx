@@ -2,7 +2,7 @@ import type { ReactNode, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Set ikon SAHABAT ANAK — digambar khusus untuk proyek ini.
+ * Set ikon SAHABAT ANAK, digambar khusus untuk proyek ini.
  * Grid 24×24, garis 1.75 px dengan ujung membulat, dan aksen duotone
  * (isian currentColor transparan) agar terasa lembut dan ramah anak.
  */
