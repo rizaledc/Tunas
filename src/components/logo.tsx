@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 
 /**
  * Logo SAHABAT ANAK: dua daun dari satu titik tumbuh.
- * Daun besar (marun) = orang tua yang menaungi; daun kecil (merah) = anak yang sedang tumbuh.
- * Keduanya berangkat dari satu akar yang sama (keluarga) dan bersama-sama membentuk tanda ✓:
- * keseimbangan yang dicapai berdua, bukan diperintahkan.
+ * Daun besar (putih di latar gelap, marun di latar terang) = orang tua yang menaungi;
+ * daun kecil (merah) = anak yang sedang tumbuh. Keduanya berangkat dari satu akar yang sama
+ * (keluarga) dan bersama-sama membentuk tunas: pertumbuhan yang dirawat bersama hingga seimbang.
  */
 const LEAF_PARENT = "M23.5 38C13.5 35 8 26 10 12c8.5.4 14.5 7 13.5 26z";
 const LEAF_CHILD = "M24.6 38c.3-9.5 4.6-15 12.6-15.6.9 8.4-4.4 14.4-12.6 15.6z";
