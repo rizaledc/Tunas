@@ -122,7 +122,7 @@ export default async function LandingPage() {
             <div>
               <Eyebrow>Mengapa SAHABAT ANAK</Eyebrow>
               <Headline text={L.features_title} className="mt-5 text-5xl md:text-6xl" />
-              <p className="mt-6 max-w-sm text-white/65">{L.features_text}</p>
+              <p className="mt-6 max-w-sm text-white/65">{L.features_text?.includes("HP Android") ? DEFAULT_SETTINGS["public.landing"].features_text : L.features_text}</p>
             </div>
             <div className="grid gap-px overflow-hidden rounded-3xl bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
               {features.map((f) => (
