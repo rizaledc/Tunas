@@ -72,7 +72,7 @@ export const DEFAULT_SETTINGS = {
     events_title: "Kegiatan Pendampingan",
     agenda_title: "Agenda Mendatang",
     features_title: "Fitur Aplikasi",
-    features_text: "Dirancang untuk HP Android, tombol besar, bahasa sederhana. Bukan aplikasi pemblokir, semua dicatat oleh Ayah dan Bunda.",
+    features_text: "Dirancang untuk semua perangkat, dari HP, tablet, hingga laptop. Tombol besar, bahasa sederhana. Bukan aplikasi pemblokir, semua dicatat oleh Ayah dan Bunda.",
     features: [
       { icon: "pencil", title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
       { icon: "chart", title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
