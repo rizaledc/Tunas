@@ -11,7 +11,9 @@ import { clearChildMode, getChildModeId, setChildMode } from "@/lib/child-mode";
 import { addDays, todayStr, wibToIso } from "@/lib/date";
 import { generateInsight } from "@/lib/insight";
 import { scoreSurvey, type Question } from "@/lib/survey";
-import { bool, int, normalizePhone, str } from "@/lib/utils";
+import { bool, int, phoneToAuthEmail, str } from "@/lib/utils";
+import { emailError, normalizeEmail, normalizePhone, phoneError, validatePassword } from "@/lib/validation";
+import { emailTaken, phoneTaken, validateName, validateRt, loginMethods } from "@/lib/accounts";
 import { getChildren } from "@/lib/parent";
 import type { ActionState } from "@/components/ui";
 
@@ -251,17 +253,37 @@ export async function submitSurvey(_: ActionState, fd: FormData): Promise<Action
 export async function updateProfile(_: ActionState, fd: FormData): Promise<ActionState> {
   const p = await requireParent();
   const nama = str(fd, "nama");
-  if (nama.length < 2) return { error: "Nama minimal 2 huruf." };
-  const hp = str(fd, "no_hp");
-  const phone = hp ? normalizePhone(hp) : null;
-  if (hp && !phone) return { error: "Nomor HP tidak valid." };
-  const db = createAdminClient();
-  if (phone && phone !== p.no_hp) {
-    const { data: taken } = await db.from("users").select("id").eq("no_hp", phone).neq("id", p.id).maybeSingle();
-    if (taken) return { error: "Nomor HP sudah dipakai akun lain." };
-  }
+  const nameErr = validateName(nama);
+  if (nameErr) return { error: nameErr };
+  const phoneErr = phoneError(str(fd, "no_hp"));
+  if (phoneErr) return { error: phoneErr };
+  const phone = normalizePhone(str(fd, "no_hp"))!;
+  if (phone !== p.no_hp && (await phoneTaken(phone, p.id))) return { error: "Nomor HP sudah dipakai akun lain." };
   const rt = str(fd, "rt");
-  await db.from("users").update({ nama, no_hp: phone ?? p.no_hp }).eq("id", p.id);
+  const rtErr = validateRt(rt);
+  if (rtErr) return { error: rtErr };
+
+  const db = createAdminClient();
+  const update: Record<string, unknown> = { nama: nama.trim(), no_hp: phone };
+  const emailRaw = str(fd, "email");
+  const { data: au } = await db.auth.admin.getUserById(p.id);
+  const { isGoogle } = loginMethods(au.user);
+  if (!isGoogle && emailRaw !== (p.email ?? "")) {
+    if (emailRaw) {
+      const emailErr = emailError(emailRaw);
+      if (emailErr) return { error: emailErr };
+      const email = normalizeEmail(emailRaw)!;
+      if (await emailTaken(email, p.id)) return { error: "Email sudah dipakai akun lain." };
+      const { error } = await db.auth.admin.updateUserById(p.id, { email, email_confirm: true });
+      if (error) return { error: "Email gagal diubah." };
+      update.email = email;
+    } else {
+      // Hapus email: kembali memakai login nomor HP.
+      await db.auth.admin.updateUserById(p.id, { email: phoneToAuthEmail(phone), email_confirm: true });
+      update.email = null;
+    }
+  }
+  await db.from("users").update(update).eq("id", p.id);
   const supabase = await createClient();
   await supabase.from("families").update({ rt: rt || null }).eq("id", p.familyId);
   revalidatePath("/app", "layout");
@@ -269,14 +291,22 @@ export async function updateProfile(_: ActionState, fd: FormData): Promise<Actio
 }
 
 export async function changePassword(_: ActionState, fd: FormData): Promise<ActionState> {
-  await requireParent();
+  const p = await requireParent();
   const pw = str(fd, "password");
-  if (pw.length < 8) return { error: "Password minimal 8 karakter." };
   if (pw !== str(fd, "password2")) return { error: "Konfirmasi password tidak sama." };
+  const pwErr = validatePassword(pw, { name: p.nama, phone: p.no_hp ?? "", email: p.email ?? "" });
+  if (pwErr) return { error: pwErr };
+  const db = createAdminClient();
+  const { data: au } = await db.auth.admin.getUserById(p.id);
+  const { hasPassword } = loginMethods(au.user);
   const supabase = await createClient();
+  if (hasPassword) {
+    const { error } = await supabase.auth.signInWithPassword({ email: au.user!.email!, password: str(fd, "current") });
+    if (error) return { error: "Password lama salah." };
+  }
   const { error } = await supabase.auth.updateUser({ password: pw });
-  if (error) return { error: "Gagal mengubah password." };
-  return { ok: true, message: "Password berhasil diubah." };
+  if (error) return { error: error.message.includes("same") ? "Password baru tidak boleh sama dengan yang lama." : "Gagal mengubah password." };
+  return { ok: true, message: hasPassword ? "Password berhasil diubah." : "Password dibuat. Sekarang Anda juga bisa masuk dengan email/nomor HP + password." };
 }
 
 export async function setReminder(enabled: boolean) {

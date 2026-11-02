@@ -38,8 +38,16 @@ export function sha256(s: string): string {
   return createHmac("sha256", "input-hash").update(s).digest("hex");
 }
 
+/** Password sementara yang memenuhi aturan password kuat (lib/validation.ts). */
 export function tempPassword(): string {
-  return randomBytes(6).toString("base64url").replace(/[-_]/g, "x") + "9a";
+  const pick = (set: string) => set[randomBytes(1)[0] % set.length];
+  const U = "ABCDEFGHJKLMNPQRSTUVWXYZ", L = "abcdefghijkmnpqrstuvwxyz", D = "23456789", S = "!@#$%&*?";
+  const chars = [pick(U), pick(U), pick(L), pick(L), pick(L), pick(L), pick(D), pick(D), pick(S), pick(L), pick(U), pick(D)];
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = randomBytes(1)[0] % (i + 1);
+    [chars[i], chars[j]] = [chars[j], chars[i]];
+  }
+  return chars.join("");
 }
 
 /** Enkripsi rahasia (mis. API key) sebelum disimpan di database. */

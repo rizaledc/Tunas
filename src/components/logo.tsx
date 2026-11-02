@@ -12,7 +12,14 @@ const VEIN_PARENT = "M23 35.5c-2.4-7-5.6-13.8-10.4-19.6";
 const VEIN_CHILD = "M26 35.8c2.4-4.6 5.4-8.2 9.4-10.6";
 
 /** Tanda logo. `tile` = ikon aplikasi berlatar hijau; tanpa tile = daun berwarna di atas latar terang. */
-export function LogoMark({ className, tile = true }: { className?: string; tile?: boolean }) {
+export type Brand = { logo?: string; tagline?: string };
+
+export function LogoMark({ className, tile = true, src }: { className?: string; tile?: boolean; src?: string }) {
+  if (src)
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt="" className={cn("h-10 w-10 shrink-0 rounded-xl bg-white object-contain", className)} />
+    );
   return (
     <svg viewBox="0 0 48 48" aria-hidden className={cn("h-10 w-10 shrink-0", className)}>
       {tile && <rect width="48" height="48" rx="11" fill="#23824a" />}
@@ -27,17 +34,17 @@ export function LogoMark({ className, tile = true }: { className?: string; tile?
 }
 
 /** Logo lengkap. Warna kata mengikuti daun: SAHABAT (hijau, orang tua) + ANAK (oranye, anak). */
-export function Logo({ light = false, small = false }: { light?: boolean; small?: boolean }) {
+export function Logo({ light = false, small = false, brand }: { light?: boolean; small?: boolean; brand?: Brand }) {
   return (
     <span className="flex items-center gap-2">
-      <LogoMark tile={light} className={small ? "h-8 w-8" : light ? "h-10 w-10" : "h-11 w-11"} />
+      <LogoMark src={brand?.logo || undefined} tile={light} className={small ? "h-8 w-8" : light ? "h-10 w-10" : "h-11 w-11"} />
       <span className="leading-tight">
         <span className={cn("block font-extrabold tracking-wide", small ? "text-base" : "text-lg")}>
           <span className={light ? "text-white" : "text-daun-700"}>SAHABAT</span> <span className={light ? "text-oranye-400" : "text-oranye-500"}>ANAK</span>
         </span>
         {!small && (
           <span className={cn("block text-[11px] font-semibold", light ? "text-white/80" : "text-ink-soft")}>
-            Tumbuh seimbang bersama keluarga
+            {brand?.tagline ?? "Tumbuh seimbang bersama keluarga"}
           </span>
         )}
       </span>

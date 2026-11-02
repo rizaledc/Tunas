@@ -3,7 +3,7 @@ import { Icon, type IconName } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Logo } from "@/components/logo";
+import { Logo, type Brand } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const MENU: Array<{ href: string; label: string; icon: IconName; superOnly?: boolean }> = [
@@ -20,7 +20,7 @@ const MENU: Array<{ href: string; label: string; icon: IconName; superOnly?: boo
   { href: "/admin/log", label: "Log", icon: "receipt", superOnly: true },
 ];
 
-export function AdminSidebar({ role, nama }: { role: string; nama: string }) {
+export function AdminSidebar({ role, nama, brand }: { role: string; nama: string; brand?: Brand }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const items = MENU.filter((m) => !m.superOnly || role === "superadmin");
@@ -40,7 +40,7 @@ export function AdminSidebar({ role, nama }: { role: string; nama: string }) {
   return (
     <>
       <div className="no-print sticky top-0 z-40 flex items-center justify-between bg-sky-brand px-4 py-3 text-white lg:hidden">
-        <Logo light small />
+        <Logo light small brand={brand} />
         <button onClick={() => setOpen(!open)} className="rounded-lg p-2 ring-1 ring-white/40" aria-expanded={open} aria-label="Menu">
           <Icon name={open ? "close" : "menu"} className="h-6 w-6" />
         </button>
@@ -48,7 +48,7 @@ export function AdminSidebar({ role, nama }: { role: string; nama: string }) {
       {open && <div className="no-print bg-sky-brand px-4 pb-4 lg:hidden">{nav}</div>}
       <aside className="no-print fixed inset-y-0 left-0 hidden w-64 flex-col bg-sky-brand p-4 text-white lg:flex">
         <Link href="/admin" className="mb-6 block">
-          <Logo light />
+          <Logo light brand={brand} />
         </Link>
         <div className="flex-1 overflow-y-auto">{nav}</div>
         <div className="mt-4 border-t border-white/20 pt-4 text-sm">

@@ -44,5 +44,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   // Halaman publik tidak melewati proxy agar landing page tetap cepat.
-  matcher: ["/app/:path*", "/admin/:path*", "/login/:path*", "/daftar", "/reset-password", "/api/:path*"],
+  matcher: ["/app/:path*", "/admin/:path*", "/login/:path*", "/daftar/:path*", "/reset-password", "/api/:path*"],
 };

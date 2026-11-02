@@ -13,7 +13,7 @@ export default async function PersetujuanPage() {
   if (parent.consentVersion === consent.version) redirect("/app");
   return (
     <div className="mx-auto max-w-md px-4 py-8">
-      <Logo />
+      <Logo brand={await getSetting("public.brand")} />
       <div className="card mt-6 space-y-4 p-6">
         <h1 className="text-2xl font-extrabold text-daun-900">Persetujuan Data</h1>
         <p className="text-ink-soft">

@@ -56,6 +56,105 @@ export const DEFAULT_SETTINGS = {
     { label: "Perilaku digital sehat anak", before: "3,43", after: "3,72" },
     { label: "Respons positif peserta", before: "", after: "88%" },
   ],
+  // Identitas situs: logo khusus (kosong = logo bawaan) dan slogan.
+  "public.brand": { logo: "", tagline: "Tumbuh seimbang bersama keluarga" },
+  // Isi landing page di luar hero & angka capaian (semua bisa diubah di Admin → Konten).
+  "public.landing": {
+    badge: "Pendamping digital keluarga Indonesia",
+    cta_primary: "Mulai Mencatat",
+    cta_secondary: "Pelajari Program",
+    stats_label: "Keluarga aktif mencatat",
+    events_title: "Kegiatan Pendampingan",
+    agenda_title: "Agenda Mendatang",
+    features_title: "Fitur Aplikasi",
+    features_text: "Dirancang untuk HP Android, tombol besar, bahasa sederhana. Bukan aplikasi pemblokir — semua dicatat oleh Ayah dan Bunda.",
+    features: [
+      { icon: "pencil", title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
+      { icon: "chart", title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
+      { icon: "sparkle", title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan — bukan perintah." },
+      { icon: "agreement", title: "Kesepakatan Keluarga", text: "Tetapkan target waktu layar dan jam bebas gawai, lalu cetak posternya." },
+      { icon: "star", title: "Mode Anak", text: "Anak mencatat kegiatannya sendiri dan mengumpulkan bintang." },
+      { icon: "community", title: "Pantau Komunitas", text: "Pengurus komunitas atau sekolah melihat data gabungan untuk merencanakan kegiatan." },
+    ],
+    steps_title: "Cara Kerja",
+    steps: [
+      { title: "Daftar dengan kode undangan", text: "Minta kode undangan ke pengurus komunitas atau sekolah, lalu daftar dengan nomor HP atau akun Google." },
+      { title: "Catat aktivitas harian", text: "Tekan tombol + Catat, pilih jenis aktivitas, selesai dalam satu menit." },
+      { title: "Baca insight dan diskusikan dengan anak", text: "Setiap minggu dapatkan ringkasan dan ide obrolan untuk si kecil." },
+    ],
+    steps_image: "",
+    roadmap_title: "Alur Program",
+    roadmap: [
+      { label: "Tahap 1", title: "Literasi Digital Orang Tua", text: "Orang tua dibekali keterampilan dan pemahaman dunia digital anak." },
+      { label: "Tahap 2", title: "Pendampingan Keluarga", text: "Keluarga belajar mendampingi penggunaan gawai yang sehat." },
+      { label: "Tahap 3", title: "Aktivitas Alternatif", text: "Anak diajak berkegiatan positif di luar layar dan mulai mencatatnya." },
+      { label: "Tahap 4", title: "SAHABAT ANAK", text: "Pencatatan berpindah ke aplikasi dengan grafik dan insight AI." },
+    ],
+    gallery_title: "Galeri Kegiatan",
+    articles_title: "Artikel & Tips",
+    cta_title: "Bergabung dengan SAHABAT ANAK",
+    cta_text: "Dampingi tumbuh kembang anak bersama keluarga-keluarga lain di komunitas Anda.",
+    cta_button: "Daftar Sekarang",
+    footer_text: "Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak — membantu keluarga mendampingi aktivitas digital dan non-digital anak secara seimbang.",
+    show: { stats: true, events: true, features: true, steps: true, roadmap: true, gallery: true, articles: true, cta: true },
+  },
+  "public.tentang": {
+    title: "Tentang SAHABAT ANAK",
+    intro: "**SAHABAT ANAK** (Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak) membantu orang tua mencatat aktivitas digital dan non-digital anak, melihat keseimbangannya, lalu mendapatkan saran pendampingan. Keputusan pendampingan tetap di tangan orang tua.",
+    body: `## Latar Belakang
+
+Banyak program pendampingan mencatat aktivitas anak di logbook kertas. Datanya tersebar di lembar setiap peserta, perlu direkap manual, dan sulit divisualisasikan. SAHABAT ANAK memindahkan logbook itu ke HP agar orang tua dan komunitas lebih mudah melihat perkembangan.
+
+## Bukan Parental Control
+
+SAHABAT ANAK tidak memblokir aplikasi, tidak membaca isi HP anak, dan tidak melacak lokasi. Screen time dicatat manual oleh orang tua, seperti logbook.
+
+## Tujuan
+
+- Orang tua mencatat aktivitas anak kurang dari 1 menit per catatan.
+- Orang tua melihat keseimbangan aktivitas digital dan non-digital dalam grafik.
+- Orang tua mendapat ringkasan dan saran pendampingan dari AI — bukan perintah.
+- Komunitas atau sekolah mendapat data gabungan untuk merencanakan kegiatan.
+- Pengelola program mendapat data evaluasi untuk laporan dan penelitian.
+
+## Untuk Komunitas & Sekolah
+
+SAHABAT ANAK dapat dipakai komunitas orang tua, sekolah, posyandu, atau kelompok kegiatan di seluruh Indonesia. Pengurus mengundang anggota dengan kode undangan dan hanya melihat data gabungan.
+
+## Untuk Keluarga
+
+Orang tua mencatat sendiri, melihat polanya, lalu memutuskan sendiri langkah pendampingan. Data keluarga tetap milik keluarga dan bisa diunduh atau dihapus kapan saja.
+
+## Alur Program
+
+1. **Literasi digital orang tua**
+2. **Pendampingan keluarga** dalam penggunaan gawai
+3. **Aktivitas alternatif** anak di luar layar
+4. **SAHABAT ANAK** — aplikasi pencatatan, grafik, dan insight AI`,
+    image: "",
+    show_logo: true,
+  },
+  "public.privasi": {
+    body: `## Data apa yang disimpan?
+
+- Orang tua: nama, nomor HP, email, RT, dan password (tersimpan dalam bentuk hash). Jika masuk dengan Google, kami menerima nama dan email dari akun Google.
+- Anak: hanya nama panggilan, tahun lahir, dan jenjang sekolah — tanpa NIK, alamat, atau foto.
+- Catatan aktivitas, check-in harian, kesepakatan keluarga, insight, dan refleksi.
+
+## Siapa yang bisa melihat?
+
+- Hanya orang tua yang bersangkutan yang bisa melihat catatan harian anaknya.
+- Pengurus komunitas hanya melihat angka gabungan, dan hanya untuk kelompok berisi minimal 5 keluarga.
+- Layanan AI hanya menerima ringkasan angka, tanpa nama atau identitas anak.
+
+## Hak Anda
+
+- Mengunduh seluruh data Anda di menu Profil.
+- Menghapus akun beserta seluruh data anak kapan saja.
+- Foto anak hanya dipublikasikan jika orang tua memberi izin; izin dicatat per foto.`,
+  },
+  // Metode masuk. Login Google aktif setelah kredensial dipasang di Supabase (lihat README).
+  "public.auth": { google: false },
   // Pratinjau tautan saat dibagikan (WhatsApp/medsos). Kosong = kartu otomatis dari judul hero.
   "public.share": { image: "", description: "" },
   "public.contact": {

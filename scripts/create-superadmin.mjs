@@ -7,6 +7,10 @@ if (!nama || !email || !password) {
   console.error('Pemakaian: node --env-file=.env.local scripts/create-superadmin.mjs "Nama" email password');
   process.exit(1);
 }
+if (password.length < 10 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+  console.error("Password harus minimal 10 karakter dan berisi huruf besar, huruf kecil, angka, dan simbol.");
+  process.exit(1);
+}
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) {

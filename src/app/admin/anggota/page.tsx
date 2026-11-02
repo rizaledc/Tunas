@@ -4,7 +4,7 @@ import { formatTanggal } from "@/lib/date";
 import { isSyntheticEmail } from "@/lib/utils";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
-import { ImportMembersForm, ResetPasswordForm } from "@/components/admin/forms";
+import { CreateMemberForm, EditMemberForm, ImportMembersForm, ResetPasswordForm } from "@/components/admin/forms";
 import { createInvites, deleteInvite, setUserStatus } from "../actions";
 
 export const metadata = { title: "Anggota" };
@@ -30,6 +30,12 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
   return (
     <div className="space-y-6">
       <PageTitle title="Anggota" subtitle={`${users?.length ?? 0} keluarga terdaftar`} />
+
+      <section className="card">
+        <h2 className="mb-1 font-extrabold">Buat akun orang tua</h2>
+        <p className="mb-3 text-sm text-ink-soft">Untuk orang tua yang kesulitan mendaftar sendiri. Cukup salah satu: nomor HP atau email.</p>
+        <CreateMemberForm />
+      </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="card">
@@ -147,6 +153,7 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
                     <button className="btn-ghost btn-sm">{m.status === "active" ? "Nonaktifkan" : "Aktifkan"}</button>
                   </form>
                   <ResetPasswordForm id={m.id} />
+                  <EditMemberForm m={{ id: m.id, nama: m.nama, no_hp: m.no_hp, email: isSyntheticEmail(m.email) ? null : m.email, rt: m.rt ?? null }} />
                 </td>
               </tr>
             ))}

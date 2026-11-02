@@ -10,10 +10,19 @@ import { parseInsight, type InsightOutput } from "@/lib/indicators";
 import { readXlsx } from "@/lib/excel";
 import { SURVEY_TEMPLATES } from "@/lib/survey";
 import { DEFAULT_SETTINGS, getSettings, type ScreenRef } from "@/lib/settings";
-import { bool, int, normalizePhone, phoneToAuthEmail, randomCode, slugify, str } from "@/lib/utils";
+import { bool, int, phoneToAuthEmail, randomCode, slugify, str } from "@/lib/utils";
+import { emailError, normalizeEmail, normalizePhone, phoneError } from "@/lib/validation";
+import { createParent, emailTaken, phoneTaken, validateName, validateRt, loginMethods } from "@/lib/accounts";
+import { googleProviderStatus } from "@/lib/auth-providers";
 import type { ActionState } from "@/components/ui";
 
 const db = () => createAdminClient();
+
+/** "…/storage/v1/object/public/media/<path>" → "<path>" */
+function storagePathFromUrl(url: string): string | null {
+  const m = url.match(/\/object\/public\/media\/(.+)$/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
 
 /** Membuat slug unik: tambahkan akhiran angka jika sudah dipakai baris lain. */
 async function uniqueSlug(table: "events" | "articles", base: string, exceptId?: string) {
@@ -80,19 +89,22 @@ export async function resetPassword(_: ActionState, fd: FormData): Promise<Actio
   return { ok: true, message: `Password sementara untuk ${target.nama}: ${pw} — sampaikan langsung dan minta segera diganti.` };
 }
 
-async function createParentAccount(input: { nama: string; phone: string | null; email: string | null; rt: string | null; password: string }) {
-  const authEmail = input.email ?? phoneToAuthEmail(input.phone!);
-  const { data, error } = await db().auth.admin.createUser({ email: authEmail, password: input.password, email_confirm: true, user_metadata: { nama: input.nama } });
-  if (error || !data.user) throw new Error(error?.message ?? "gagal");
-  const uid = data.user.id;
-  const { error: e1 } = await db().from("users").insert({ id: uid, nama: input.nama, no_hp: input.phone, email: input.email, role: "parent" });
-  // consent_version kosong → orang tua diminta menyetujui saat pertama masuk.
-  const { error: e2 } = e1 ? { error: e1 } : await db().from("families").insert({ parent_id: uid, rt: input.rt });
-  if (e1 || e2) {
-    await db().auth.admin.deleteUser(uid);
-    throw new Error("gagal menyimpan profil");
-  }
-  return uid;
+/** Admin membuat satu akun orang tua. Orang tua diminta menyetujui consent saat pertama masuk. */
+export async function createMember(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  const manual = str(fd, "pw_mode") === "manual";
+  const password = manual ? str(fd, "password") : tempPassword();
+  if (manual && password !== str(fd, "password2")) return { error: "Konfirmasi password tidak sama." };
+  const res = await createParent(
+    { nama: str(fd, "nama"), phone: str(fd, "no_hp"), email: str(fd, "email"), rt: str(fd, "rt"), password, inviteId: null, consent: false },
+    { requireBoth: false },
+  );
+  if (res.error || !res.id) return { error: res.error };
+  const phone = normalizePhone(str(fd, "no_hp"));
+  const login = phone ? `0${phone.slice(2)}` : (normalizeEmail(str(fd, "email")) ?? "");
+  await audit(me.id, "member.create", res.id, { login });
+  revalidatePath("/admin/anggota");
+  return { ok: true, message: `Akun untuk ${str(fd, "nama")} berhasil dibuat.`, data: { nama: str(fd, "nama"), login, password, phone: phone ?? "", manual } };
 }
 
 export async function importMembers(_: ActionState, fd: FormData): Promise<ActionState> {
@@ -109,19 +121,11 @@ export async function importMembers(_: ActionState, fd: FormData): Promise<Actio
   const results: Array<{ baris: number; nama: string; login: string; password?: string; status: string }> = [];
   for (const [i, r] of rows.slice(0, 300).entries()) {
     const nama = r.nama ?? r.nama_orang_tua ?? "";
-    const phone = r.no_hp ? normalizePhone(r.no_hp) : null;
-    const email = r.email?.includes("@") ? r.email.toLowerCase() : null;
-    if (!nama || (!phone && !email)) {
-      results.push({ baris: i + 2, nama, login: "", status: "Lewati: nama & no_hp/email wajib" });
-      continue;
-    }
     const pw = tempPassword();
-    try {
-      await createParentAccount({ nama, phone, email, rt: r.rt || null, password: pw });
-      results.push({ baris: i + 2, nama, login: phone ? `0${phone.slice(2)}` : email!, password: pw, status: "Dibuat" });
-    } catch (e) {
-      results.push({ baris: i + 2, nama, login: phone ?? email ?? "", status: `Gagal: ${(e as Error).message.includes("already") ? "sudah terdaftar" : (e as Error).message}` });
-    }
+    const res = await createParent({ nama, phone: r.no_hp ?? "", email: r.email ?? "", rt: r.rt ?? "", password: pw, inviteId: null, consent: false }, { requireBoth: false });
+    const phone = normalizePhone(r.no_hp ?? "");
+    const login = phone ? `0${phone.slice(2)}` : (normalizeEmail(r.email ?? "") ?? r.email ?? "");
+    results.push(res.id ? { baris: i + 2, nama, login, password: pw, status: "Dibuat" } : { baris: i + 2, nama, login, status: `Gagal: ${res.error}` });
   }
   await audit(me.id, "member.import", `${results.filter((r) => r.status === "Dibuat").length} akun`);
   revalidatePath("/admin/anggota");
@@ -222,10 +226,15 @@ export async function savePhotos(_: ActionState, fd: FormData): Promise<ActionSt
 export async function updatePhoto(fd: FormData) {
   const me = await requireAdmin();
   const id = str(fd, "id");
-  await db()
-    .from("gallery_photos")
-    .update({ caption: str(fd, "caption") || null, category: str(fd, "category"), publish_consent: str(fd, "publish_consent") === "on", event_id: str(fd, "event_id") || null })
-    .eq("id", id);
+  const update: Record<string, unknown> = { caption: str(fd, "caption") || null, category: str(fd, "category"), publish_consent: str(fd, "publish_consent") === "on", event_id: str(fd, "event_id") || null };
+  const newUrl = str(fd, "url");
+  const { data: old } = await db().from("gallery_photos").select("url,storage_path").eq("id", id).maybeSingle();
+  if (newUrl && old && newUrl !== old.url) {
+    update.url = newUrl;
+    update.storage_path = storagePathFromUrl(newUrl);
+    if (old.storage_path) await db().storage.from("media").remove([old.storage_path]);
+  }
+  await db().from("gallery_photos").update(update).eq("id", id);
   await audit(me.id, "gallery.update", id);
   revalidatePath("/", "layout");
 }
@@ -389,9 +398,10 @@ export async function toggleCategory(fd: FormData) {
 export async function createAdminAccount(_: ActionState, fd: FormData): Promise<ActionState> {
   const me = await requireAdmin("superadmin");
   const nama = str(fd, "nama");
-  const email = str(fd, "email").toLowerCase();
+  const email = normalizeEmail(str(fd, "email"));
   const role = str(fd, "role") === "superadmin" ? "superadmin" : "admin";
-  if (!nama || !email.includes("@")) return { error: "Nama dan email wajib." };
+  if (nama.length < 2) return { error: "Nama wajib diisi." };
+  if (!email) return { error: "Format email tidak valid." };
   const pw = tempPassword();
   const { data, error } = await db().auth.admin.createUser({ email, password: pw, email_confirm: true });
   if (error || !data.user) return { error: error?.message.includes("already") ? "Email sudah terdaftar." : "Gagal membuat akun." };
@@ -627,4 +637,129 @@ export async function saveShare(_: ActionState, fd: FormData): Promise<ActionSta
   await audit(me.id, "content.share");
   revalidatePath("/", "layout");
   return { ok: true, message: "Tampilan saat dibagikan tersimpan. WhatsApp bisa menyimpan pratinjau lama hingga beberapa jam." };
+}
+
+export async function saveAuthSettings(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin("superadmin");
+  const google = str(fd, "google") === "on";
+  if (google) {
+    const status = await googleProviderStatus();
+    if (status === false) return { error: "Provider Google belum aktif di Supabase. Ikuti langkah 1–3 di atas dulu, lalu coba lagi." };
+  }
+  await setSetting("public.auth", { google });
+  await audit(me.id, "settings.auth", google ? "google_on" : "google_off");
+  revalidatePath("/", "layout");
+  return { ok: true, message: google ? "Tombol Google ditampilkan di halaman Masuk dan Daftar." : "Tombol Google disembunyikan." };
+}
+
+// =============== Konten lain (semua bisa diubah admin) ===============
+export async function saveBrand(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  await setSetting("public.brand", { logo: str(fd, "logo"), tagline: str(fd, "tagline").slice(0, 60) || DEFAULT_SETTINGS["public.brand"].tagline });
+  await audit(me.id, "content.brand");
+  revalidatePath("/", "layout");
+  return { ok: true, message: "Identitas situs tersimpan." };
+}
+
+export async function saveLanding(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  const d = DEFAULT_SETTINGS["public.landing"];
+  const t = (k: string, max = 300) => str(fd, k).slice(0, max);
+  const list = <T,>(n: number, f: (i: number) => T) => Array.from({ length: n }, (_, i) => f(i));
+  const value = {
+    badge: t("badge", 80),
+    cta_primary: t("cta_primary", 40) || d.cta_primary,
+    cta_secondary: t("cta_secondary", 40) || d.cta_secondary,
+    stats_label: t("stats_label", 60),
+    events_title: t("events_title", 80),
+    agenda_title: t("agenda_title", 80),
+    features_title: t("features_title", 80),
+    features_text: t("features_text"),
+    features: list(6, (i) => ({ icon: t(`f_icon_${i}`, 30) || "star", title: t(`f_title_${i}`, 60), text: t(`f_text_${i}`, 200) })),
+    steps_title: t("steps_title", 80),
+    steps: list(3, (i) => ({ title: t(`s_title_${i}`, 80), text: t(`s_text_${i}`, 200) })),
+    steps_image: t("steps_image", 500),
+    roadmap_title: t("roadmap_title", 80),
+    roadmap: list(6, (i) => ({ label: t(`r_label_${i}`, 30), title: t(`r_title_${i}`, 80), text: t(`r_text_${i}`, 200) })),
+    gallery_title: t("gallery_title", 80),
+    articles_title: t("articles_title", 80),
+    cta_title: t("cta_title", 100),
+    cta_text: t("cta_text"),
+    cta_button: t("cta_button", 40) || d.cta_button,
+    footer_text: t("footer_text"),
+    show: Object.fromEntries(Object.keys(d.show).map((k) => [k, str(fd, `show_${k}`) === "on"])),
+  };
+  await setSetting("public.landing", value);
+  await audit(me.id, "content.landing");
+  revalidatePath("/", "layout");
+  return { ok: true, message: "Isi beranda tersimpan." };
+}
+
+export async function saveTentang(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  await setSetting("public.tentang", { title: str(fd, "title") || "Tentang", intro: str(fd, "intro"), body: str(fd, "body"), image: str(fd, "image"), show_logo: str(fd, "show_logo") === "on" });
+  await audit(me.id, "content.tentang");
+  revalidatePath("/tentang");
+  return { ok: true, message: "Halaman Tentang tersimpan." };
+}
+
+export async function savePrivasi(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  await setSetting("public.privasi", { body: str(fd, "body") });
+  await audit(me.id, "content.privasi");
+  revalidatePath("/privasi");
+  return { ok: true, message: "Halaman Privasi tersimpan." };
+}
+
+export async function resetContent(key: string, fd?: FormData) {
+  void fd;
+  const me = await requireAdmin();
+  const allowed = ["public.landing", "public.tentang", "public.privasi", "public.brand", "public.hero", "public.stats", "public.panduan", "public.share"];
+  if (!allowed.includes(key)) return;
+  await db().from("settings").delete().eq("key", key);
+  await audit(me.id, "content.reset", key);
+  revalidatePath("/", "layout");
+}
+
+export async function updateMember(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  const id = str(fd, "id");
+  const { data: target } = await db().from("users").select("role,email,no_hp").eq("id", id).maybeSingle();
+  if (!target || target.role !== "parent") return { error: "Akun tidak ditemukan." };
+  const nama = str(fd, "nama");
+  const nameErr = validateName(nama);
+  if (nameErr) return { error: nameErr };
+  const phoneRaw = str(fd, "no_hp");
+  const emailRaw = str(fd, "email");
+  let phone: string | null = null;
+  let email: string | null = null;
+  if (phoneRaw) {
+    const e = phoneError(phoneRaw);
+    if (e) return { error: e };
+    phone = normalizePhone(phoneRaw);
+    if (await phoneTaken(phone!, id)) return { error: "Nomor HP sudah dipakai akun lain." };
+  }
+  if (emailRaw) {
+    const e = emailError(emailRaw);
+    if (e) return { error: e };
+    email = normalizeEmail(emailRaw);
+    if (await emailTaken(email!, id)) return { error: "Email sudah dipakai akun lain." };
+  }
+  if (!phone && !email) return { error: "Isi nomor HP atau email." };
+  const rt = str(fd, "rt");
+  const rtErr = validateRt(rt);
+  if (rtErr) return { error: rtErr };
+
+  const { data: au } = await db().auth.admin.getUserById(id);
+  const { isGoogle } = loginMethods(au.user);
+  if (!isGoogle && email !== target.email) {
+    const authEmail = email ?? phoneToAuthEmail(phone!);
+    const { error } = await db().auth.admin.updateUserById(id, { email: authEmail, email_confirm: true });
+    if (error) return { error: "Email login gagal diubah." };
+  }
+  await db().from("users").update({ nama: nama.trim(), no_hp: phone, email: isGoogle ? target.email : email }).eq("id", id);
+  await db().from("families").update({ rt: rt || null }).eq("parent_id", id);
+  await audit(me.id, "member.update", id);
+  revalidatePath("/admin/anggota");
+  return { ok: true, message: "Data anggota tersimpan." };
 }

@@ -6,13 +6,20 @@ import { ActionForm, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
 import { changePassword, deleteAccount, updateProfile } from "../../actions";
 import { PushToggle } from "./push-toggle";
+import { EmailField, NewPasswordField, PhoneField } from "@/components/fields";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { loginMethods } from "@/lib/accounts";
 
 export const metadata = { title: "Profil" };
 
 export default async function ProfilPage() {
   const parent = await requireParent();
   const supabase = await createClient();
-  const { data: fam } = await supabase.from("families").select("rt,consent_at,consent_version").eq("id", parent.familyId).maybeSingle();
+  const [{ data: fam }, { data: au }] = await Promise.all([
+    supabase.from("families").select("rt,consent_at,consent_version").eq("id", parent.familyId).maybeSingle(),
+    createAdminClient().auth.admin.getUserById(parent.id),
+  ]);
+  const { isGoogle, hasPassword } = loginMethods(au.user);
   return (
     <div className="space-y-4">
       <PageTitle title="Profil" subtitle={parent.no_hp ? `+${parent.no_hp}` : parent.email ?? ""} />
@@ -39,27 +46,49 @@ export default async function ProfilPage() {
         <h2 className="mb-3 text-lg font-extrabold">Data akun</h2>
         <ActionForm action={updateProfile} className="space-y-3">
           <div>
-            <label className="label">Nama</label>
-            <input name="nama" defaultValue={parent.nama} required className="input" />
+            <label className="label" htmlFor="nama">
+              Nama
+            </label>
+            <input id="nama" name="nama" defaultValue={parent.nama} required minLength={2} maxLength={80} className="input" />
           </div>
+          <PhoneField defaultValue={parent.no_hp ? `0${parent.no_hp.slice(2)}` : ""} />
+          {isGoogle ? (
+            <div>
+              <p className="label">Email</p>
+              <p className="flex items-center gap-2 rounded-xl bg-gray-50 p-3 text-sm">
+                <Icon name="check-circle" className="text-daun-600" /> {parent.email} <span className="text-ink-soft">(akun Google)</span>
+              </p>
+            </div>
+          ) : (
+            <EmailField required={false} defaultValue={parent.email ?? ""} hint="Isi email agar bisa memulihkan password sendiri." />
+          )}
           <div>
-            <label className="label">Nomor HP</label>
-            <input name="no_hp" defaultValue={parent.no_hp ? `0${parent.no_hp.slice(2)}` : ""} className="input" inputMode="tel" />
-          </div>
-          <div>
-            <label className="label">RT</label>
-            <input name="rt" defaultValue={fam?.rt ?? ""} className="input" />
+            <label className="label" htmlFor="rt">
+              RT
+            </label>
+            <input id="rt" name="rt" defaultValue={fam?.rt ?? ""} inputMode="numeric" maxLength={3} pattern="\d{0,3}" className="input w-28" />
           </div>
           <SubmitButton className="btn-green w-full">Simpan</SubmitButton>
         </ActionForm>
       </section>
 
       <section className="card">
-        <h2 className="mb-3 text-lg font-extrabold">Ubah password</h2>
+        <h2 className="mb-3 text-lg font-extrabold">{hasPassword ? "Ubah password" : "Buat password (opsional)"}</h2>
+        {!hasPassword && <p className="mb-3 text-sm text-ink-soft">Anda masuk dengan Google. Buat password jika ingin bisa masuk juga dengan email/nomor HP.</p>}
         <ActionForm action={changePassword} resetOnSuccess className="space-y-3">
-          <input name="password" type="password" minLength={8} required placeholder="Password baru" className="input" autoComplete="new-password" />
-          <input name="password2" type="password" minLength={8} required placeholder="Ulangi password baru" className="input" autoComplete="new-password" />
-          <SubmitButton className="btn-outline w-full">Ubah Password</SubmitButton>
+          {hasPassword && (
+            <div>
+              <label className="label" htmlFor="current">
+                Password lama
+              </label>
+              <input id="current" name="current" type="password" required autoComplete="current-password" className="input" />
+            </div>
+          )}
+          <input type="hidden" name="nama" value={parent.nama} />
+          <input type="hidden" name="no_hp" value={parent.no_hp ?? ""} />
+          <input type="hidden" name="email" value={parent.email ?? ""} />
+          <NewPasswordField label="Password baru" />
+          <SubmitButton className="btn-outline w-full">{hasPassword ? "Ubah Password" : "Buat Password"}</SubmitButton>
         </ActionForm>
       </section>
 

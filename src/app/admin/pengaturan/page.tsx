@@ -1,4 +1,5 @@
-import { CATEGORY_ICONS, CategoryIcon, Icon } from "@/components/icons";
+import { CategoryIcon, Icon } from "@/components/icons";
+import { IconSelect } from "@/components/admin/icon-select";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getSettings } from "@/lib/settings";
@@ -9,7 +10,10 @@ import { MfaSetup } from "@/components/admin/mfa";
 import { AiTestForm } from "@/components/admin/ai-test";
 import { fetchModels, maskKey, resolveOpenRouterKey } from "@/lib/openrouter";
 import { openRouterBalance } from "@/lib/insight";
-import { changeAdminRole, createAdminAccount, deleteAdminAccount, deleteOpenRouterKey, resetSystemPrompt, saveAiSettings, saveOpenRouterKey, saveCategory, saveConsent, saveReminder, saveScreenRef, toggleCategory } from "../actions";
+import { googleProviderStatus, supabaseOAuthCallback } from "@/lib/auth-providers";
+import { SITE_URL } from "@/lib/site";
+import { getSetting } from "@/lib/settings";
+import { changeAdminRole, createAdminAccount, deleteAdminAccount, deleteOpenRouterKey, resetSystemPrompt, saveAiSettings, saveAuthSettings, saveOpenRouterKey, saveCategory, saveConsent, saveReminder, saveScreenRef, toggleCategory } from "../actions";
 
 export const metadata = { title: "Pengaturan" };
 
@@ -21,6 +25,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
   const tabs = [
     ["kategori", "Kategori"],
     ["ai", "AI & Prompt"],
+    ["login", "Login & Google"],
     ["acuan", "Acuan Screen Time"],
     ["consent", "Teks Consent"],
     ["pengingat", "Pengingat"],
@@ -36,6 +41,7 @@ export default async function PengaturanPage({ searchParams }: { searchParams: P
       {tab === "kategori" && <Categories db={db} />}
 
       {tab === "ai" && <AiSettings s={s} />}
+      {tab === "login" && <LoginSettings />}
 
       {tab === "acuan" && (
         <ActionForm action={saveScreenRef} className="card space-y-3">
@@ -235,18 +241,6 @@ async function Admins({ db, meId }: { db: ReturnType<typeof createAdminClient>; 
   );
 }
 
-function IconSelect({ defaultValue }: { defaultValue: string }) {
-  return (
-    <select name="icon" defaultValue={CATEGORY_ICONS.some((i) => i.key === defaultValue) ? defaultValue : "heart"} className="input w-44 py-1 text-sm" aria-label="Ikon">
-      {CATEGORY_ICONS.map((i) => (
-        <option key={i.key} value={i.key}>
-          {i.label}
-        </option>
-      ))}
-    </select>
-  );
-}
-
 type AiCfg = { "ai.model": string; "ai.system_prompt": string; "ai.max_per_day": number; "ai.max_tokens": number; "ai.enabled": boolean };
 
 async function AiSettings({ s }: { s: AiCfg }) {
@@ -361,6 +355,73 @@ async function AiSettings({ s }: { s: AiCfg }) {
           Pulihkan prompt bawaan
         </ConfirmButton>
       </form>
+    </div>
+  );
+}
+
+function CopyLine({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-gray-50 p-3">
+      <p className="text-xs font-bold text-ink-soft">{label}</p>
+      <code className="block font-mono text-sm break-all select-all">{value}</code>
+    </div>
+  );
+}
+
+async function LoginSettings() {
+  const [auth, provider] = await Promise.all([getSetting("public.auth"), googleProviderStatus()]);
+  const providerText =
+    provider === true ? { tone: "bg-daun-50 text-daun-700", icon: "check-circle" as const, text: "Provider Google di Supabase: AKTIF" } : provider === false ? { tone: "bg-orange-50 text-oranye-600", icon: "warning" as const, text: "Provider Google di Supabase: belum aktif" } : { tone: "bg-gray-100 text-ink-soft", icon: "info" as const, text: "Status provider tidak bisa dicek" };
+  return (
+    <div className="space-y-4">
+      <section className="card space-y-4">
+        <div>
+          <h2 className="text-lg font-extrabold">Masuk & daftar dengan Google</h2>
+          <p className="text-sm text-ink-soft">Orang tua cukup memilih akun Google; kode undangan, nomor HP, dan persetujuan data tetap diminta saat pertama kali mendaftar.</p>
+        </div>
+        <p className={`flex items-center gap-2 rounded-xl p-3 text-sm font-semibold ${providerText.tone}`}>
+          <Icon name={providerText.icon} /> {providerText.text}
+        </p>
+        <ol className="list-decimal space-y-3 pl-5 text-sm">
+          <li>
+            Buka{" "}
+            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+              Google Cloud Console → APIs & Services → Credentials
+            </a>
+            . Atur <strong>OAuth consent screen</strong> (nama aplikasi SAHABAT ANAK, email dukungan, logo, domain), lalu buat <strong>OAuth client ID</strong> tipe <em>Web application</em>.
+          </li>
+          <li>
+            Isi kolom di Google:
+            <div className="mt-2 grid gap-2">
+              <CopyLine label="Authorized JavaScript origins" value={SITE_URL} />
+              <CopyLine label="Authorized redirect URIs" value={supabaseOAuthCallback()} />
+            </div>
+          </li>
+          <li>
+            Salin <strong>Client ID</strong> dan <strong>Client secret</strong> ke Supabase Dashboard → Authentication → Sign In / Providers → <strong>Google</strong> → Enable. Lalu di Authentication → URL Configuration, pastikan:
+            <div className="mt-2 grid gap-2">
+              <CopyLine label="Site URL" value={SITE_URL} />
+              <CopyLine label="Redirect URLs (tambahkan)" value={`${SITE_URL}/auth/callback`} />
+            </div>
+          </li>
+          <li>Kembali ke sini, nyalakan tombol di bawah, lalu coba masuk dengan Google dari HP.</li>
+        </ol>
+        <ActionForm action={saveAuthSettings} className="flex flex-wrap items-center gap-3 border-t pt-4">
+          <label className="flex items-center gap-2 font-bold">
+            <input type="checkbox" name="google" defaultChecked={auth.google} className="h-5 w-5 accent-daun-600" /> Tampilkan tombol &quot;Masuk/Daftar dengan Google&quot;
+          </label>
+          <SubmitButton className="btn-green btn-sm">Simpan</SubmitButton>
+        </ActionForm>
+      </section>
+      <section className="card text-sm">
+        <h2 className="mb-2 font-extrabold">Aturan password & data akun</h2>
+        <ul className="list-disc space-y-1 pl-5 text-ink-soft">
+          <li>Password minimal 10 karakter, berisi huruf besar, huruf kecil, angka, dan simbol; bukan kata umum, nama, atau nomor HP pengguna. Panduan tampil langsung saat mengetik.</li>
+          <li>Nomor HP hanya angka (nomor seluler Indonesia, diawali 08/628). Email diperiksa formatnya dan salah ketik umum (gmial.com) disarankan perbaikannya.</li>
+          <li>Daftar mandiri tanpa Google wajib mengisi nomor HP dan email. Akun buatan admin cukup salah satu.</li>
+          <li>Pengurus (admin) masuk lewat /login/admin dengan email + password; akun pengurus tidak bisa masuk lewat tombol Google.</li>
+        </ul>
+      </section>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import { Icon } from "@/components/icons";
+import { CategoryIcon, Icon } from "@/components/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { getArticles, getEvents, getPhotos, countActiveFamilies } from "@/lib/content";
-import { getSettings } from "@/lib/settings";
+import { DEFAULT_SETTINGS, getSettings } from "@/lib/settings";
 import { formatTanggal } from "@/lib/date";
 import { EventSlider } from "@/components/site/slider";
 import { GalleryGrid } from "@/components/site/gallery";
@@ -12,25 +12,9 @@ import { excerpt } from "@/lib/markdown";
 
 export const revalidate = 300;
 
-const FEATURES = [
-  { icon: "pencil" as const, title: "Catat Aktivitas", text: "Catat waktu gawai dan kegiatan positif anak kurang dari 1 menit." },
-  { icon: "chart" as const, title: "Grafik Keseimbangan", text: "Lihat perbandingan digital dan non-digital dalam grafik yang mudah dibaca." },
-  { icon: "sparkle" as const, title: "Insight AI", text: "Ringkasan mingguan dan saran pendampingan — bukan perintah." },
-  { icon: "agreement" as const, title: "Kesepakatan Keluarga", text: "Tetapkan target waktu layar dan jam bebas gawai, lalu cetak posternya." },
-  { icon: "star" as const, title: "Mode Anak", text: "Anak mencatat kegiatannya sendiri dan mengumpulkan bintang." },
-  { icon: "community" as const, title: "Pantau Komunitas", text: "Pengurus komunitas atau sekolah melihat data gabungan untuk merencanakan kegiatan." },
-];
-
-const ROADMAP = [
-  { year: "Tahap 1", title: "Literasi Digital Orang Tua", text: "Orang tua dibekali keterampilan dan pemahaman dunia digital anak." },
-  { year: "Tahap 2", title: "Pendampingan Keluarga", text: "Keluarga belajar mendampingi penggunaan gawai yang sehat." },
-  { year: "Tahap 3", title: "Aktivitas Alternatif", text: "Anak diajak berkegiatan positif di luar layar dan mulai mencatatnya." },
-  { year: "Tahap 4", title: "SAHABAT ANAK", text: "Pencatatan berpindah ke aplikasi dengan grafik dan insight AI." },
-];
-
 export default async function LandingPage() {
   const [settings, featured, upcoming, photos, articles, families] = await Promise.all([
-    getSettings(["public.hero", "public.stats", "public.contact"]),
+    getSettings(["public.hero", "public.stats", "public.contact", "public.landing"]),
     getEvents({ featured: true, limit: 5 }),
     getEvents({ upcoming: true, limit: 3 }),
     getPhotos({ limit: 12 }),
@@ -40,6 +24,8 @@ export default async function LandingPage() {
   const hero = settings["public.hero"];
   const stats = settings["public.stats"];
   const contact = settings["public.contact"];
+  const L = settings["public.landing"];
+  const show = { ...DEFAULT_SETTINGS["public.landing"].show, ...(L.show ?? {}) };
 
   return (
     <>
@@ -48,16 +34,16 @@ export default async function LandingPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 md:grid-cols-2 md:py-16">
           <div>
             <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-bold">
-              <Icon name="sprout" className="h-4 w-4" /> Pendamping digital keluarga Indonesia
+              <Icon name="sprout" className="h-4 w-4" /> {L.badge}
             </p>
             <h1 className="text-3xl leading-tight font-extrabold md:text-5xl">{hero.title}</h1>
             <p className="mt-4 text-lg text-white/90">{hero.subtitle}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/daftar" className="btn-primary text-lg">
-                Mulai Mencatat
+                {L.cta_primary}
               </Link>
               <Link href="/tentang" className="btn border-2 border-white/70 text-lg text-white hover:bg-white/10">
-                Pelajari Program
+                {L.cta_secondary}
               </Link>
             </div>
           </div>
@@ -72,7 +58,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Angka capaian */}
-      <section className="mx-auto -mt-8 max-w-6xl px-4" aria-label="Angka capaian program">
+      {show.stats && <section className="mx-auto -mt-8 max-w-6xl px-4" aria-label="Angka capaian program">
         <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
           {stats.map((s) => (
             <div key={s.label} className="card text-center">
@@ -85,20 +71,20 @@ export default async function LandingPage() {
           ))}
           <div className="card bg-oranye-500 text-center text-white">
             <p className="text-2xl font-extrabold">{families ?? "–"}</p>
-            <p className="mt-1 text-sm font-semibold">Keluarga aktif mencatat</p>
+            <p className="mt-1 text-sm font-semibold">{L.stats_label}</p>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Kegiatan unggulan + agenda */}
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <h2 className="mb-4 text-2xl font-extrabold text-daun-900">Kegiatan Pendampingan</h2>
+      {show.events && <section className="mx-auto max-w-6xl px-4 py-12">
+        <h2 className="mb-4 text-2xl font-extrabold text-daun-900">{L.events_title}</h2>
         <div className="grid gap-6 md:grid-cols-5">
           <div className="md:col-span-3">
             <EventSlider items={featured.map((e) => ({ slug: e.slug, title: e.title, dateLabel: formatTanggal(e.date), cover: e.cover_photo }))} />
           </div>
           <div className="md:col-span-2">
-            <h3 className="mb-3 text-lg font-extrabold">Agenda Mendatang</h3>
+            <h3 className="mb-3 text-lg font-extrabold">{L.agenda_title}</h3>
             {upcoming.length === 0 ? (
               <p className="card text-ink-soft">Agenda berikutnya akan segera diumumkan.</p>
             ) : (
@@ -126,18 +112,18 @@ export default async function LandingPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Fitur */}
-      <section className="bg-white py-12">
+      {show.features && <section className="bg-white py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-center text-2xl font-extrabold text-daun-900">Fitur Aplikasi</h2>
-          <p className="mx-auto mt-2 max-w-2xl text-center text-ink-soft">Dirancang untuk HP Android, tombol besar, bahasa sederhana. Bukan aplikasi pemblokir — semua dicatat oleh Ayah dan Bunda.</p>
+          <h2 className="text-center text-2xl font-extrabold text-daun-900">{L.features_title}</h2>
+          <p className="mx-auto mt-2 max-w-2xl text-center text-ink-soft">{L.features_text}</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f) => (
+            {L.features.filter((f) => f.title).map((f) => (
               <div key={f.title} className="card flex gap-3">
                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-daun-50 text-daun-600">
-                  <Icon name={f.icon} className="h-7 w-7" />
+                  <CategoryIcon icon={f.icon} className="h-7 w-7" />
                 </span>
                 <div>
                   <p className="font-extrabold">{f.title}</p>
@@ -147,12 +133,12 @@ export default async function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Cara kerja */}
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 md:grid-cols-2">
+      {show.steps && <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 md:grid-cols-2">
         <div>
-          <h2 className="text-2xl font-extrabold text-daun-900">Cara Kerja</h2>
+          <h2 className="text-2xl font-extrabold text-daun-900">{L.steps_title}</h2>
           <ol className="mt-6 space-y-5">
             {[
               ["Daftar dengan kode undangan", "Minta kode undangan ke pengurus komunitas atau sekolah, lalu daftar dengan nomor HP."],
@@ -172,17 +158,23 @@ export default async function LandingPage() {
             Lihat panduan lengkap
           </Link>
         </div>
-        <PhoneMockup />
-      </section>
+        {L.steps_image ? (
+          <div className="relative mx-auto aspect-[9/16] w-64 overflow-hidden rounded-[2rem] shadow-2xl">
+            <Image src={L.steps_image} alt="Tampilan aplikasi SAHABAT ANAK" fill sizes="256px" className="object-cover" />
+          </div>
+        ) : (
+          <PhoneMockup />
+        )}
+      </section>}
 
       {/* Roadmap */}
-      <section className="bg-daun-50 py-12">
+      {show.roadmap && <section className="bg-daun-50 py-12">
         <div className="mx-auto max-w-6xl px-4">
-          <h2 className="text-2xl font-extrabold text-daun-900">Alur Program</h2>
+          <h2 className="text-2xl font-extrabold text-daun-900">{L.roadmap_title}</h2>
           <ol className="mt-6 grid gap-4 md:grid-cols-4">
-            {ROADMAP.map((r, i) => (
+            {L.roadmap.filter((r) => r.title).map((r, i) => (
               <li key={r.title} className="card relative">
-                <span className="text-sm font-extrabold text-oranye-600">{r.year}</span>
+                <span className="text-sm font-extrabold text-oranye-600">{r.label}</span>
                 <p className="mt-1 font-extrabold">
                   {i + 1}. {r.title}
                 </p>
@@ -191,24 +183,24 @@ export default async function LandingPage() {
             ))}
           </ol>
         </div>
-      </section>
+      </section>}
 
       {/* Galeri */}
-      <section className="mx-auto max-w-6xl px-4 py-12">
+      {show.gallery && <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="mb-4 flex items-end justify-between">
-          <h2 className="text-2xl font-extrabold text-daun-900">Galeri Kegiatan</h2>
+          <h2 className="text-2xl font-extrabold text-daun-900">{L.gallery_title}</h2>
           <Link href="/galeri" className="inline-flex items-center gap-1 font-bold text-sky-brand">
             Lihat semua <Icon name="arrow-right" className="h-4 w-4" />
           </Link>
         </div>
         {photos.length ? <GalleryGrid photos={photos} limit={8} /> : <p className="card text-center text-ink-soft">Foto kegiatan akan segera diunggah oleh pengurus.</p>}
-      </section>
+      </section>}
 
       {/* Artikel */}
-      <section className="bg-white py-12">
+      {show.articles && <section className="bg-white py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-2xl font-extrabold text-daun-900">Artikel & Tips</h2>
+            <h2 className="text-2xl font-extrabold text-daun-900">{L.articles_title}</h2>
             <Link href="/artikel" className="inline-flex items-center gap-1 font-bold text-sky-brand">
               Semua artikel <Icon name="arrow-right" className="h-4 w-4" />
             </Link>
@@ -236,18 +228,18 @@ export default async function LandingPage() {
             </div>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* CTA */}
-      <section className="mx-auto max-w-6xl px-4 py-12">
+      {show.cta && <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="rounded-3xl bg-gradient-to-r from-oranye-500 to-oranye-400 p-8 text-white md:flex md:items-center md:justify-between">
           <div>
-            <h2 className="text-2xl font-extrabold">Bergabung dengan SAHABAT ANAK</h2>
-            <p className="mt-1 text-white/90">Dampingi tumbuh kembang anak bersama keluarga-keluarga lain di komunitas Anda.</p>
+            <h2 className="text-2xl font-extrabold">{L.cta_title}</h2>
+            <p className="mt-1 text-white/90">{L.cta_text}</p>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 md:mt-0">
             <Link href="/daftar" className="btn bg-white text-oranye-600 hover:bg-orange-50">
-              Daftar Sekarang
+              {L.cta_button}
             </Link>
             {contact.whatsapp && (
             <a href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent("Halo pengurus, saya ingin bergabung dengan SAHABAT ANAK.")}`} target="_blank" rel="noopener noreferrer" className="btn border-2 border-white text-white hover:bg-white/10">
@@ -256,7 +248,7 @@ export default async function LandingPage() {
             )}
           </div>
         </div>
-      </section>
+      </section>}
     </>
   );
 }

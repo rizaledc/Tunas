@@ -1,14 +1,18 @@
 "use client";
 import { Icon } from "@/components/icons";
-import { useActionState, useEffect, useRef, type ReactNode } from "react";
+import { createContext, startTransition, useActionState, useContext, useEffect, useRef, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";
 
 export type ActionState = { ok?: boolean; error?: string; message?: string; data?: Record<string, unknown> } | null;
 export type FormAction = (prev: ActionState, fd: FormData) => Promise<ActionState>;
 
+const PendingContext = createContext(false);
+
 export function SubmitButton({ children, className, pendingText = "Menyimpan…", ...rest }: { children: ReactNode; className?: string; pendingText?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { pending } = useFormStatus();
+  const status = useFormStatus();
+  const ctxPending = useContext(PendingContext);
+  const pending = status.pending || ctxPending;
   return (
     <button type="submit" disabled={pending} className={cn(className ?? "btn-primary w-full")} {...rest}>
       {pending ? pendingText : children}
@@ -47,23 +51,33 @@ export function ActionForm({
   resetOnSuccess?: boolean;
   confirm?: string;
 }) {
-  const [state, formAction] = useActionState(action, null);
+  const [state, formAction, pending] = useActionState(action, null);
   const ref = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (resetOnSuccess && state?.ok) ref.current?.reset();
   }, [state, resetOnSuccess]);
   return (
-    <form
-      ref={ref}
-      action={formAction}
-      className={className ?? "space-y-4"}
-      onSubmit={(e) => {
-        if (confirm && !window.confirm(confirm)) e.preventDefault();
-      }}
-    >
-      {typeof children === "function" ? children(state) : children}
-      <Alert state={state} />
-    </form>
+    <PendingContext value={pending}>
+      <form
+        ref={ref}
+        action={formAction}
+        className={className ?? "space-y-4"}
+        onSubmit={(e) => {
+          const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+          // Tombol dengan formAction sendiri (mis. "Kembalikan ke bawaan") ditangani React seperti biasa.
+          if (submitter?.hasAttribute("formaction")) return;
+          e.preventDefault();
+          if (confirm && !window.confirm(confirm)) return;
+          // Kirim manual agar React tidak mengosongkan isian form setelah aksi selesai
+          // (isian tetap ada saat validasi gagal). Reset hanya bila resetOnSuccess.
+          const fd = new FormData(e.currentTarget, submitter);
+          startTransition(() => formAction(fd));
+        }}
+      >
+        {typeof children === "function" ? children(state) : children}
+        <Alert state={state} />
+      </form>
+    </PendingContext>
   );
 }
 
@@ -85,6 +99,23 @@ export function PrintButton({ label = "Cetak" }: { label?: string }) {
   return (
     <button type="button" className="btn-primary no-print" onClick={() => window.print()}>
       <Icon name="printer" className="h-5 w-5" /> {label}
+    </button>
+  );
+}
+
+/** Tombol "kembalikan ke bawaan" di dalam form lain, dengan konfirmasi. */
+export function ResetToDefault({ action, label = "Kembalikan ke bawaan" }: { action: (fd: FormData) => Promise<void>; label?: string }) {
+  return (
+    <button
+      type="submit"
+      formAction={action}
+      formNoValidate
+      className="btn-ghost btn-sm ml-2 text-ink-soft"
+      onClick={(e) => {
+        if (!window.confirm("Kembalikan isi bagian ini ke teks bawaan? Perubahan Anda akan hilang.")) e.preventDefault();
+      }}
+    >
+      {label}
     </button>
   );
 }

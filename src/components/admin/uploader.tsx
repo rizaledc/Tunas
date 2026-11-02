@@ -27,14 +27,14 @@ async function upload(file: File, folder: string) {
   return { url: data.publicUrl, path };
 }
 
-export function SingleUpload({ name, defaultValue, folder, accept = "image/*", label = "Unggah gambar" }: { name: string; defaultValue?: string | null; folder: string; accept?: string; label?: string }) {
+export function SingleUpload({ name, defaultValue, folder, accept = "image/*", label = "Unggah gambar", preview = true }: { name: string; defaultValue?: string | null; folder: string; accept?: string; label?: string; preview?: boolean }) {
   const [url, setUrl] = useState(defaultValue ?? "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   return (
     <div className="space-y-2">
       <input type="hidden" name={name} value={url} />
-      {url && accept.startsWith("image") && (
+      {preview && url && accept.startsWith("image") && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={url} alt="" className="h-32 rounded-xl object-cover" />
       )}
@@ -66,11 +66,12 @@ export function SingleUpload({ name, defaultValue, folder, accept = "image/*", l
             }}
           />
         </label>
-        {url && (
+        {url && preview && (
           <button type="button" className="btn-ghost btn-sm" onClick={() => setUrl("")}>
             Hapus
           </button>
         )}
+        {!preview && url !== (defaultValue ?? "") && <span className="text-xs font-semibold text-daun-700">Foto baru siap — tekan Simpan</span>}
       </div>
       {err && <p className="text-sm text-merah-600">Gagal: {err}</p>}
     </div>

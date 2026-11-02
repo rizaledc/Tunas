@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Logo } from "@/components/logo";
+import { Logo, type Brand } from "@/components/logo";
 import { cn } from "@/lib/utils";
 
 const MENU = [
@@ -14,14 +14,14 @@ const MENU = [
   { href: "/panduan", label: "Panduan" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ brand }: { brand?: Brand }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 bg-sky-brand text-white shadow-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex items-center gap-2" aria-label="SAHABAT ANAK — Beranda">
-          <Logo light />
+          <Logo light brand={brand} />
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Menu utama">
           {MENU.map((m) => (

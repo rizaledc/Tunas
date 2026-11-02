@@ -6,7 +6,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { clientIp } from "@/lib/auth";
 import { getSetting } from "@/lib/settings";
 import { audit } from "@/lib/audit";
-import { normalizePhone, phoneToAuthEmail, str } from "@/lib/utils";
+import { phoneToAuthEmail, str } from "@/lib/utils";
+import { normalizeEmail, normalizePhone, phoneError, validatePassword } from "@/lib/validation";
+import { checkInvite, createParent, createParentProfile, emailTaken, phoneTaken, consumeInvite, validateName, validateRt } from "@/lib/accounts";
 import type { ActionState } from "@/components/ui";
 
 const WINDOW_MIN = 15;
@@ -93,79 +95,94 @@ export async function verifyMfa(_: ActionState, fd: FormData): Promise<ActionSta
 }
 
 export async function register(_: ActionState, fd: FormData): Promise<ActionState> {
-  const nama = str(fd, "nama");
-  const contact = str(fd, "contact");
+  if (str(fd, "consent") !== "on") return { error: "Mohon setujui persetujuan data untuk melanjutkan." };
   const password = str(fd, "password");
-  const password2 = str(fd, "password2");
-  const code = str(fd, "kode").toUpperCase();
-  const rt = str(fd, "rt");
-  const consent = str(fd, "consent") === "on";
-
-  if (nama.length < 2) return { error: "Nama minimal 2 huruf." };
-  if (!consent) return { error: "Mohon setujui persetujuan data untuk melanjutkan." };
-  if (password.length < 8) return { error: "Password minimal 8 karakter." };
-  if (password !== password2) return { error: "Konfirmasi password tidak sama." };
-
-  let phone: string | null = null;
-  let email: string | null = null;
-  if (contact.includes("@")) {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) return { error: "Format email tidak valid." };
-    email = contact.toLowerCase();
-  } else {
-    phone = normalizePhone(contact);
-    if (!phone) return { error: "Nomor HP tidak valid. Contoh: 081234567890" };
-  }
-
-  const db = createAdminClient();
-  const { data: invite } = await db.from("invite_codes").select("*").eq("code", code).maybeSingle();
-  if (!invite) return { error: "Kode undangan tidak ditemukan. Tanyakan ke pengurus komunitas." };
-  if (invite.expires_at && new Date(invite.expires_at) < new Date()) return { error: "Kode undangan sudah kedaluwarsa." };
-  if (invite.used_count >= invite.max_uses) return { error: "Kode undangan sudah habis dipakai." };
-
-  if (phone) {
-    const { data: exists } = await db.from("users").select("id").eq("no_hp", phone).maybeSingle();
-    if (exists) return { error: "Nomor HP sudah terdaftar. Silakan masuk." };
-  }
-
-  const authEmail = email ?? phoneToAuthEmail(phone!);
-  const { data: created, error: createErr } = await db.auth.admin.createUser({ email: authEmail, password, email_confirm: true, user_metadata: { nama } });
-  if (createErr || !created.user) {
-    return { error: createErr?.message.includes("already") ? "Email sudah terdaftar. Silakan masuk." : "Pendaftaran gagal, coba lagi." };
-  }
-  const uid = created.user.id;
-  const consentCfg = await getSetting("public.consent");
-  const { error: e1 } = await db.from("users").insert({ id: uid, nama, no_hp: phone, email, role: "parent" });
-  const { error: e2 } = e1
-    ? { error: e1 }
-    : await db.from("families").insert({ parent_id: uid, rt: rt || null, invite_code_id: invite.id, consent_at: new Date().toISOString(), consent_version: consentCfg.version });
-  if (e1 || e2) {
-    await db.auth.admin.deleteUser(uid);
-    return { error: "Pendaftaran gagal disimpan, coba lagi." };
-  }
-  // Penambahan bersyarat agar kuota tidak terlampaui saat daftar bersamaan.
-  await db.from("invite_codes").update({ used_count: invite.used_count + 1 }).eq("id", invite.id).eq("used_count", invite.used_count);
-
+  if (password !== str(fd, "password2")) return { error: "Konfirmasi password tidak sama." };
+  const { invite, error: invErr } = await checkInvite(str(fd, "kode"));
+  if (!invite) return { error: invErr };
+  const res = await createParent(
+    { nama: str(fd, "nama"), phone: str(fd, "no_hp"), email: str(fd, "email"), rt: str(fd, "rt"), password, inviteId: invite.id, consent: true },
+    { requireBoth: true },
+  );
+  if (res.error || !res.authEmail) return { error: res.error };
+  await consumeInvite(invite);
   const supabase = await createClient();
-  await supabase.auth.signInWithPassword({ email: authEmail, password });
+  await supabase.auth.signInWithPassword({ email: res.authEmail, password });
   redirect("/app/anak?baru=1");
 }
 
 export async function requestReset(_: ActionState, fd: FormData): Promise<ActionState> {
-  const email = str(fd, "email").toLowerCase();
-  if (!email.includes("@")) {
-    return { error: "Reset lewat email hanya untuk akun yang mendaftar dengan email. Jika memakai nomor HP, minta pengurus komunitas mereset password Anda." };
-  }
+  const email = normalizeEmail(str(fd, "email"));
+  if (!email) return { error: "Format email tidak valid, contoh nama@gmail.com." };
   const supabase = await createClient();
-  const site = SITE_URL;
-  await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${site}/auth/callback?next=/reset-password` });
-  return { ok: true, message: "Jika email terdaftar, tautan reset password sudah dikirim. Periksa kotak masuk Anda." };
+  await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${SITE_URL}/auth/callback?next=/reset-password` });
+  return { ok: true, message: "Jika email terdaftar, tautan reset password sudah dikirim. Periksa kotak masuk (dan folder spam). Akun yang hanya memakai nomor HP: minta pengurus komunitas mereset password." };
 }
 
 export async function updatePassword(_: ActionState, fd: FormData): Promise<ActionState> {
   const password = str(fd, "password");
-  if (password.length < 8) return { error: "Password minimal 8 karakter." };
+  if (password !== str(fd, "password2")) return { error: "Konfirmasi password tidak sama." };
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const pwErr = validatePassword(password, { email: user?.email });
+  if (pwErr) return { error: pwErr };
   const { error } = await supabase.auth.updateUser({ password });
   if (error) return { error: "Gagal mengubah password. Tautan mungkin sudah kedaluwarsa." };
   redirect("/app");
+}
+
+// ---------- Google ----------
+export async function signInWithGoogle(fd: FormData) {
+  const auth = await getSetting("public.auth");
+  if (!auth.google) redirect("/login?alasan=google_mati");
+  const kode = str(fd, "kode").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const next = kode ? `/daftar/lengkapi?kode=${kode}` : "/app";
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${SITE_URL}/auth/callback?next=${encodeURIComponent(next)}`, queryParams: { prompt: "select_account" } },
+  });
+  if (error || !data.url) redirect("/login?alasan=google_gagal");
+  redirect(data.url);
+}
+
+/** Langkah terakhir pendaftaran lewat Google: kode undangan, nomor HP, RT, persetujuan. */
+export async function completeGoogleProfile(_: ActionState, fd: FormData): Promise<ActionState> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  const db = createAdminClient();
+  const { data: existing } = await db.from("users").select("id").eq("id", user.id).maybeSingle();
+  if (existing) redirect("/app");
+  if (str(fd, "consent") !== "on") return { error: "Mohon setujui persetujuan data untuk melanjutkan." };
+  const nama = str(fd, "nama");
+  const nameErr = validateName(nama);
+  if (nameErr) return { error: nameErr };
+  const phoneErr = phoneError(str(fd, "no_hp"));
+  if (phoneErr) return { error: phoneErr };
+  const phone = normalizePhone(str(fd, "no_hp"))!;
+  const rtErr = validateRt(str(fd, "rt"));
+  if (rtErr) return { error: rtErr };
+  if (await phoneTaken(phone)) return { error: "Nomor HP sudah dipakai akun lain. Masuk dengan akun tersebut atau hubungi pengurus." };
+  const email = normalizeEmail(user.email ?? "");
+  if (email && (await emailTaken(email))) return { error: "Email Google ini sudah terhubung dengan akun lain." };
+  const { invite, error: invErr } = await checkInvite(str(fd, "kode"));
+  if (!invite) return { error: invErr };
+  const err = await createParentProfile(user.id, { nama, phone, email, rt: str(fd, "rt") || null, inviteId: invite.id, consent: true });
+  if (err) return { error: "Profil gagal disimpan, coba lagi." };
+  await consumeInvite(invite);
+  redirect("/app/anak?baru=1");
+}
+
+/** Batal mendaftar lewat Google: hapus akun auth yang belum punya profil. */
+export async function cancelGoogleSignup() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const db = createAdminClient();
+    const { data: existing } = await db.from("users").select("id").eq("id", user.id).maybeSingle();
+    await supabase.auth.signOut({ scope: "local" });
+    if (!existing) await db.auth.admin.deleteUser(user.id);
+  }
+  redirect("/login");
 }

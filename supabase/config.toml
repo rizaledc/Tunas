@@ -323,6 +323,16 @@ max_frequency = "5s"
 # Use an external OAuth provider. The full list of providers are: `apple`, `azure`, `bitbucket`,
 # `discord`, `facebook`, `github`, `gitlab`, `google`, `keycloak`, `linkedin_oidc`, `notion`, `twitch`,
 # `twitter`, `x`, `slack_oidc`, `spotify`, `workos`, `zoom`.
+# Login Google untuk pengembangan lokal. Isi env SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID
+# dan SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET, ubah enabled = true, lalu `supabase stop && supabase start`.
+# Produksi: aktifkan di Supabase Dashboard → Authentication → Sign In / Providers → Google.
+[auth.external.google]
+enabled = false
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+redirect_uri = ""
+skip_nonce_check = true
+
 [auth.external.apple]
 enabled = false
 client_id = ""

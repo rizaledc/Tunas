@@ -4,14 +4,14 @@ import { Logo } from "@/components/logo";
 import { getSetting } from "@/lib/settings";
 
 export async function SiteFooter() {
-  const contact = await getSetting("public.contact");
+  const [contact, brand, landing] = await Promise.all([getSetting("public.contact"), getSetting("public.brand"), getSetting("public.landing")]);
   return (
     <footer className="bg-daun-900 text-white/85">
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-4">
         <div className="md:col-span-2">
-          <Logo light />
+          <Logo light brand={brand} />
           <p className="mt-3 max-w-md text-sm">
-            Sistem Aplikasi Harmoni Aktivitas dan Perilaku Anak — membantu keluarga mendampingi aktivitas digital dan non-digital anak secara seimbang.
+            {landing.footer_text}
           </p>
           {contact.address && (
             <p className="mt-3 flex gap-2 text-sm">

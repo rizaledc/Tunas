@@ -12,15 +12,7 @@ export function slugify(s: string): string {
     .slice(0, 80);
 }
 
-/** Normalisasi nomor HP Indonesia ke format 62xxxxxxxxxx. */
-export function normalizePhone(input: string): string | null {
-  let s = input.replace(/[^0-9+]/g, "");
-  if (s.startsWith("+")) s = s.slice(1);
-  if (s.startsWith("0")) s = "62" + s.slice(1);
-  else if (s.startsWith("8")) s = "62" + s;
-  if (!/^62\d{8,13}$/.test(s)) return null;
-  return s;
-}
+export { normalizePhone } from "./validation";
 
 /** Domain email sintetis (tidak pernah dikirimi email) untuk akun yang mendaftar hanya dengan nomor HP. */
 const PHONE_EMAIL_DOMAIN = "hp.sahabat-anak.internal";

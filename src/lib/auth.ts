@@ -59,7 +59,7 @@ export type ParentContext = Profile & { familyId: string; consentVersion: string
 
 export const requireParent = cache(async (): Promise<ParentContext> => {
   const p = await getProfile();
-  if (!p) redirect("/login");
+  if (!p) redirect((await getAuthUser()) ? "/daftar/lengkapi" : "/login");
   if (p.status !== "active") redirect("/keluar?alasan=nonaktif");
   if (p.role !== "parent") redirect("/admin");
   const supabase = await createClient();

@@ -66,3 +66,11 @@ describe("utils", () => {
     expect(badges.filter((b) => b.earned).map((b) => b.name)).toEqual(["Bintang Pertama", "Rajin", "Penjelajah", "Seminggu Hebat"]);
   });
 });
+
+import { tempPassword } from "../src/lib/crypto";
+describe("password sementara admin", () => {
+  it("selalu memenuhi aturan password kuat", async () => {
+    const { validatePassword } = await import("../src/lib/validation");
+    for (let i = 0; i < 200; i++) expect(validatePassword(tempPassword())).toBeNull();
+  });
+});

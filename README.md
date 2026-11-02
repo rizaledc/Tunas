@@ -46,7 +46,7 @@ Butuh Node.js 20+ dan Docker (untuk Supabase lokal).
 npm install
 npx supabase start          # menerapkan migrasi + seed
 cp .env.example .env.local  # isi URL & key dari output `supabase start`
-node --env-file=.env.local scripts/create-superadmin.mjs "Pengelola" admin@contoh.id "PasswordKuat123"
+node --env-file=.env.local scripts/create-superadmin.mjs "Pengelola" admin@contoh.id "Kuat!Sekali2026"
 npm run dev
 ```
 
@@ -66,6 +66,35 @@ Perintah lain: `npm test` (unit test), `npm run typecheck`, `npm run lint`, `npm
    - `CRON_SECRET` (dipakai Vercel Cron untuk `/api/cron/reminder`, setiap hari 19.00 WIB)
 3. **Domain**: arahkan domain Anda ke Vercel.
 4. Buat superadmin pertama dengan `scripts/create-superadmin.mjs` (pakai env produksi), lalu tambah admin komunitas lewat **Pengaturan → Akun Admin**.
+
+## Masuk & daftar dengan Google
+
+Kredensial Google **tidak** disimpan di kode/Vercel — cukup di Google Cloud dan Supabase. Panduan yang sama (dengan URL yang sudah terisi otomatis untuk domain Anda) ada di **Admin → Pengaturan → Login & Google**.
+
+| Di mana | Kolom | Isi |
+| --- | --- | --- |
+| Google Cloud Console → APIs & Services → OAuth consent screen | App name, support email, logo, authorized domain | SAHABAT ANAK, email pengelola, logo, `domain-anda.id` |
+| Google Cloud Console → Credentials → Create OAuth client ID (*Web application*) | Authorized JavaScript origins | `https://domain-anda.id` |
+| | Authorized redirect URIs | `https://<project-ref>.supabase.co/auth/v1/callback` |
+| Supabase → Authentication → Sign In / Providers → **Google** | Client ID, Client Secret | dari langkah sebelumnya, lalu **Enable** |
+| Supabase → Authentication → URL Configuration | Site URL / Redirect URLs | `https://domain-anda.id` / `https://domain-anda.id/auth/callback` |
+
+Setelah itu nyalakan **"Tampilkan tombol Masuk/Daftar dengan Google"** di panel (panel menolak menyalakan jika provider di Supabase belum aktif). Pengguna Google tetap diminta kode undangan, nomor HP, dan persetujuan data saat pertama kali masuk. Akun pengurus tetap masuk lewat `/login/admin`.
+
+Lokal (opsional): isi `SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID` dan `SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET`, ubah `enabled = true` di `[auth.external.google]` pada `supabase/config.toml`, lalu restart Supabase; redirect URI Google untuk lokal: `http://127.0.0.1:54321/auth/v1/callback`.
+
+## Akun, password, dan validasi
+
+- **Password kuat**: minimal 10 karakter, ada huruf besar, huruf kecil, angka, dan simbol; bukan kata umum, nama, atau nomor HP pengguna. Formulir menampilkan checklist syarat, indikator kekuatan, dan tombol **Buatkan password kuat**. Aturan yang sama diperiksa ulang di server (daftar, reset, ganti password, akun buatan admin).
+- **Nomor HP**: hanya angka (huruf otomatis tidak bisa diketik), harus nomor seluler Indonesia (08… / 628…).
+- **Email**: format diperiksa; salah ketik umum (mis. `gmial.com`) diberi saran perbaikan.
+- **Daftar mandiri tanpa Google** wajib nomor HP **dan** email (email dipakai untuk memulihkan password sendiri). Daftar dengan Google wajib nomor HP.
+- **Admin membuat akun** di **Admin → Anggota → Buat akun orang tua** (cukup nomor HP atau email; password otomatis yang kuat atau ditentukan sendiri, lengkap dengan tombol kirim lewat WhatsApp). Admin juga bisa **ubah data**, **reset password**, menonaktifkan, dan impor dari Excel.
+- Disarankan juga mengatur *Password requirements* di Supabase → Authentication → Policies agar sama ketatnya.
+
+## Konten yang bisa diubah dari panel admin
+
+Semua teks dan gambar situs publik dapat diubah di **Admin → Konten** tanpa coding: hero & foto, angka capaian, seluruh bagian beranda (label, fitur & ikon, cara kerja + gambar, alur program, judul bagian, ajakan, teks footer, tampil/sembunyi per bagian), logo & slogan, halaman Tentang (teks + foto), halaman Privasi, panduan & modul PDF, kontak, gambar saat dibagikan, artikel, galeri (unggah banyak, **ganti foto**, keterangan, kategori, izin publikasi, hapus), kegiatan (sampul, dokumentasi, daftar hadir). Superadmin mengatur kategori & ikon, AI, consent, acuan screen time, pengingat, akun admin, dan login Google. Setiap bagian punya tombol **Kembalikan ke bawaan**.
 
 ## Pratinjau tautan (WhatsApp & media sosial)
 
