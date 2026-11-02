@@ -33,7 +33,7 @@ export default async function AdminEventDetail({ params, searchParams }: { param
 
   return (
     <div className="space-y-4">
-      <Link href="/admin/kegiatan" className="inline-flex items-center gap-1 text-sm font-bold text-sky-brand">
+      <Link href="/admin/kegiatan" className="inline-flex items-center gap-1 text-sm font-bold text-marun-600">
         <Icon name="arrow-left" className="h-4 w-4" /> Semua kegiatan
       </Link>
       <PageTitle title={e.title} action={<Link href={`/kegiatan/${e.slug}`} className="btn-outline btn-sm" target="_blank">Lihat publik</Link>} />
@@ -60,13 +60,13 @@ export default async function AdminEventDetail({ params, searchParams }: { param
               <li key={p.id} className="flex items-center justify-between gap-2 py-2">
                 <span>
                   <span className="font-bold">{p.nama}</span>
-                  {p.a?.rsvp && <span className={`ml-2 text-xs ${p.a.rsvp === "hadir" ? "text-daun-700" : "text-ink-soft"}`}>{p.a.rsvp === "hadir" ? "konfirmasi hadir" : "tidak bisa"}</span>}
+                  {p.a?.rsvp && <span className={`ml-2 text-xs ${p.a.rsvp === "hadir" ? "text-marun-700" : "text-ink-soft"}`}>{p.a.rsvp === "hadir" ? "konfirmasi hadir" : "tidak bisa"}</span>}
                 </span>
                 <form action={markAttendance}>
                   <input type="hidden" name="event_id" value={e.id} />
                   <input type="hidden" name="user_id" value={p.id} />
                   <input type="hidden" name="attended" value={p.a?.attended ? "0" : "1"} />
-                  <button className={`btn-sm btn ${p.a?.attended ? "bg-daun-600 text-white" : "bg-gray-100"}`}>{p.a?.attended ? <><Icon name="check" className="h-4 w-4" /> Hadir</> : "Tandai hadir"}</button>
+                  <button className={`btn-sm btn ${p.a?.attended ? "bg-marun-600 text-white" : "bg-gray-100"}`}>{p.a?.attended ? <><Icon name="check" className="h-4 w-4" /> Hadir</> : "Tandai hadir"}</button>
                 </form>
               </li>
             ))}
@@ -94,7 +94,7 @@ export default async function AdminEventDetail({ params, searchParams }: { param
             ))}
           </select>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="publish_consent" className="h-5 w-5 accent-daun-600" /> Izin publikasi sudah ada
+            <input type="checkbox" name="publish_consent" className="h-5 w-5 accent-marun-600" /> Izin publikasi sudah ada
           </label>
           <button className="btn-green">Simpan Foto Dokumentasi</button>
         </ActionForm>

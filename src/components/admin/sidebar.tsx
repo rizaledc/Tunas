@@ -29,7 +29,7 @@ export function AdminSidebar({ role, nama, brand }: { role: string; nama: string
       {items.map((m) => {
         const active = m.href === "/admin" ? path === "/admin" : path.startsWith(m.href);
         return (
-          <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold", active ? "bg-white text-sky-brand" : "text-white/90 hover:bg-white/10")}>
+          <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold", active ? "bg-white text-marun-600" : "text-white/90 hover:bg-white/10")}>
             <Icon name={m.icon} className="h-5 w-5" />
             {m.label}
           </Link>
@@ -39,16 +39,16 @@ export function AdminSidebar({ role, nama, brand }: { role: string; nama: string
   );
   return (
     <>
-      <div className="no-print sticky top-0 z-40 flex items-center justify-between bg-sky-brand px-4 py-3 text-white lg:hidden">
+      <div className="no-print sticky top-0 z-40 flex items-center justify-between bg-gelap-800 px-4 py-3 text-white lg:hidden">
         <Logo light small brand={brand} />
         <button onClick={() => setOpen(!open)} className="rounded-lg p-2 ring-1 ring-white/40" aria-expanded={open} aria-label="Menu">
           <Icon name={open ? "close" : "menu"} className="h-6 w-6" />
         </button>
       </div>
-      {open && <div className="no-print bg-sky-brand px-4 pb-4 lg:hidden">{nav}</div>}
-      <aside className="no-print fixed inset-y-0 left-0 hidden w-64 flex-col bg-sky-brand p-4 text-white lg:flex">
+      {open && <div className="no-print bg-gelap-800 px-4 pb-4 lg:hidden">{nav}</div>}
+      <aside className="no-print fixed inset-y-0 left-0 hidden w-64 flex-col bg-gelap-800 p-4 text-white lg:flex">
         <Link href="/admin" className="mb-6 block">
-          <Logo light brand={brand} />
+          <Logo light small brand={brand} />
         </Link>
         <div className="flex-1 overflow-y-auto">{nav}</div>
         <div className="mt-4 border-t border-white/20 pt-4 text-sm">

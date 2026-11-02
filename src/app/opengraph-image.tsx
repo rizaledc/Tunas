@@ -1,7 +1,7 @@
 import { getSettings } from "@/lib/settings";
 import { OG_SIZE, OG_TYPE, shareImage } from "@/lib/og";
 
-export const alt = "SAHABAT ANAK — dampingi aktivitas anak, seimbangkan dunia digitalnya";
+export const alt = "SAHABAT ANAK: dampingi aktivitas anak, seimbangkan dunia digitalnya";
 export const size = OG_SIZE;
 export const contentType = OG_TYPE;
 export const revalidate = 3600;

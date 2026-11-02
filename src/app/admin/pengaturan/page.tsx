@@ -122,7 +122,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
     <div className="space-y-4">
       {(["digital", "positif"] as const).map((type) => (
         <section key={type} className="card overflow-x-auto">
-          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-daun-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
+          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-marun-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
           <table className="tbl">
             <thead>
               <tr>
@@ -143,7 +143,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
                         <input type="hidden" name="id" value={c.id} />
                         <input type="hidden" name="type" value={c.type} />
                         <input type="hidden" name="active" value={c.active ? "on" : "off"} />
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-daun-50 text-daun-600">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-marun-50 text-marun-600">
                           <CategoryIcon icon={c.icon} className="h-6 w-6" />
                         </span>
                         <IconSelect defaultValue={c.icon} />
@@ -211,7 +211,7 @@ async function Admins({ db, meId }: { db: ReturnType<typeof createAdminClient>; 
                     </form>
                   )}
                 </td>
-                <td>{a.last_active_at ? formatTanggal(a.last_active_at) : "—"}</td>
+                <td>{a.last_active_at ? formatTanggal(a.last_active_at) : "-"}</td>
                 <td>
                   {a.id !== meId && (
                     <form action={deleteAdminAccount}>
@@ -251,12 +251,12 @@ async function AiSettings({ s }: { s: AiCfg }) {
   const estimate = current ? (1500 * current.promptPerM + Number(s["ai.max_tokens"]) * current.completionPerM) / 1_000_000 : null;
   const status =
     source === "panel"
-      ? { tone: "bg-daun-50 text-daun-700", icon: "check-circle" as const, text: `Terhubung · kunci ${maskKey(key)} disimpan di Panel Admin (terenkripsi)` }
+      ? { tone: "bg-marun-50 text-marun-700", icon: "check-circle" as const, text: `Terhubung · kunci ${maskKey(key)} disimpan di Panel Admin (terenkripsi)` }
       : source === "env"
-        ? { tone: "bg-blue-50 text-sky-brand", icon: "info" as const, text: `Terhubung · kunci ${maskKey(key)} dari variabel server OPENROUTER_API_KEY. Kunci yang diisi di bawah akan diutamakan.` }
+        ? { tone: "bg-black/[0.045] text-marun-600", icon: "info" as const, text: `Terhubung · kunci ${maskKey(key)} dari variabel server OPENROUTER_API_KEY. Kunci yang diisi di bawah akan diutamakan.` }
         : source === "broken"
           ? { tone: "bg-red-50 text-merah-600", icon: "warning" as const, text: "Kunci tersimpan tidak bisa dibuka (APP_SECRET berubah). Simpan ulang API key." }
-          : { tone: "bg-orange-50 text-oranye-600", icon: "warning" as const, text: "Belum terhubung. Insight memakai ringkasan cadangan sampai API key diisi." };
+          : { tone: "bg-emas-300/25 text-aksen-600", icon: "warning" as const, text: "Belum terhubung. Insight memakai ringkasan cadangan sampai API key diisi." };
 
   return (
     <div className="space-y-4">
@@ -264,7 +264,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div>
             <h2 className="text-lg font-extrabold">Koneksi OpenRouter</h2>
-            <p className="text-sm text-ink-soft">Semua pengaturan AI cukup dari halaman ini — tanpa mengubah kode atau server.</p>
+            <p className="text-sm text-ink-soft">Semua pengaturan AI cukup dari halaman ini, tanpa mengubah kode atau server.</p>
           </div>
           {balance && (
             <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-bold">
@@ -283,14 +283,14 @@ async function AiSettings({ s }: { s: AiCfg }) {
           <ol className="list-decimal space-y-0.5 pl-5 text-xs text-ink-soft">
             <li>
               Buat kunci di{" "}
-              <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+              <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="font-bold text-marun-600 underline">
                 openrouter.ai/keys
               </a>{" "}
               dan <strong>pasang limit kredit</strong> (mis. $10–15) pada kunci tersebut.
             </li>
             <li>
               Isi saldo di{" "}
-              <a href="https://openrouter.ai/credits" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+              <a href="https://openrouter.ai/credits" target="_blank" rel="noopener noreferrer" className="font-bold text-marun-600 underline">
                 openrouter.ai/credits
               </a>
               .
@@ -314,7 +314,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
       <ActionForm action={saveAiSettings} className="card space-y-3">
         <h2 className="text-lg font-extrabold">Model & batas pemakaian</h2>
         <label className="flex items-center gap-2 font-bold">
-          <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-daun-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
+          <input type="checkbox" name="enabled" defaultChecked={Boolean(s["ai.enabled"])} className="h-5 w-5 accent-marun-600" /> AI aktif (jika mati, semua insight memakai ringkasan rule-based)
         </label>
         <label className="block">
           <span className="label">Model OpenRouter</span>
@@ -322,7 +322,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
           <datalist id="model-list">
             {models.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.name} — ${m.promptPerM.toFixed(2)} / ${m.completionPerM.toFixed(2)} per 1 jt token
+                {m.name}: ${m.promptPerM.toFixed(2)} / ${m.completionPerM.toFixed(2)} per 1 jt token
               </option>
             ))}
           </datalist>
@@ -330,7 +330,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
             {current
               ? `${current.name} · perkiraan ±$${estimate!.toFixed(4)} per analisis`
               : models.length
-                ? "Model ini tidak ditemukan di katalog OpenRouter — pilih dari daftar saat mengetik."
+                ? "Model ini tidak ditemukan di katalog OpenRouter. Pilih dari daftar saat mengetik."
                 : "Ketik ID model, mis. anthropic/claude-haiku-5.5."}
           </span>
         </label>
@@ -371,7 +371,7 @@ function CopyLine({ label, value }: { label: string; value: string }) {
 async function LoginSettings() {
   const [auth, provider] = await Promise.all([getSetting("public.auth"), googleProviderStatus()]);
   const providerText =
-    provider === true ? { tone: "bg-daun-50 text-daun-700", icon: "check-circle" as const, text: "Provider Google di Supabase: AKTIF" } : provider === false ? { tone: "bg-orange-50 text-oranye-600", icon: "warning" as const, text: "Provider Google di Supabase: belum aktif" } : { tone: "bg-gray-100 text-ink-soft", icon: "info" as const, text: "Status provider tidak bisa dicek" };
+    provider === true ? { tone: "bg-marun-50 text-marun-700", icon: "check-circle" as const, text: "Provider Google di Supabase: AKTIF" } : provider === false ? { tone: "bg-emas-300/25 text-aksen-600", icon: "warning" as const, text: "Provider Google di Supabase: belum aktif" } : { tone: "bg-gray-100 text-ink-soft", icon: "info" as const, text: "Status provider tidak bisa dicek" };
   return (
     <div className="space-y-4">
       <section className="card space-y-4">
@@ -385,7 +385,7 @@ async function LoginSettings() {
         <ol className="list-decimal space-y-3 pl-5 text-sm">
           <li>
             Buka{" "}
-            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="font-bold text-sky-brand underline">
+            <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="font-bold text-marun-600 underline">
               Google Cloud Console → APIs & Services → Credentials
             </a>
             . Atur <strong>OAuth consent screen</strong> (nama aplikasi SAHABAT ANAK, email dukungan, logo, domain), lalu buat <strong>OAuth client ID</strong> tipe <em>Web application</em>.
@@ -408,7 +408,7 @@ async function LoginSettings() {
         </ol>
         <ActionForm action={saveAuthSettings} className="flex flex-wrap items-center gap-3 border-t pt-4">
           <label className="flex items-center gap-2 font-bold">
-            <input type="checkbox" name="google" defaultChecked={auth.google} className="h-5 w-5 accent-daun-600" /> Tampilkan tombol &quot;Masuk/Daftar dengan Google&quot;
+            <input type="checkbox" name="google" defaultChecked={auth.google} className="h-5 w-5 accent-marun-600" /> Tampilkan tombol &quot;Masuk/Daftar dengan Google&quot;
           </label>
           <SubmitButton className="btn-green btn-sm">Simpan</SubmitButton>
         </ActionForm>

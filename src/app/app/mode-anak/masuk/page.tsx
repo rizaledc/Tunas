@@ -15,8 +15,8 @@ export default async function MasukModeAnak() {
   return (
     <div className="mx-auto max-w-md space-y-5 px-4 py-8">
       <div className="text-center">
-        <Icon name="star" className="mx-auto h-14 w-14 text-oranye-500" />
-        <h1 className="text-3xl font-extrabold text-daun-900">Mode Anak</h1>
+        <Icon name="star" className="mx-auto h-14 w-14 text-aksen-500" />
+        <h1 className="text-3xl font-extrabold tracking-tight text-ink">Mode Anak</h1>
         <p className="mt-1 text-ink-soft">Anak bisa mencatat kegiatan positifnya sendiri dan mengumpulkan bintang. Anak tidak bisa melihat analitik atau insight.</p>
       </div>
       {kids.some((k) => k.pin_hash) ? (
@@ -24,7 +24,7 @@ export default async function MasukModeAnak() {
       ) : (
         <p className="card text-center">
           Atur PIN 4 angka untuk anak dulu di{" "}
-          <Link href="/app/anak" className="font-bold text-sky-brand">
+          <Link href="/app/anak" className="font-bold text-marun-600">
             menu Anak
           </Link>
           .

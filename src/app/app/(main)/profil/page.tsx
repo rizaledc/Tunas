@@ -36,7 +36,7 @@ export default async function ProfilPage() {
           ["/privasi", "lock", "Privasi"],
         ] as Array<[string, IconName, string]>).map(([href, icon, label]) => (
           <Link key={href} href={href} className="card flex items-center gap-2 p-3 font-bold">
-            <Icon name={icon} className="h-6 w-6 text-daun-600" />
+            <Icon name={icon} className="h-6 w-6 text-marun-600" />
             {label}
           </Link>
         ))}
@@ -56,7 +56,7 @@ export default async function ProfilPage() {
             <div>
               <p className="label">Email</p>
               <p className="flex items-center gap-2 rounded-xl bg-gray-50 p-3 text-sm">
-                <Icon name="check-circle" className="text-daun-600" /> {parent.email} <span className="text-ink-soft">(akun Google)</span>
+                <Icon name="check-circle" className="text-marun-600" /> {parent.email} <span className="text-ink-soft">(akun Google)</span>
               </p>
             </div>
           ) : (

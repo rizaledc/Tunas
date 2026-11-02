@@ -18,7 +18,7 @@ export default async function CatatPage({ searchParams }: { searchParams: Promis
   const today = todayStr();
   const dates = Array.from({ length: 8 }, (_, i) => {
     const d = addDays(today, -i);
-    return { value: d, label: i === 0 ? `Hari ini — ${formatHari(d)}` : i === 1 ? `Kemarin — ${formatHari(d)}` : formatHari(d) };
+    return { value: d, label: i === 0 ? `Hari ini, ${formatHari(d)}` : i === 1 ? `Kemarin, ${formatHari(d)}` : formatHari(d) };
   });
 
   let editLog: EditLog | undefined;

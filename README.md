@@ -6,7 +6,9 @@
 
 <img src="public/logo.svg" width="72" alt="Logo SAHABAT ANAK" /> <img src="public/icons/icon.svg" width="72" alt="Ikon aplikasi SAHABAT ANAK" />
 
-Dua daun yang tumbuh dari satu titik. **Daun besar hijau** adalah orang tua yang menaungi (dan dunia nyata tempat anak bermain); **daun kecil oranye** adalah anak yang sedang tumbuh. Keduanya berangkat dari akar yang sama — keluarga dan komunitas tempat anak tumbuh — dan bersama-sama membentuk tanda ✓: keseimbangan digital yang dicapai berdua, bukan diperintahkan. Warna kata mengikuti daun: **SAHABAT** hijau, **ANAK** oranye.
+Dua daun yang tumbuh dari satu titik. **Daun besar marun** adalah orang tua yang menaungi (dan dunia nyata tempat anak bermain); **daun kecil merah** adalah anak yang sedang tumbuh. Keduanya berangkat dari akar yang sama — keluarga dan komunitas tempat anak tumbuh — dan bersama-sama membentuk tanda ✓: keseimbangan digital yang dicapai berdua, bukan diperintahkan. Warna kata mengikuti daun: **SAHABAT** marun, **ANAK** merah.
+
+**Palet warna** mengikuti Telkom: merah `#FF0000`, merah tua `#B00000` (turunan marun `#940000` sebagai warna utama), putih, abu `#808080`, abu gelap `#333333`, dan hitam. Aksen emas `#E8B54D` dipakai untuk ikon dan detail kecil. Font: Plus Jakarta Sans. Token warna ada di `src/app/globals.css` (`marun-*`, `aksen-*`, `gelap-*`, `emas-*`).
 
 Berkas: `public/logo.svg` (latar terang), `public/icons/icon.svg` (ikon aplikasi), PNG 192/512/maskable di `public/icons/`, gambar pratinjau tautan `src/app/opengraph-image.png`. Komponen React: `LogoMark` dan `Logo` di `src/components/logo.tsx`.
 

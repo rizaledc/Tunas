@@ -1,6 +1,6 @@
 export type Question = { id: string; text: string; scale?: 5; positive?: boolean };
 
-/** System Usability Scale (SUS) — 10 butir, skala 1–5. */
+/** System Usability Scale (SUS): 10 butir, skala 1–5. */
 export const SUS_QUESTIONS: Question[] = [
   { id: "q1", text: "Saya ingin sering memakai SAHABAT ANAK.", positive: true },
   { id: "q2", text: "SAHABAT ANAK terasa rumit tanpa perlu.", positive: false },

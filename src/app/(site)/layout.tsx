@@ -10,7 +10,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         Lompat ke konten
       </a>
       <SiteHeader brand={brand} />
-      <main id="konten">{children}</main>
+      <main id="konten" className="bg-gelap-950">{children}</main>
       <SiteFooter />
     </>
   );

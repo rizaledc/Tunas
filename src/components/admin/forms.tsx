@@ -47,7 +47,7 @@ export function ImportMembersForm() {
           </SubmitButton>
           {state?.data?.results ? (
             <>
-              <p className="text-sm font-semibold text-merah-600">Simpan daftar password sementara ini sekarang — tidak akan ditampilkan lagi.</p>
+              <p className="text-sm font-semibold text-merah-600">Simpan daftar password sementara ini sekarang. Password ini tidak akan ditampilkan lagi.</p>
               <ResultTable rows={state.data.results as Row[]} />
             </>
           ) : null}
@@ -77,7 +77,7 @@ export function ResetPasswordForm({ id }: { id: string }) {
   return (
     <ActionForm action={resetPassword} className="space-y-1" confirm="Buat password sementara baru untuk akun ini?">
       <input type="hidden" name="id" value={id} />
-      <SubmitButton className="btn-ghost btn-sm text-sky-brand" pendingText="…">
+      <SubmitButton className="btn-ghost btn-sm text-marun-600" pendingText="…">
         Reset password
       </SubmitButton>
     </ActionForm>
@@ -142,8 +142,8 @@ export function CreateMemberForm() {
               <Icon name="plus" /> Buat Akun
             </SubmitButton>
             {d && (
-              <div className="space-y-2 rounded-xl border border-daun-200 bg-daun-50 p-4 text-sm">
-                <p className="font-extrabold text-daun-700">Sampaikan data masuk ini kepada {d.nama}:</p>
+              <div className="space-y-2 rounded-xl border border-marun-200 bg-marun-50 p-4 text-sm">
+                <p className="font-extrabold text-marun-700">Sampaikan data masuk ini kepada {d.nama}:</p>
                 <p className="flex flex-wrap items-center gap-2">
                   Nomor HP/email: <code className="rounded bg-white px-2 py-1 font-bold">{d.login}</code> <Copy text={d.login} />
                 </p>
@@ -171,7 +171,7 @@ export function CreateMemberForm() {
 export function EditMemberForm({ m }: { m: { id: string; nama: string; no_hp: string | null; email: string | null; rt: string | null } }) {
   return (
     <details className="text-left">
-      <summary className="btn-ghost btn-sm cursor-pointer list-none text-sky-brand">Ubah data</summary>
+      <summary className="btn-ghost btn-sm cursor-pointer list-none text-marun-600">Ubah data</summary>
       <ActionForm action={updateMember} className="mt-2 w-72 space-y-2 rounded-xl bg-gray-50 p-3">
         <input type="hidden" name="id" value={m.id} />
         <input name="nama" defaultValue={m.nama} required minLength={2} className="input py-2" aria-label="Nama" />

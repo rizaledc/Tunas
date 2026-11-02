@@ -1,5 +1,5 @@
 -- =====================================================================
--- SAHABAT ANAK — SQL LENGKAP UNTUK SUPABASE (proyek baru)
+-- SAHABAT ANAK: SQL LENGKAP UNTUK SUPABASE (proyek baru)
 -- Cara pakai: Supabase Dashboard → SQL Editor → New query → tempel SEMUA
 -- isi file ini → Run. Jalankan SEKALI saja pada proyek yang masih kosong.
 -- Isi: (1) skema + RLS + storage, (2) ikon kategori, (3) data awal.
@@ -7,7 +7,7 @@
 
 -- ===================== (1) supabase/migrations/0001_init.sql =====================
 -- =============================================================
--- SAHABAT ANAK — skema inti (PostgreSQL / Supabase)
+-- SAHABAT ANAK: skema inti (PostgreSQL / Supabase)
 -- 17 tabel inti sesuai PRD + tabel pendukung (login_attempts,
 -- push_subscriptions, event_attendance).
 -- =============================================================

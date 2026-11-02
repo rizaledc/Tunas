@@ -21,18 +21,18 @@ export default async function PosterPage() {
       <div className="no-print mb-4 flex justify-end">
         <PrintButton label="Cetak Poster" />
       </div>
-      <div className="mx-auto aspect-[1/1.414] max-w-md rounded-3xl border-8 border-daun-500 bg-white p-6 text-center shadow-lg print:max-w-none print:border-[12px] print:shadow-none">
+      <div className="mx-auto aspect-[1/1.414] max-w-md rounded-3xl border-8 border-marun-500 bg-white p-6 text-center shadow-lg print:max-w-none print:border-[12px] print:shadow-none">
         <LogoMark src={brand.logo || undefined} className="mx-auto h-14 w-14" />
-        <p className="mt-2 text-sm font-bold tracking-widest text-daun-700">KESEPAKATAN DIGITAL KELUARGA</p>
-        <h1 className="mt-1 text-3xl font-extrabold text-oranye-600">Keluarga {child.nickname}</h1>
-        <div className="mt-6 rounded-2xl bg-blue-50 p-4">
-          <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-sky-brand"><Icon name="device" className="h-4 w-4" /> Waktu layar maksimal</p>
+        <p className="mt-2 text-sm font-bold tracking-widest text-marun-700">KESEPAKATAN DIGITAL KELUARGA</p>
+        <h1 className="mt-1 text-3xl font-extrabold text-aksen-600">Keluarga {child.nickname}</h1>
+        <div className="mt-6 rounded-2xl bg-black/[0.045] p-4">
+          <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-marun-600"><Icon name="device" className="h-4 w-4" /> Waktu layar maksimal</p>
           <p className="text-4xl font-extrabold">{formatMenit(a.target_screen_min)}</p>
           <p className="text-sm">per hari</p>
         </div>
         {a.no_device_hours && (
-          <div className="mt-4 rounded-2xl bg-orange-50 p-4">
-            <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-oranye-600"><Icon name="ban" className="h-4 w-4" /> Jam bebas gawai</p>
+          <div className="mt-4 rounded-2xl bg-emas-300/25 p-4">
+            <p className="flex items-center justify-center gap-1.5 text-sm font-bold text-aksen-600"><Icon name="ban" className="h-4 w-4" /> Jam bebas gawai</p>
             <p className="text-xl font-extrabold">{a.no_device_hours}</p>
           </div>
         )}
@@ -40,7 +40,7 @@ export default async function PosterPage() {
           <ul className="mt-4 space-y-2 text-left text-lg">
             {rules.map((r, i) => (
               <li key={i} className="flex gap-2">
-                <Icon name="star-solid" className="mt-1 h-5 w-5 text-oranye-500" />
+                <Icon name="star-solid" className="mt-1 h-5 w-5 text-aksen-500" />
                 {r}
               </li>
             ))}

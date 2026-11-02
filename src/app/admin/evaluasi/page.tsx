@@ -20,7 +20,7 @@ export default async function EvaluasiPage() {
 
   return (
     <div className="space-y-4">
-      <PageTitle title="Evaluasi Program" subtitle="Kuesioner SUS, penerimaan, dan manfaat — pre-test & post-test." />
+      <PageTitle title="Evaluasi Program" subtitle="Kuesioner SUS, penerimaan, dan manfaat untuk pre-test dan post-test." />
       <ActionForm action={createSurvey} className="card flex flex-wrap items-end gap-3">
         <label>
           <span className="label">Template</span>
@@ -67,9 +67,9 @@ export default async function EvaluasiPage() {
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-daun-50 text-daun-700" : "bg-gray-100"}`}>{s.is_open ? <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-daun-500" /> Terbuka</span> : "Tertutup"}</span>
+              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-marun-50 text-marun-700" : "bg-gray-100"}`}>{s.is_open ? <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-marun-500" /> Terbuka</span> : "Tertutup"}</span>
               {mean !== null && (
-                <span className="rounded-full bg-orange-50 px-3 py-1 text-sm font-bold text-oranye-600">
+                <span className="rounded-full bg-emas-300/25 px-3 py-1 text-sm font-bold text-aksen-600">
                   Skor rata-rata: {mean}
                   {s.kind === "sus" ? ` / 100 (${susGrade(mean)})` : " / 5"}
                 </span>
@@ -85,7 +85,7 @@ export default async function EvaluasiPage() {
                       return (
                         <tr key={q.id}>
                           <td>{q.text}</td>
-                          <td className="font-bold whitespace-nowrap">{avg(vals) ?? "—"}</td>
+                          <td className="font-bold whitespace-nowrap">{avg(vals) ?? "-"}</td>
                         </tr>
                       );
                     })}

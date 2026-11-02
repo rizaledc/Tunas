@@ -55,7 +55,7 @@ export async function getArticle(slug: string): Promise<ArticleRow | null> {
   return (data as ArticleRow) ?? null;
 }
 
-/** Jumlah keluarga aktif (orang tua aktif 30 hari terakhir) — hanya angka agregat. */
+/** Jumlah keluarga aktif (orang tua aktif 30 hari terakhir), hanya angka agregat. */
 export async function countActiveFamilies(): Promise<number | null> {
   if (!isSupabaseConfigured || !SUPABASE_SERVICE_KEY) return null;
   try {

@@ -17,10 +17,10 @@ const REASONS: Record<string, string> = {
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; alasan?: string }> }) {
   const [{ next, alasan }, auth] = await Promise.all([searchParams, getSetting("public.auth")]);
   return (
-    <div className="card mt-4 p-6">
-      <h1 className="text-2xl font-extrabold text-daun-900">Masuk</h1>
+    <div className="card rounded-3xl p-7 sm:p-9">
+      <h1 className="display text-3xl text-ink">Masuk</h1>
       <p className="mb-5 text-ink-soft">Untuk orang tua.</p>
-      {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-orange-50 p-3 text-sm font-semibold text-oranye-600">{REASONS[alasan]}</p>}
+      {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-emas-300/25 p-3 text-sm font-semibold text-aksen-600">{REASONS[alasan]}</p>}
       {auth.google && (
         <>
           <GoogleButton label="Masuk dengan Google" />
@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <LoginForm next={next} />
       <div className="mt-6 border-t pt-4 text-center text-sm">
         Belum punya akun?{" "}
-        <Link href="/daftar" className="font-bold text-sky-brand">
+        <Link href="/daftar" className="font-bold text-marun-600">
           Daftar dengan kode undangan
         </Link>
       </div>

@@ -29,10 +29,10 @@ export function EventForm({ e }: { e?: EventRow }) {
       <SingleUpload name="cover_photo" defaultValue={e?.cover_photo} folder="kegiatan" label="Unggah foto sampul" />
       <div className="flex flex-wrap gap-4">
         <label className="flex items-center gap-2 font-bold">
-          <input type="checkbox" name="published" defaultChecked={e?.published ?? true} className="h-5 w-5 accent-daun-600" /> Tampilkan di website
+          <input type="checkbox" name="published" defaultChecked={e?.published ?? true} className="h-5 w-5 accent-marun-600" /> Tampilkan di website
         </label>
         <label className="flex items-center gap-2 font-bold">
-          <input type="checkbox" name="featured" defaultChecked={e?.featured} className="h-5 w-5 accent-daun-600" /> Unggulan (slider beranda)
+          <input type="checkbox" name="featured" defaultChecked={e?.featured} className="h-5 w-5 accent-marun-600" /> Unggulan (slider beranda)
         </label>
       </div>
       <SubmitButton className="btn-green">Simpan Kegiatan</SubmitButton>

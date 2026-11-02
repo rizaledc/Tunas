@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { SUPABASE_SERVICE_KEY, SUPABASE_URL } from "./env";
 
 /**
- * Klien service role — melewati RLS. HANYA dipakai di server setelah
+ * Klien service role: melewati RLS. HANYA dipakai di server setelah
  * peran pengguna diverifikasi (lihat lib/auth.ts), atau untuk data agregat.
  */
 export function createAdminClient() {

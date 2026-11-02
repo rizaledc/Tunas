@@ -1,24 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-daun-50: #eefaf2;
-  --color-daun-100: #d5f2de;
-  --color-daun-200: #ade4c0;
-  --color-daun-500: #2e9e5b;
-  --color-daun-600: #23824a;
-  --color-daun-700: #1d6a3e;
-  --color-daun-900: #123d25;
-  --color-merah-500: #c8102e;
-  --color-merah-600: #a50d26;
-  --color-sky-brand: #1e5aa8;
-  --color-sky-brand-dark: #154582;
-  --color-oranye-400: #ffa94d;
-  --color-oranye-500: #f28c28;
-  --color-oranye-600: #d9741a;
-  --color-ink: #1f2937;
-  --color-ink-soft: #4b5563;
-  --color-surface: #f6f8f7;
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  /* Palet Telkom: merah #FF0000, merah tua #B00000, putih, abu #808080, abu gelap #333333, hitam.
+     Warna utama: merah marun (turunan #B00000). */
+  --color-marun-50: #fdf3f3;
+  --color-marun-100: #fae1e1;
+  --color-marun-200: #f2bcbc;
+  --color-marun-300: #e48a8a;
+  --color-marun-400: #c94848;
+  --color-marun-500: #b00000;
+  --color-marun-600: #940000;
+  --color-marun-700: #760000;
+  --color-marun-800: #560000;
+  --color-marun-900: #3b0000;
+  --color-marun-950: #220000;
+  /* Merah Telkom untuk sorotan & tombol utama. */
+  --color-aksen-400: #ff3d3d;
+  --color-aksen-500: #e60000;
+  --color-aksen-600: #c40000;
+  /* Merah untuk pesan galat. */
+  --color-merah-500: #d11a2a;
+  --color-merah-600: #a8111f;
+  /* Netral Telkom. */
+  --color-abu-400: #a6a6a6;
+  --color-abu-500: #808080;
+  --color-gelap-700: #333333;
+  --color-gelap-800: #1c1c1c;
+  --color-gelap-900: #0e0e0e;
+  --color-gelap-950: #060606;
+  /* Aksen tambahan (di luar palet) untuk ikon & detail kecil. */
+  --color-emas-300: #f4d99c;
+  --color-emas-400: #e8b54d;
+  --color-emas-500: #cf9327;
+  --color-ink: #161616;
+  --color-ink-soft: #565656;
+  --color-surface: #f7f5f3;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 html {
@@ -41,16 +58,28 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold transition focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-sky-brand disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-base font-bold tracking-tight transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-marun-500 disabled:cursor-not-allowed disabled:opacity-60;
 }
 @utility btn-primary {
-  @apply btn bg-oranye-500 text-white shadow-sm hover:bg-oranye-600;
+  @apply btn bg-aksen-500 text-white shadow-[0_10px_30px_-10px_rgba(230,0,0,0.6)] hover:bg-aksen-600;
 }
 @utility btn-green {
-  @apply btn bg-daun-600 text-white hover:bg-daun-700;
+  @apply btn bg-marun-600 text-white hover:bg-marun-700;
 }
 @utility btn-outline {
-  @apply btn border-2 border-daun-600 bg-white text-daun-700 hover:bg-daun-50;
+  @apply btn border border-marun-600 bg-white text-marun-700 hover:bg-marun-50;
+}
+/* Tombol garis di atas latar gelap (gaya referensi). */
+@utility btn-ghost-light {
+  @apply btn border border-white/30 text-white hover:border-white hover:bg-white/10;
+}
+/* Label kecil huruf kapital berjarak lebar. */
+@utility eyebrow {
+  @apply text-[11px] font-semibold tracking-[0.32em] uppercase;
+}
+/* Judul besar bergaya editorial. */
+@utility display {
+  @apply font-extrabold tracking-[-0.035em] leading-[0.95];
 }
 @utility btn-ghost {
   @apply btn text-ink-soft hover:bg-black/5;
@@ -62,16 +91,16 @@ body {
   @apply px-3 py-2 text-sm;
 }
 @utility card {
-  @apply rounded-2xl border border-black/5 bg-white p-4 shadow-sm;
+  @apply rounded-2xl border border-black/5 bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.08)];
 }
 @utility input {
-  @apply w-full rounded-xl border border-gray-300 bg-white px-3 py-3 text-base text-ink placeholder:text-gray-400 focus:border-daun-500 focus:ring-2 focus:ring-daun-200 focus:outline-none;
+  @apply w-full rounded-xl border border-gray-300 bg-white px-3 py-3 text-base text-ink placeholder:text-gray-400 focus:border-marun-500 focus:ring-2 focus:ring-marun-200 focus:outline-none;
 }
 @utility label {
   @apply mb-1 block text-sm font-bold text-ink;
 }
 @utility chip {
-  @apply inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-ink-soft transition has-[:checked]:border-daun-600 has-[:checked]:bg-daun-50 has-[:checked]:text-daun-700;
+  @apply inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-ink-soft transition has-[:checked]:border-marun-600 has-[:checked]:bg-marun-50 has-[:checked]:text-marun-700;
 }
 @layer components {
   .tbl {
@@ -84,10 +113,19 @@ body {
     @apply border-b border-gray-100 px-3 py-2 align-top;
   }
   .prose-sa h2 {
-    @apply mt-6 mb-2 text-xl font-extrabold text-daun-900;
+    @apply mt-10 mb-3 text-2xl font-extrabold tracking-tight text-ink md:text-[1.75rem];
+  }
+  .prose-sa h2:first-child {
+    @apply mt-0;
   }
   .prose-sa h3 {
-    @apply mt-4 mb-2 text-lg font-bold text-daun-900;
+    @apply mt-6 mb-2 text-lg font-bold text-marun-700;
+  }
+  .prose-sa li::marker {
+    @apply text-marun-500;
+  }
+  .prose-sa strong {
+    @apply font-bold text-ink;
   }
   .prose-sa p {
     @apply mb-3 leading-relaxed;
@@ -99,8 +137,41 @@ body {
     @apply mb-3 list-decimal space-y-1 pl-6;
   }
   .prose-sa a {
-    @apply font-semibold text-sky-brand underline;
+    @apply font-semibold text-marun-600 underline;
   }
+}
+
+/* Teks berjalan (marquee) */
+@keyframes sa-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.sa-marquee {
+  animation: sa-marquee 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sa-marquee {
+    animation: none;
+  }
+}
+
+/* Latar gelap bertekstur halus untuk bagian tanpa foto */
+.sa-dark-texture {
+  background-color: #0e0e0e;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(176, 0, 0, 0.35), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, rgba(118, 0, 0, 0.35), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    56px 56px,
+    56px 56px;
 }
 
 @media print {

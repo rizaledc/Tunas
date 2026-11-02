@@ -109,3 +109,12 @@ describe("helpers", () => {
     expect(balancePercent(50, 50)).toBe(50);
   });
 });
+
+describe("parseInsight membersihkan tanda pisah panjang", () => {
+  it("mengganti em dash dengan koma, rentang angka tetap", () => {
+    const o = parseInsight({ ringkasan: "Minggu ini bagus — terus pertahankan", sudah_baik: ["Main 10–15 menit"], perlu_diperhatikan: [], saran: ["Coba ini — lalu itu"], ide_obrolan: "Apa kabar?" })!;
+    expect(o.ringkasan).toBe("Minggu ini bagus, terus pertahankan");
+    expect(o.saran[0]).toBe("Coba ini, lalu itu");
+    expect(o.sudah_baik[0]).toBe("Main 10–15 menit");
+  });
+});

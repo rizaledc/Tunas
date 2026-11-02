@@ -1,5 +1,5 @@
 -- =============================================================
--- SAHABAT ANAK — skema inti (PostgreSQL / Supabase)
+-- SAHABAT ANAK: skema inti (PostgreSQL / Supabase)
 -- 17 tabel inti sesuai PRD + tabel pendukung (login_attempts,
 -- push_subscriptions, event_attendance).
 -- =============================================================

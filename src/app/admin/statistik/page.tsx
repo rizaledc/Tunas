@@ -31,7 +31,7 @@ function Row({ label, g }: { label: string; g: GroupStats }) {
         <>
           <td>{g.families}</td>
           <td>{g.avgScreen} mnt</td>
-          <td>{g.avgTarget ?? "—"} mnt</td>
+          <td>{g.avgTarget ?? "-"} mnt</td>
           <td>{g.avgPositive} mnt</td>
           <td>{g.compliancePct}%</td>
         </>
@@ -93,7 +93,7 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <Stat icon="clock" label="Rata-rata screen time" value={`${app.avgScreen} mnt`} hint={`target rata-rata ${app.avgTarget ?? "—"} mnt`} tone="blue" />
+            <Stat icon="clock" label="Rata-rata screen time" value={`${app.avgScreen} mnt`} hint={`target rata-rata ${app.avgTarget ?? "-"} mnt`} tone="blue" />
             <Stat icon="leaf" label="Rata-rata aktivitas positif" value={`${app.avgPositive} mnt`} hint="per anak per hari tercatat" />
             <Stat icon="agreement" label="Kepatuhan kesepakatan" value={`${app.compliancePct}%`} hint="hari-anak sesuai target" tone="orange" />
             <Stat icon="moon" label="Penggunaan malam" value={`${app.nightPct}%`} hint="menit gawai 21.00–04.00" tone="red" />
@@ -112,7 +112,7 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
           </div>
           <section className="card">
             <h2 className="font-extrabold">Jam rawan (total menit gawai per jam mulai)</h2>
-            <SimpleBars data={app.hours.filter((h) => h.value > 0)} color="#1e5aa8" unit=" mnt" />
+            <SimpleBars data={app.hours.filter((h) => h.value > 0)} color="#333333" unit=" mnt" />
           </section>
         </>
       )}

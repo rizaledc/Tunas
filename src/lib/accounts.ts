@@ -108,7 +108,7 @@ export async function createParent(input: NewParent, opts: { requireBoth: boolea
   return { id: data.user.id, authEmail };
 }
 
-/** Metode masuk akun (dari app_metadata.providers — selalu terisi, termasuk akun buatan admin). */
+/** Metode masuk akun (dari app_metadata.providers, selalu terisi, termasuk akun buatan admin). */
 export function loginMethods(user: { app_metadata?: { provider?: string; providers?: string[] } } | null | undefined) {
   const providers = user?.app_metadata?.providers ?? (user?.app_metadata?.provider ? [user.app_metadata.provider] : []);
   return { isGoogle: providers.includes("google"), hasPassword: providers.includes("email") };

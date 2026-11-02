@@ -15,7 +15,7 @@ function PasswordInput({ name = "password", label = "Password", autoComplete = "
       </label>
       <div className="relative">
         <input id={name} name={name} type={show ? "text" : "password"} required autoComplete={autoComplete} className="input pr-20" />
-        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-2 py-1 text-sm font-bold text-daun-700">
+        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 -translate-y-1/2 rounded-lg px-2 py-1 text-sm font-bold text-marun-700">
           {show ? "Sembunyi" : "Lihat"}
         </button>
       </div>
@@ -37,7 +37,7 @@ export function LoginForm({ admin = false, next }: { admin?: boolean; next?: str
       <SubmitButton pendingText="Memeriksa…">Masuk</SubmitButton>
       {!admin && (
         <p className="text-center text-sm">
-          <Link href="/lupa-password" className="font-bold text-sky-brand">
+          <Link href="/lupa-password" className="font-bold text-marun-600">
             Lupa password?
           </Link>
         </p>
@@ -66,12 +66,12 @@ function ConsentBox({ consentText, consentVersion }: { consentText: string; cons
       <details className="rounded-xl bg-gray-50 p-3 text-sm">
         <summary className="cursor-pointer font-bold">Baca persetujuan data (versi {consentVersion})</summary>
         <p className="mt-2 whitespace-pre-line text-ink-soft">{consentText}</p>
-        <Link href="/privasi" className="mt-2 inline-block font-bold text-sky-brand" target="_blank">
+        <Link href="/privasi" className="mt-2 inline-block font-bold text-marun-600" target="_blank">
           Kebijakan privasi lengkap
         </Link>
       </details>
       <label className="flex items-start gap-3 text-sm">
-        <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-daun-600" />
+        <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-marun-600" />
         <span>Saya sudah membaca dan menyetujui penyimpanan serta pemakaian data seperti dijelaskan di atas.</span>
       </label>
     </>
@@ -167,7 +167,7 @@ export function RegisterForm({ consentText, consentVersion, code }: { consentTex
 export function CompleteGoogleForm({ consentText, consentVersion, code, nama, email }: { consentText: string; consentVersion: string; code?: string; nama: string; email: string }) {
   return (
     <ActionForm action={completeGoogleProfile}>
-      <p className="flex items-center gap-2 rounded-xl bg-daun-50 p-3 text-sm text-daun-700">
+      <p className="flex items-center gap-2 rounded-xl bg-marun-50 p-3 text-sm text-marun-700">
         <Icon name="check-circle" /> Akun Google terhubung: <strong className="break-all">{email}</strong>
       </p>
       <InviteField code={code} />

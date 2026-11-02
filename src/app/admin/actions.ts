@@ -86,7 +86,7 @@ export async function resetPassword(_: ActionState, fd: FormData): Promise<Actio
   const { error } = await db().auth.admin.updateUserById(id, { password: pw });
   if (error) return { error: "Gagal mereset password." };
   await audit(me.id, "user.reset_password", id);
-  return { ok: true, message: `Password sementara untuk ${target.nama}: ${pw} — sampaikan langsung dan minta segera diganti.` };
+  return { ok: true, message: `Password sementara untuk ${target.nama}: ${pw}. Sampaikan langsung dan minta segera diganti.` };
 }
 
 /** Admin membuat satu akun orang tua. Orang tua diminta menyetujui consent saat pertama masuk. */
@@ -298,7 +298,7 @@ export async function createSurvey(_: ActionState, fd: FormData): Promise<Action
   const tpl = SURVEY_TEMPLATES[kind];
   if (!tpl) return { error: "Template tidak dikenal." };
   const period = str(fd, "period") === "post" ? "post" : "pre";
-  const { error } = await db().from("surveys").insert({ name: `${tpl.name} — ${period === "pre" ? "Pre-test" : "Post-test"}`, kind, period, questions: tpl.questions, is_open: false });
+  const { error } = await db().from("surveys").insert({ name: `${tpl.name} (${period === "pre" ? "Pre-test" : "Post-test"})`, kind, period, questions: tpl.questions, is_open: false });
   if (error) return { error: "Gagal membuat kuesioner." };
   await audit(me.id, "survey.create", `${kind}/${period}`);
   revalidatePath("/admin/evaluasi");
@@ -556,7 +556,7 @@ export async function testOpenRouter(_: ActionState, fd: FormData): Promise<Acti
       ok: true,
       detail: `Valid (${source === "panel" ? "dari Panel Admin" : "dari env server"})${info.label ? ` · ${info.label}` : ""} · terpakai $${info.usage.toFixed(4)}${info.limit !== null ? ` dari limit $${info.limit}` : " · tanpa limit (disarankan pasang limit kredit)"}${info.isFreeTier ? " · akun gratis" : ""}`,
     });
-    if (info.remaining !== null && info.remaining <= 0) steps.push({ label: "Saldo", ok: false, detail: "Limit/saldo habis — insight akan memakai ringkasan cadangan." });
+    if (info.remaining !== null && info.remaining <= 0) steps.push({ label: "Saldo", ok: false, detail: "Limit/saldo habis, insight akan memakai ringkasan cadangan." });
   } catch (e) {
     steps.push({ label: "API key", ok: false, detail: (e as Error).message });
     return { ok: false, data: { steps } };

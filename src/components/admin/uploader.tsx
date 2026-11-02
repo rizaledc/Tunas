@@ -39,7 +39,7 @@ export function SingleUpload({ name, defaultValue, folder, accept = "image/*", l
         <img src={url} alt="" className="h-32 rounded-xl object-cover" />
       )}
       {url && !accept.startsWith("image") && (
-        <a href={url} target="_blank" rel="noreferrer" className="block text-sm font-bold text-sky-brand break-all">
+        <a href={url} target="_blank" rel="noreferrer" className="block text-sm font-bold text-marun-600 break-all">
           {url}
         </a>
       )}
@@ -71,7 +71,7 @@ export function SingleUpload({ name, defaultValue, folder, accept = "image/*", l
             Hapus
           </button>
         )}
-        {!preview && url !== (defaultValue ?? "") && <span className="text-xs font-semibold text-daun-700">Foto baru siap — tekan Simpan</span>}
+        {!preview && url !== (defaultValue ?? "") && <span className="text-xs font-semibold text-marun-700">Foto baru siap, tekan Simpan</span>}
       </div>
       {err && <p className="text-sm text-merah-600">Gagal: {err}</p>}
     </div>
