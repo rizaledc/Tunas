@@ -24,15 +24,15 @@ export default async function ArticleDetail({ params }: { params: Promise<{ slug
   if (!a) notFound();
   return (
     <article>
-      <DarkMedia src={a.cover} alt="" priority className="text-white">
-        <div className="absolute inset-0 bg-gradient-to-t from-gelap-950 via-gelap-950/75 to-gelap-950/45" />
+      <DarkMedia src={a.cover} alt="" priority className="text-ink">
+        <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/75 to-surface/45" />
         <div className="relative mx-auto max-w-4xl px-4 pt-36 pb-16 md:pt-48">
-          <Link href="/artikel" className="eyebrow inline-flex items-center gap-2 text-white/60 hover:text-white">
+          <Link href="/artikel" className="eyebrow inline-flex items-center gap-2 text-ink/60 hover:text-ink">
             <Icon name="arrow-left" className="h-4 w-4" /> Semua artikel
           </Link>
           <Eyebrow className="mt-8">{a.published_at ? formatTanggal(a.published_at) : "Artikel"}</Eyebrow>
           <h1 className="display mt-5 text-4xl md:text-6xl">{a.title}</h1>
-          {a.excerpt && <p className="mt-6 max-w-2xl text-lg text-white/70">{a.excerpt}</p>}
+          {a.excerpt && <p className="mt-6 max-w-2xl text-lg text-ink/70">{a.excerpt}</p>}
         </div>
       </DarkMedia>
       <div className="bg-surface">

@@ -6,6 +6,7 @@ import { getActiveChild } from "@/lib/parent";
 import { BottomNav } from "@/components/app/bottom-nav";
 import { ChildSwitcher } from "@/components/app/child-switcher";
 import { LogoMark } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const parent = await requireParent();
@@ -26,6 +27,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-2 text-sm">
             {kids.length > 0 && <span className="text-white/80">Anak:</span>}
             <ChildSwitcher items={kids.map((k) => ({ id: k.id, nickname: k.nickname }))} activeId={child?.id} />
+            <span className="theme-dark">
+              <ThemeToggle className="h-9 w-9 border-white/30" />
+            </span>
           </div>
         </div>
       </header>

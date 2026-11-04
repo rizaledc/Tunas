@@ -253,7 +253,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
     source === "panel"
       ? { tone: "bg-marun-50 text-marun-700", icon: "check-circle" as const, text: `Terhubung · kunci ${maskKey(key)} disimpan di Panel Admin (terenkripsi)` }
       : source === "env"
-        ? { tone: "bg-black/[0.045] text-marun-600", icon: "info" as const, text: `Terhubung · kunci ${maskKey(key)} dari variabel server OPENROUTER_API_KEY. Kunci yang diisi di bawah akan diutamakan.` }
+        ? { tone: "bg-ink/[0.045] text-marun-600", icon: "info" as const, text: `Terhubung · kunci ${maskKey(key)} dari variabel server OPENROUTER_API_KEY. Kunci yang diisi di bawah akan diutamakan.` }
         : source === "broken"
           ? { tone: "bg-red-50 text-merah-600", icon: "warning" as const, text: "Kunci tersimpan tidak bisa dibuka (APP_SECRET berubah). Simpan ulang API key." }
           : { tone: "bg-emas-300/25 text-aksen-600", icon: "warning" as const, text: "Belum terhubung. Insight memakai ringkasan cadangan sampai API key diisi." };

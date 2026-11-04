@@ -79,8 +79,8 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
               </div>
               <div>
                 <p className="label">Pratinjau</p>
-                <div className="overflow-hidden rounded-xl bg-[#e9e1d6] p-2 shadow-inner">
-                  <div className="overflow-hidden rounded-lg bg-white">
+                <div className="theme-light overflow-hidden rounded-xl bg-[#e9e1d6] p-2 shadow-inner">
+                  <div className="overflow-hidden rounded-lg bg-paper">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={`/opengraph-image?v=${encodeURIComponent(`${s["public.share"].image}|${s["public.share"].description}|${s["public.hero"].title}`.length + (s["public.share"].image || s["public.share"].description || s["public.hero"].title).slice(-16))}`} alt="Pratinjau kartu tautan" className="aspect-[1200/630] w-full object-cover" />
                     <div className="space-y-0.5 bg-[#f3f0ec] px-3 py-2 text-xs">

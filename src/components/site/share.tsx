@@ -20,7 +20,7 @@ export function ShareButtons({ path, title }: { path: string; title: string }) {
     {
       label: copied ? "Tersalin!" : "Salin tautan",
       icon: copied ? "check" : "copy",
-      className: "bg-white text-ink ring-1 ring-gray-200",
+      className: "bg-paper text-ink ring-1 ring-gray-200",
       onClick: async () => {
         try {
           await navigator.clipboard.writeText(url());

@@ -34,7 +34,7 @@ export function GalleryGrid({ photos, limit, dark = false }: { photos: Photo[]; 
             onClick={() => setCat(k)}
             className={cn(
               "rounded-full px-4 py-2 text-[11px] font-semibold tracking-[0.2em] uppercase transition",
-              cat === k ? "bg-aksen-500 text-white" : dark ? "border border-white/15 text-white/70 hover:border-white/40" : "border border-black/10 bg-white text-ink-soft hover:border-black/30",
+              cat === k ? "bg-aksen-500 text-white" : dark ? "border border-ink/15 text-ink/70 hover:border-ink/40" : "border border-ink/10 bg-paper text-ink-soft hover:border-ink/30",
             )}
           >
             {v}
@@ -42,25 +42,25 @@ export function GalleryGrid({ photos, limit, dark = false }: { photos: Photo[]; 
         ))}
       </div>
       {list.length === 0 ? (
-        <p className={cn("rounded-3xl p-10 text-center", dark ? "border border-white/10 text-white/55" : "bg-white text-ink-soft")}>Belum ada foto di kategori ini.</p>
+        <p className={cn("rounded-3xl p-10 text-center", dark ? "border border-ink/10 text-ink/65" : "bg-paper text-ink-soft")}>Belum ada foto di kategori ini.</p>
       ) : (
         <div className="grid auto-rows-[10rem] grid-cols-2 gap-3 sm:auto-rows-[13rem] sm:grid-cols-3 lg:grid-cols-4">
           {list.map((p, i) => (
             <button key={p.id} onClick={() => setOpen(i)} className={cn("group relative overflow-hidden rounded-2xl bg-gelap-800", i % 5 === 0 && "row-span-2")}>
               <Image src={p.url} alt={p.caption ?? "Foto kegiatan"} fill sizes="(min-width:1024px) 25vw, 50vw" className="object-cover transition duration-700 group-hover:scale-105" />
               <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-              {p.caption && <span className="absolute inset-x-0 bottom-0 translate-y-2 px-3 pb-3 text-left text-xs font-semibold text-white opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">{p.caption}</span>}
+              {p.caption && <span className="absolute inset-x-0 bottom-0 translate-y-2 px-3 pb-3 text-left text-xs font-semibold text-ink opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">{p.caption}</span>}
             </button>
           ))}
         </div>
       )}
       {open !== null && list[open] && (
-        <div role="dialog" aria-modal="true" aria-label="Pratinjau foto" className="fixed inset-0 z-50 flex items-center justify-center bg-gelap-950/95 p-4 backdrop-blur" onClick={() => setOpen(null)}>
+        <div role="dialog" aria-modal="true" aria-label="Pratinjau foto" className="theme-dark fixed inset-0 z-50 flex items-center justify-center bg-surface/95 p-4 backdrop-blur" onClick={() => setOpen(null)}>
           <div className="relative h-[80vh] w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <Image src={list[open].url} alt={list[open].caption ?? "Foto kegiatan"} fill sizes="100vw" className="object-contain" />
           </div>
-          {list[open].caption && <p className="absolute bottom-6 px-4 text-center text-white">{list[open].caption}</p>}
-          <button className="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-ink" aria-label="Tutup" onClick={() => setOpen(null)}>
+          {list[open].caption && <p className="absolute bottom-6 px-4 text-center text-ink">{list[open].caption}</p>}
+          <button className="absolute top-4 right-4 rounded-full bg-white/90 p-2 text-gelap-950" aria-label="Tutup" onClick={() => setOpen(null)}>
             <Icon name="close" className="h-6 w-6" />
           </button>
         </div>

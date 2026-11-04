@@ -36,12 +36,12 @@ export default async function LandingPage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative isolate min-h-[100svh] overflow-hidden bg-gelap-950 text-white">
+      <section className={`relative isolate min-h-[100svh] overflow-hidden bg-surface text-ink ${hero.image ? "theme-dark" : ""}`}>
         <DarkMedia src={hero.image} alt="Kegiatan anak bersama keluarga" priority className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-gelap-950 via-gelap-950/80 to-gelap-950/10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-gelap-950 via-transparent to-gelap-950/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/80 to-surface/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/60" />
         </DarkMedia>
-        {!hero.image && <LogoMark tile={false} onDark className="pointer-events-none absolute right-[-9rem] bottom-[-7rem] -z-10 h-[30rem] w-[30rem] opacity-[0.09] md:right-[-6rem] md:bottom-[-9rem] md:h-[42rem] md:w-[42rem]" />}
+        {!hero.image && <LogoMark auto className="pointer-events-none absolute right-[-9rem] bottom-[-7rem] -z-10 h-[30rem] w-[30rem] opacity-[0.09] md:right-[-6rem] md:bottom-[-9rem] md:h-[42rem] md:w-[42rem]" />}
 
         <div className="mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pt-32 pb-28">
           <Eyebrow>{L.badge}</Eyebrow>
@@ -51,9 +51,9 @@ export default async function LandingPage() {
                 {l}
               </span>
             ))}
-            <span className="block text-aksen-400">{heroB}</span>
+            <span className="block text-hl">{heroB}</span>
           </h1>
-          <p className="mt-7 max-w-md text-base leading-relaxed text-white/70 md:text-lg">{hero.subtitle}</p>
+          <p className="mt-7 max-w-md text-base leading-relaxed text-ink/70 md:text-lg">{hero.subtitle}</p>
           <div className="mt-10 flex flex-wrap items-center gap-6">
             <ArrowLink href="/daftar">{L.cta_primary}</ArrowLink>
             <Link href="/tentang" className="btn-ghost-light btn-sm px-5 text-xs tracking-[0.2em] uppercase">
@@ -66,24 +66,24 @@ export default async function LandingPage() {
         {features.length > 0 && (
           <ul className="absolute top-1/3 right-6 hidden space-y-3 text-right lg:block xl:right-[max(1.5rem,calc((100vw-72rem)/2))]">
             {features.slice(0, 3).map((f) => (
-              <li key={f.title} className="eyebrow text-white/50">
+              <li key={f.title} className="eyebrow text-ink/60">
                 {f.title}
               </li>
             ))}
-            <li aria-hidden className="ml-auto h-px w-10 bg-aksen-400" />
+            <li aria-hidden className="ml-auto h-px w-10 bg-hl" />
           </ul>
         )}
 
         {/* Kartu angka melayang */}
         {show.stats && (
-          <div className="absolute right-4 bottom-8 hidden rounded-3xl border border-white/10 bg-white/[0.06] p-5 backdrop-blur-xl md:block xl:right-[max(1rem,calc((100vw-72rem)/2))]">
-            <p className="eyebrow text-white/50">{L.stats_label}</p>
+          <div className="absolute right-4 bottom-8 hidden rounded-3xl border border-ink/10 bg-ink/[0.06] p-5 backdrop-blur-xl md:block xl:right-[max(1rem,calc((100vw-72rem)/2))]">
+            <p className="eyebrow text-ink/60">{L.stats_label}</p>
             <div className="mt-3 flex items-end gap-8">
-              <p className="display text-5xl text-white">{families ?? 0}</p>
+              <p className="display text-5xl text-ink">{families ?? 0}</p>
               {stats[0] && (
-                <div className="border-l border-white/15 pl-6">
-                  <p className="display text-3xl text-aksen-400">{stats[0].after}</p>
-                  <p className="mt-1 max-w-[9rem] text-[11px] leading-snug text-white/60">{stats[0].label}</p>
+                <div className="border-l border-ink/15 pl-6">
+                  <p className="display text-3xl text-hl">{stats[0].after}</p>
+                  <p className="mt-1 max-w-[9rem] text-[11px] leading-snug text-ink/60">{stats[0].label}</p>
                 </div>
               )}
             </div>
@@ -93,12 +93,12 @@ export default async function LandingPage() {
 
       {/* PITA BERJALAN */}
       {marquee.length > 0 && (
-        <div className="overflow-hidden border-y border-white/10 bg-marun-700 py-4 text-white" aria-hidden>
+        <div className="theme-dark overflow-hidden border-y border-ink/10 bg-marun-700 py-4 text-ink" aria-hidden>
           <div className="sa-marquee flex w-max whitespace-nowrap">
             {[...marquee, ...marquee, ...marquee, ...marquee].map((t, i) => (
-              <span key={i} className="eyebrow flex shrink-0 items-center gap-10 pr-10 text-[13px] text-white/90">
+              <span key={i} className="eyebrow flex shrink-0 items-center gap-10 pr-10 text-[13px] text-ink/90">
                 {t}
-                <Icon name="star-solid" className="h-3 w-3 text-emas-400" />
+                <Icon name="star-solid" className="h-3 w-3 text-gold" />
               </span>
             ))}
           </div>
@@ -117,21 +117,21 @@ export default async function LandingPage() {
 
       {/* FITUR */}
       {show.features && features.length > 0 && (
-        <section className="sa-dark-texture text-white">
+        <section className="sa-texture text-ink">
           <div className="mx-auto grid max-w-6xl gap-14 px-4 py-24 lg:grid-cols-[0.9fr_1.6fr] lg:items-center">
             <div>
               <Eyebrow>Mengapa SAHABAT ANAK</Eyebrow>
               <Headline text={L.features_title} className="mt-5 text-5xl md:text-6xl" />
-              <p className="mt-6 max-w-sm text-white/65">{L.features_text?.includes("HP Android") ? DEFAULT_SETTINGS["public.landing"].features_text : L.features_text}</p>
+              <p className="mt-6 max-w-sm text-ink/65">{L.features_text?.includes("HP Android") ? DEFAULT_SETTINGS["public.landing"].features_text : L.features_text}</p>
             </div>
-            <div className="grid gap-px overflow-hidden rounded-3xl bg-white/10 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-px overflow-hidden rounded-3xl bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
               {features.map((f) => (
-                <div key={f.title} className="group bg-gelap-950/90 p-7 transition hover:bg-marun-900/60">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-emas-400 transition group-hover:border-aksen-400 group-hover:text-aksen-400">
+                <div key={f.title} className="group bg-paper/90 p-7 transition hover:bg-marun-50">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-gold transition group-hover:border-hl group-hover:text-hl">
                     <CategoryIcon icon={f.icon} className="h-6 w-6" />
                   </span>
-                  <p className="eyebrow mt-6 text-white">{f.title}</p>
-                  <p className="mt-3 text-sm leading-relaxed text-white/60">{f.text}</p>
+                  <p className="eyebrow mt-6 text-ink">{f.title}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{f.text}</p>
                 </div>
               ))}
             </div>
@@ -141,7 +141,7 @@ export default async function LandingPage() {
 
       {/* KEGIATAN */}
       {show.events && (
-        <section className="bg-gelap-950 py-24 text-white">
+        <section className="bg-surface py-24 text-ink">
           <div className="mx-auto max-w-6xl px-4">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
@@ -154,17 +154,17 @@ export default async function LandingPage() {
             <div className="mt-12 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
               <div className="grid gap-6 sm:grid-cols-2">
                 {featured.length === 0 && (
-                  <div className="sa-dark-texture flex aspect-[4/5] flex-col justify-end rounded-3xl border border-white/10 p-7 sm:col-span-2 sm:aspect-[16/9]">
-                    <p className="eyebrow text-aksen-400">Segera hadir</p>
+                  <div className="sa-texture flex aspect-[4/5] flex-col justify-end rounded-3xl border border-ink/10 p-7 sm:col-span-2 sm:aspect-[16/9]">
+                    <p className="eyebrow text-hl">Segera hadir</p>
                     <p className="display mt-3 text-3xl">Kegiatan unggulan akan tampil di sini</p>
                   </div>
                 )}
                 {featured.slice(0, 2).map((e, i) => (
-                  <Link key={e.id} href={`/kegiatan/${e.slug}`} className={`group relative block overflow-hidden rounded-3xl border border-white/10 ${featured.length === 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/5]"} ${i === 1 ? "sm:mt-12" : ""}`}>
+                  <Link key={e.id} href={`/kegiatan/${e.slug}`} className={`theme-dark group relative block overflow-hidden rounded-3xl border border-ink/10 ${featured.length === 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/5]"} ${i === 1 ? "sm:mt-12" : ""}`}>
                     <DarkMedia src={e.cover_photo} alt={e.title} sizes="(min-width:1024px) 30vw, 100vw" className="absolute inset-0 transition duration-700 group-hover:scale-105">
-                      <div className="absolute inset-0 bg-gradient-to-t from-gelap-950 via-gelap-950/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
                     </DarkMedia>
-                    <span className="absolute top-5 left-5 rounded-full border border-white/20 bg-gelap-950/50 px-3 py-1.5 text-[11px] font-semibold tracking-[0.2em] uppercase backdrop-blur">
+                    <span className="absolute top-5 left-5 rounded-full border border-ink/20 bg-surface/50 px-3 py-1.5 text-[11px] font-semibold tracking-[0.2em] uppercase backdrop-blur">
                       {formatTanggal(e.date, { day: "numeric", month: "short", year: "numeric" })}
                     </span>
                     <span className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-aksen-500 text-white transition group-hover:rotate-[-45deg]">
@@ -172,32 +172,32 @@ export default async function LandingPage() {
                     </span>
                     <div className="absolute inset-x-0 bottom-0 p-6">
                       <p className="display text-2xl md:text-3xl">{e.title}</p>
-                      {e.location && <p className="mt-2 flex items-center gap-1.5 text-sm text-white/60"><Icon name="pin" className="h-4 w-4 text-aksen-400" /> {e.location}</p>}
+                      {e.location && <p className="mt-2 flex items-center gap-1.5 text-sm text-ink/60"><Icon name="pin" className="h-4 w-4 text-hl" /> {e.location}</p>}
                     </div>
                   </Link>
                 ))}
               </div>
 
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
-                <p className="eyebrow text-white/50">{L.agenda_title}</p>
+              <div className="rounded-3xl border border-ink/10 bg-ink/[0.03] p-6">
+                <p className="eyebrow text-ink/60">{L.agenda_title}</p>
                 {upcoming.length === 0 ? (
-                  <p className="mt-6 text-white/60">Agenda berikutnya akan segera diumumkan.</p>
+                  <p className="mt-6 text-ink/60">Agenda berikutnya akan segera diumumkan.</p>
                 ) : (
-                  <ul className="mt-4 divide-y divide-white/10">
+                  <ul className="mt-4 divide-y divide-ink/10">
                     {upcoming.map((e) => (
                       <li key={e.id}>
                         <Link href={`/kegiatan/${e.slug}`} className="group flex items-center gap-5 py-5">
-                          <span className="flex w-16 shrink-0 flex-col items-center rounded-2xl bg-marun-600 py-3">
+                          <span className="theme-dark flex w-16 shrink-0 flex-col items-center rounded-2xl bg-marun-600 py-3">
                             <span className="display text-2xl">{formatTanggal(e.date, { day: "numeric" })}</span>
-                            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-white/80">{formatTanggal(e.date, { month: "short" })}</span>
+                            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-ink/80">{formatTanggal(e.date, { month: "short" })}</span>
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block font-bold group-hover:text-aksen-400">{e.title}</span>
-                            <span className="mt-1 block text-sm text-white/55">
+                            <span className="block font-bold group-hover:text-hl">{e.title}</span>
+                            <span className="mt-1 block text-sm text-ink/65">
                               {formatTanggal(e.date, { hour: "2-digit", minute: "2-digit" })} WIB{e.location ? ` · ${e.location}` : ""}
                             </span>
                           </span>
-                          <Icon name="chevron-right" className="h-5 w-5 text-white/40 group-hover:text-aksen-400" />
+                          <Icon name="chevron-right" className="h-5 w-5 text-ink/60 group-hover:text-hl" />
                         </Link>
                       </li>
                     ))}
@@ -216,9 +216,9 @@ export default async function LandingPage() {
             <div>
               <Eyebrow light={false}>Mulai dalam {L.steps.filter((s) => s.title).length} langkah</Eyebrow>
               <Headline text={L.steps_title} light={false} className="mt-5 text-5xl md:text-6xl" />
-              <ol className="mt-12 space-y-0 border-t border-black/10">
+              <ol className="mt-12 space-y-0 border-t border-ink/10">
                 {L.steps.filter((s) => s.title).map((st, i) => (
-                  <li key={i} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-black/10 py-7">
+                  <li key={i} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-ink/10 py-7">
                     <span className="display text-4xl text-marun-600">{String(i + 1).padStart(2, "0")}</span>
                     <span>
                       <span className="block text-xl font-extrabold tracking-tight">{st.title}</span>
@@ -247,17 +247,17 @@ export default async function LandingPage() {
 
       {/* ALUR PROGRAM */}
       {show.roadmap && (
-        <section className="bg-gradient-to-br from-marun-800 via-marun-700 to-marun-900 py-24 text-white">
+        <section className="theme-dark bg-gradient-to-br from-marun-800 via-marun-700 to-marun-900 py-24 text-ink">
           <div className="mx-auto max-w-6xl px-4">
             <Eyebrow>Perjalanan</Eyebrow>
             <Headline text={L.roadmap_title} className="mt-5 text-4xl md:text-6xl" breakLine={false} />
-            <ol className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-white/15 md:grid-cols-2 lg:grid-cols-4">
+            <ol className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-ink/15 md:grid-cols-2 lg:grid-cols-4">
               {L.roadmap.filter((r) => r.title).map((r, i) => (
                 <li key={i} className="relative bg-marun-800/90 p-7">
-                  <span className="display absolute top-5 right-6 text-6xl text-emas-300">{String(i + 1).padStart(2, "0")}</span>
-                  <p className="eyebrow text-emas-300">{r.label}</p>
+                  <span className="display absolute top-5 right-6 text-6xl text-gold">{String(i + 1).padStart(2, "0")}</span>
+                  <p className="eyebrow text-gold">{r.label}</p>
                   <p className="mt-10 text-xl font-extrabold tracking-tight">{r.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/65">{r.text}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-ink/65">{r.text}</p>
                 </li>
               ))}
             </ol>
@@ -267,7 +267,7 @@ export default async function LandingPage() {
 
       {/* GALERI */}
       {show.gallery && (
-        <section className="bg-gelap-950 py-24 text-white">
+        <section className="bg-surface py-24 text-ink">
           <div className="mx-auto max-w-6xl px-4">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
               <div>
@@ -276,7 +276,7 @@ export default async function LandingPage() {
               </div>
               <ArrowLink href="/galeri">Lihat semua</ArrowLink>
             </div>
-            {photos.length ? <GalleryGrid photos={photos} limit={8} dark /> : <p className="rounded-3xl border border-white/10 p-10 text-center text-white/55">Foto kegiatan akan segera diunggah oleh pengurus.</p>}
+            {photos.length ? <GalleryGrid photos={photos} limit={8} dark /> : <p className="rounded-3xl border border-ink/10 p-10 text-center text-ink/65">Foto kegiatan akan segera diunggah oleh pengurus.</p>}
           </div>
         </section>
       )}
@@ -293,7 +293,7 @@ export default async function LandingPage() {
               <ArrowLink href="/artikel" light={false}>Semua artikel</ArrowLink>
             </div>
             {articles.length === 0 ? (
-              <div className="rounded-3xl bg-white p-10 text-center">
+              <div className="rounded-3xl bg-paper p-10 text-center">
                 <Icon name="book-open" className="mx-auto h-10 w-10 text-marun-600" />
                 <p className="mt-3 font-bold">Artikel pertama sedang ditulis</p>
                 <p className="text-ink-soft">Nantikan tips digital parenting untuk keluarga.</p>
@@ -311,9 +311,9 @@ export default async function LandingPage() {
 
       {/* AJAKAN */}
       {show.cta && (
-        <section className="relative isolate overflow-hidden bg-gelap-950 text-white">
+        <section className="theme-dark relative isolate overflow-hidden bg-gradient-to-br from-gelap-950 via-marun-950 to-marun-800 text-ink">
           <DarkMedia src={hero.image} className="absolute inset-0 -z-10 opacity-40">
-            <div className="absolute inset-0 bg-gradient-to-r from-gelap-950 via-gelap-950/70 to-marun-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-marun-900/60" />
           </DarkMedia>
           <div className="mx-auto grid max-w-6xl items-end gap-10 px-4 py-28 md:grid-cols-[1.4fr_1fr]">
             <div>
@@ -321,7 +321,7 @@ export default async function LandingPage() {
               <Headline text={L.cta_title} className="mt-5 text-5xl md:text-7xl" />
             </div>
             <div className="md:justify-self-end">
-              <p className="max-w-xs text-white/70">{L.cta_text}</p>
+              <p className="max-w-xs text-ink/70">{L.cta_text}</p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link href="/daftar" className="btn-primary px-7">
                   {L.cta_button} <Icon name="arrow-right" className="h-5 w-5" />

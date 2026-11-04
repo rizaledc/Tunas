@@ -16,7 +16,7 @@ export default async function ArtikelPage() {
       <div className="bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20">
           {articles.length === 0 ? (
-            <div className="rounded-3xl bg-white p-12 text-center">
+            <div className="rounded-3xl bg-paper p-12 text-center">
               <Icon name="book-open" className="mx-auto h-10 w-10 text-marun-600" />
               <p className="mt-3 text-lg font-bold">Belum ada artikel</p>
               <p className="text-ink-soft">Tips digital parenting akan segera hadir.</p>

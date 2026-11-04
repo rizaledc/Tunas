@@ -30,8 +30,8 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         <TrendChart
           data={k.trend}
           lines={[
-            { key: "screen", name: "Screen time", color: "#333333" },
-            { key: "positif", name: "Aktivitas positif", color: "#940000" },
+            { key: "screen", name: "Screen time", color: "var(--chart-ink)" },
+            { key: "positif", name: "Aktivitas positif", color: "var(--chart-brand)" },
             { key: "keluarga", name: "Keluarga mencatat", color: "#e8b54d" },
           ]}
         />

@@ -14,11 +14,23 @@ const VEIN_CHILD = "M26 35.8c2.4-4.6 5.4-8.2 9.4-10.6";
 /** Tanda logo. `tile` = ikon aplikasi berlatar marun; tanpa tile = daun berwarna di atas latar terang. */
 export type Brand = { logo?: string; tagline?: string };
 
-export function LogoMark({ className, tile = true, src, onDark = false }: { className?: string; tile?: boolean; src?: string; onDark?: boolean }) {
+export function LogoMark({ className, tile = true, src, onDark = false, auto = false }: { className?: string; tile?: boolean; src?: string; onDark?: boolean; auto?: boolean }) {
   if (src)
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt="" className={cn("h-10 w-10 shrink-0 rounded-xl bg-white object-contain", className)} />
+      <img src={src} alt="" className={cn("h-10 w-10 shrink-0 rounded-xl bg-paper object-contain", className)} />
+    );
+  if (auto)
+    // Mengikuti mode: daun besar marun di latar terang, putih di latar gelap.
+    return (
+      <svg viewBox="0 0 48 48" aria-hidden className={cn("h-10 w-10 shrink-0", className)}>
+        <g transform="translate(0 -1)">
+          <path d={LEAF_PARENT} className="fill-[#940000] dark:fill-white" />
+          <path d={LEAF_CHILD} className="fill-[#e60000] dark:fill-[#ff3d3d]" />
+          <path d={VEIN_PARENT} className="stroke-white dark:stroke-[#940000]" strokeOpacity={0.4} strokeWidth="1.1" strokeLinecap="round" fill="none" />
+          <path d={VEIN_CHILD} stroke="#ffffff" strokeOpacity="0.55" strokeWidth="1.1" strokeLinecap="round" fill="none" />
+        </g>
+      </svg>
     );
   return (
     <svg viewBox="0 0 48 48" aria-hidden className={cn("h-10 w-10 shrink-0", className)}>
@@ -34,16 +46,17 @@ export function LogoMark({ className, tile = true, src, onDark = false }: { clas
 }
 
 /** Logo lengkap. Warna kata mengikuti daun: SAHABAT (marun, orang tua) + ANAK (merah, anak). */
-export function Logo({ light = false, small = false, brand }: { light?: boolean; small?: boolean; brand?: Brand }) {
+/** `light` = selalu putih (di atas foto/pita gelap); `auto` = daun tanpa kotak yang mengikuti mode terang/gelap. */
+export function Logo({ light = false, auto = false, small = false, brand }: { light?: boolean; auto?: boolean; small?: boolean; brand?: Brand }) {
   return (
     <span className="flex items-center gap-2.5">
-      <LogoMark src={brand?.logo || undefined} tile={!light} onDark={light} className={small ? "h-8 w-8" : "h-10 w-10"} />
+      <LogoMark src={brand?.logo || undefined} tile={!light && !auto} onDark={light} auto={auto} className={small ? "h-8 w-8" : "h-10 w-10"} />
       <span className="leading-none">
         <span className={cn("block font-extrabold tracking-[0.18em] whitespace-nowrap", small ? "text-[15px]" : "text-[17px]")}>
-          <span className={light ? "text-white" : "text-marun-700"}>SAHABAT</span> <span className={light ? "text-aksen-400" : "text-aksen-500"}>ANAK</span>
+          <span className={light ? "text-white" : "text-[#760000] dark:text-white"}>SAHABAT</span> <span className={light ? "text-aksen-400" : "text-[#e60000] dark:text-[#ff3d3d]"}>ANAK</span>
         </span>
         {!small && (
-          <span className={cn("mt-1 text-[9.5px] font-semibold tracking-[0.22em] whitespace-nowrap uppercase", light ? "hidden text-white/60 sm:block" : "block text-ink-soft")}>
+          <span className={cn("mt-1 text-[9.5px] font-semibold tracking-[0.22em] whitespace-nowrap uppercase", light ? "hidden text-white/60 sm:block" : auto ? "hidden text-ink-soft sm:block" : "block text-ink-soft")}>
             {brand?.tagline ?? "Tumbuh seimbang bersama keluarga"}
           </span>
         )}

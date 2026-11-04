@@ -112,7 +112,7 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
           </div>
           <section className="card">
             <h2 className="font-extrabold">Jam rawan (total menit gawai per jam mulai)</h2>
-            <SimpleBars data={app.hours.filter((h) => h.value > 0)} color="#333333" unit=" mnt" />
+            <SimpleBars data={app.hours.filter((h) => h.value > 0)} color="var(--chart-ink)" unit=" mnt" />
           </section>
         </>
       )}

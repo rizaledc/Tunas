@@ -60,7 +60,7 @@ export function MfaSetup() {
         <>
           <p className="text-sm">Pindai kode QR dengan Google Authenticator / Authy, lalu masukkan 6 digit kodenya.</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={enroll.qr} alt="Kode QR TOTP" className="h-48 w-48 rounded-xl bg-white p-2 ring-1 ring-gray-200" />
+          <img src={enroll.qr} alt="Kode QR TOTP" className="h-48 w-48 rounded-xl bg-paper p-2 ring-1 ring-gray-200" />
           <p className="font-mono text-xs break-all">Kunci manual: {enroll.secret}</p>
           <div className="flex gap-2">
             <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" maxLength={6} className="input w-40 text-center tracking-widest" placeholder="123456" />

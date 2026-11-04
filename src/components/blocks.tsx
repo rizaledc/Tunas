@@ -32,9 +32,9 @@ export function Stat({ label, value, hint, tone = "green", icon }: { label: stri
   const tones = {
     green: "bg-marun-50 text-marun-600",
     orange: "bg-emas-300/25 text-emas-500",
-    blue: "bg-black/[0.045] text-gelap-700",
+    blue: "bg-ink/[0.045] text-ink",
     red: "bg-aksen-500/10 text-aksen-600",
-    gray: "bg-black/[0.045] text-ink-soft",
+    gray: "bg-ink/[0.045] text-ink-soft",
   };
   return (
     <div className="card">
@@ -61,7 +61,7 @@ export function Tabs({ items, active }: { items: Array<{ href: string; label: st
           href={t.href}
           className={cn(
             "rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap",
-            t.key === active ? "bg-marun-600 text-white" : "bg-white text-ink-soft ring-1 ring-gray-200",
+            t.key === active ? "bg-marun-600 text-white" : "bg-paper text-ink-soft ring-1 ring-gray-200",
           )}
         >
           {t.label}

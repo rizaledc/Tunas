@@ -27,24 +27,24 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
   const upcoming = new Date(e.date) > new Date();
   return (
     <article>
-      <DarkMedia src={e.cover_photo} alt={e.title} priority className="text-white">
-        <div className="absolute inset-0 bg-gradient-to-t from-gelap-950 via-gelap-950/70 to-gelap-950/40" />
+      <DarkMedia src={e.cover_photo} alt={e.title} priority className="text-ink">
+        <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/70 to-surface/40" />
         <div className="relative mx-auto max-w-6xl px-4 pt-36 pb-16 md:pt-48">
-          <Link href="/kegiatan" className="eyebrow inline-flex items-center gap-2 text-white/60 hover:text-white">
+          <Link href="/kegiatan" className="eyebrow inline-flex items-center gap-2 text-ink/60 hover:text-ink">
             <Icon name="arrow-left" className="h-4 w-4" /> Semua kegiatan
           </Link>
           <Eyebrow className="mt-8">{upcoming ? "Agenda mendatang" : "Kegiatan"}</Eyebrow>
           <h1 className="display mt-5 max-w-4xl text-4xl md:text-6xl">{e.title}</h1>
           <div className="mt-8 flex flex-wrap gap-3 text-sm">
-            <span className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur">
-              <Icon name="calendar" className="h-4 w-4 text-aksen-400" /> {formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+            <span className="flex items-center gap-2 rounded-full border border-ink/20 bg-ink/5 px-4 py-2 backdrop-blur">
+              <Icon name="calendar" className="h-4 w-4 text-hl" /> {formatTanggal(e.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
             </span>
-            <span className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur">
-              <Icon name="clock" className="h-4 w-4 text-aksen-400" /> {formatTanggal(e.date, { hour: "2-digit", minute: "2-digit" })} WIB
+            <span className="flex items-center gap-2 rounded-full border border-ink/20 bg-ink/5 px-4 py-2 backdrop-blur">
+              <Icon name="clock" className="h-4 w-4 text-hl" /> {formatTanggal(e.date, { hour: "2-digit", minute: "2-digit" })} WIB
             </span>
             {e.location && (
-              <span className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur">
-                <Icon name="pin" className="h-4 w-4 text-aksen-400" /> {e.location}
+              <span className="flex items-center gap-2 rounded-full border border-ink/20 bg-ink/5 px-4 py-2 backdrop-blur">
+                <Icon name="pin" className="h-4 w-4 text-hl" /> {e.location}
               </span>
             )}
           </div>
@@ -57,8 +57,8 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
             <ShareButtons path={`/kegiatan/${e.slug}`} title={e.title} />
           </div>
           {upcoming && (
-            <aside className="h-fit rounded-3xl bg-gelap-950 p-7 text-white">
-              <p className="eyebrow text-aksen-400">Untuk anggota</p>
+            <aside className="h-fit rounded-3xl bg-surface p-7 text-ink">
+              <p className="eyebrow text-hl">Untuk anggota</p>
               <p className="mt-3 text-xl font-extrabold tracking-tight">Konfirmasi kehadiran lewat aplikasi.</p>
               <Link href="/app/kegiatan" className="btn-primary mt-6 w-full">
                 Konfirmasi Hadir <Icon name="arrow-right" className="h-5 w-5" />

@@ -46,7 +46,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
       </div>
 
       {openSurvey && (
-        <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-gelap-800 bg-black/[0.045]">
+        <Link href={`/app/evaluasi/${openSurvey.id}`} className="card flex items-center gap-3 border-2 border-ink/80 bg-ink/[0.045]">
           <Icon name="clipboard-check" className="h-9 w-9 text-marun-600" />
           <span>
             <span className="block font-extrabold">Isi kuesioner: {openSurvey.name}</span>
