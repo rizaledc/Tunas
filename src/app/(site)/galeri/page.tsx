@@ -12,9 +12,9 @@ export default async function GaleriPage() {
   return (
     <>
       <PageHero eyebrow="Dokumentasi" title="Galeri Kegiatan" text="Foto hanya ditampilkan jika orang tua sudah memberi izin publikasi." />
-      <div className="bg-gelap-950 text-white">
+      <div className="bg-surface text-ink">
         <div className="mx-auto max-w-6xl px-4 pt-4 pb-24">
-          {photos.length ? <GalleryGrid photos={photos} dark /> : <p className="rounded-3xl border border-white/10 p-12 text-center text-white/55">Belum ada foto yang dipublikasikan.</p>}
+          {photos.length ? <GalleryGrid photos={photos} dark /> : <p className="rounded-3xl border border-ink/10 p-12 text-center text-ink/65">Belum ada foto yang dipublikasikan.</p>}
         </div>
       </div>
     </>

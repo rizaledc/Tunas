@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Logo, type Brand } from "@/components/logo";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const MENU = [
   { href: "/", label: "Beranda" },
@@ -28,35 +29,41 @@ export function SiteHeader({ brand }: { brand?: Brand }) {
   const solid = scrolled || open;
 
   return (
-    <header className={cn("fixed inset-x-0 top-0 z-40 text-white transition-colors duration-300", solid ? "border-b border-white/10 bg-gelap-950/85 backdrop-blur-xl" : "bg-transparent")}>
+    <header className={cn("fixed inset-x-0 top-0 z-40 text-ink transition-colors duration-300", solid ? "border-b border-ink/10 bg-surface/85 backdrop-blur-xl" : "bg-surface/60 backdrop-blur-md dark:bg-transparent dark:backdrop-blur-none")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-5">
         <Link href="/" aria-label="SAHABAT ANAK, beranda">
-          <Logo light brand={brand} />
+          <Logo auto brand={brand} />
         </Link>
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Menu utama">
           {MENU.map((m) => {
             const active = m.href === "/" ? path === "/" : path.startsWith(m.href);
             return (
-              <Link key={m.href} href={m.href} className={cn("relative py-2 text-[12px] font-semibold tracking-[0.18em] uppercase transition hover:text-white", active ? "text-white" : "text-white/65")}>
+              <Link key={m.href} href={m.href} className={cn("relative py-2 text-[12px] font-semibold tracking-[0.18em] uppercase transition hover:text-ink", active ? "text-ink" : "text-ink/65")}>
                 {m.label}
-                {active && <span className="absolute inset-x-0 -bottom-0.5 mx-auto h-px w-5 bg-aksen-400" />}
+                {active && <span className="absolute inset-x-0 -bottom-0.5 mx-auto h-px w-5 bg-hl" />}
               </Link>
             );
           })}
         </nav>
-        <Link href="/login" className="hidden shrink-0 items-center gap-3 rounded-full border border-aksen-400/70 py-2.5 pr-3 pl-5 whitespace-nowrap text-[12px] font-semibold tracking-[0.18em] text-white uppercase transition hover:bg-aksen-500 hover:border-aksen-500 lg:inline-flex">
+        <div className="hidden items-center gap-3 lg:flex">
+        <ThemeToggle />
+        <Link href="/login" className="hidden shrink-0 items-center gap-3 rounded-full border border-hl/70 py-2.5 pr-3 pl-5 whitespace-nowrap text-[12px] font-semibold tracking-[0.18em] text-ink uppercase transition hover:border-aksen-500 hover:bg-aksen-500 hover:text-white lg:inline-flex">
           Masuk / Daftar <Icon name="arrow-right" className="h-4 w-4" />
         </Link>
-        <button className="rounded-full border border-white/20 p-2.5 lg:hidden" aria-expanded={open} aria-label={open ? "Tutup menu" : "Buka menu"} onClick={() => setOpen(!open)}>
+        </div>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+        <button className="rounded-full border border-ink/20 p-2.5" aria-expanded={open} aria-label={open ? "Tutup menu" : "Buka menu"} onClick={() => setOpen(!open)}>
           <Icon name={open ? "close" : "menu"} className="h-5 w-5" />
         </button>
+        </div>
       </div>
       {open && (
-        <nav className="border-t border-white/10 px-4 pt-2 pb-6 lg:hidden" aria-label="Menu utama seluler">
+        <nav className="border-t border-ink/10 px-4 pt-2 pb-6 lg:hidden" aria-label="Menu utama seluler">
           {MENU.map((m) => (
-            <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className="flex items-center justify-between border-b border-white/10 py-4 text-sm font-semibold tracking-[0.18em] uppercase">
+            <Link key={m.href} href={m.href} onClick={() => setOpen(false)} className="flex items-center justify-between border-b border-ink/10 py-4 text-sm font-semibold tracking-[0.18em] uppercase">
               {m.label}
-              <Icon name="chevron-right" className="h-4 w-4 text-white/40" />
+              <Icon name="chevron-right" className="h-4 w-4 text-ink/60" />
             </Link>
           ))}
           <Link href="/login" onClick={() => setOpen(false)} className="btn-primary mt-5 w-full">

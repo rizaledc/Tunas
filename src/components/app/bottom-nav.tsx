@@ -15,7 +15,7 @@ const ITEMS = [
 export function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)]" aria-label="Menu aplikasi">
+    <nav className="no-print fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-paper pb-[env(safe-area-inset-bottom)]" aria-label="Menu aplikasi">
       <ul className="mx-auto flex max-w-lg items-end justify-around px-2">
         {ITEMS.map((it) => {
           const active = it.href === "/app" ? path === "/app" : path.startsWith(it.href);

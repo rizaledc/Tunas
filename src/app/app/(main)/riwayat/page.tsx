@@ -80,7 +80,7 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                     const cat = cats.find((c) => c.id === l.category_id);
                     return (
                       <li key={l.id} className="card flex items-start gap-3 p-3">
-                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${l.type === "digital" ? "bg-black/[0.045] text-marun-600" : "bg-marun-50 text-marun-600"}`}>
+                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${l.type === "digital" ? "bg-ink/[0.045] text-marun-600" : "bg-marun-50 text-marun-600"}`}>
                           <CategoryIcon icon={cat?.icon} className="h-6 w-6" />
                         </span>
                         <div className="min-w-0 flex-1">

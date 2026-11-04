@@ -6,11 +6,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const brand = await getSetting("public.brand");
   return (
     <>
-      <a href="#konten" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">
+      <a href="#konten" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-paper focus:p-2">
         Lompat ke konten
       </a>
       <SiteHeader brand={brand} />
-      <main id="konten" className="bg-gelap-950">{children}</main>
+      <main id="konten" className="bg-surface">{children}</main>
       <SiteFooter />
     </>
   );

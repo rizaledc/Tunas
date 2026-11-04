@@ -145,10 +145,10 @@ export function CreateMemberForm() {
               <div className="space-y-2 rounded-xl border border-marun-200 bg-marun-50 p-4 text-sm">
                 <p className="font-extrabold text-marun-700">Sampaikan data masuk ini kepada {d.nama}:</p>
                 <p className="flex flex-wrap items-center gap-2">
-                  Nomor HP/email: <code className="rounded bg-white px-2 py-1 font-bold">{d.login}</code> <Copy text={d.login} />
+                  Nomor HP/email: <code className="rounded bg-paper px-2 py-1 font-bold">{d.login}</code> <Copy text={d.login} />
                 </p>
                 <p className="flex flex-wrap items-center gap-2">
-                  Password{d.manual ? "" : " sementara"}: <code className="rounded bg-white px-2 py-1 font-bold">{d.password}</code> <Copy text={d.password} />
+                  Password{d.manual ? "" : " sementara"}: <code className="rounded bg-paper px-2 py-1 font-bold">{d.password}</code> <Copy text={d.password} />
                 </p>
                 <p className="text-xs text-ink-soft">Password tidak ditampilkan lagi setelah halaman ini ditutup. Orang tua akan diminta menyetujui persetujuan data saat pertama masuk.</p>
                 <div className="flex flex-wrap gap-2">

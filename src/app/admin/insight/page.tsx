@@ -63,7 +63,7 @@ export default async function MonitoringAiPage() {
       )}
       <section className="card">
         <h2 className="font-extrabold">Analisis per hari</h2>
-        <TrendChart data={perDay} lines={[{ key: "analisis", name: "Analisis", color: "#940000" }, { key: "cadangan", name: "Cadangan rule-based", color: "#e60000" }]} />
+        <TrendChart data={perDay} lines={[{ key: "analisis", name: "Analisis", color: "var(--chart-brand)" }, { key: "cadangan", name: "Cadangan rule-based", color: "#e60000" }]} />
       </section>
       <section className="space-y-3">
         <h2 className="font-extrabold">Contoh output anonim (cek kualitas)</h2>

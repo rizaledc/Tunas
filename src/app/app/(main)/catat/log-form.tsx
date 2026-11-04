@@ -46,7 +46,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
   return (
     <div>
       {!edit && (
-        <div className="mb-4 grid grid-cols-2 gap-2 rounded-2xl bg-white p-1 ring-1 ring-gray-200" role="tablist">
+        <div className="mb-4 grid grid-cols-2 gap-2 rounded-2xl bg-paper p-1 ring-1 ring-gray-200" role="tablist">
           {(["digital", "positif"] as const).map((t) => (
             <button
               key={t}
@@ -56,7 +56,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
                 setTab(t);
                 setMode(t === "digital" ? "jam" : "durasi");
               }}
-              className={cn("rounded-xl py-3 font-extrabold", tab === t ? (t === "digital" ? "bg-gelap-800 text-white" : "bg-marun-600 text-white") : "text-ink-soft")}
+              className={cn("rounded-xl py-3 font-extrabold", tab === t ? (t === "digital" ? "bg-gelap-800 text-white dark:bg-[#3a3a3a]" : "bg-marun-600 text-white") : "text-ink-soft")}
             >
               <span className="inline-flex items-center gap-1.5"><Icon name={t === "digital" ? "device" : "leaf"} /> {t === "digital" ? "Aktivitas Digital" : "Aktivitas Positif"}</span>
             </button>
@@ -105,10 +105,10 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
 
         <div>
           <div className="mb-2 flex gap-2 text-sm">
-            <button type="button" onClick={() => setMode("jam")} className={cn("rounded-full px-3 py-1 font-bold", mode === "jam" ? "bg-ink text-white" : "bg-gray-100")}>
+            <button type="button" onClick={() => setMode("jam")} className={cn("rounded-full px-3 py-1 font-bold", mode === "jam" ? "bg-ink text-surface" : "bg-gray-100")}>
               Jam mulai–selesai
             </button>
-            <button type="button" onClick={() => setMode("durasi")} className={cn("rounded-full px-3 py-1 font-bold", mode === "durasi" ? "bg-ink text-white" : "bg-gray-100")}>
+            <button type="button" onClick={() => setMode("durasi")} className={cn("rounded-full px-3 py-1 font-bold", mode === "durasi" ? "bg-ink text-surface" : "bg-gray-100")}>
               Durasi saja
             </button>
           </div>
@@ -132,7 +132,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
               <p className="label">Berapa lama?</p>
               <div className="grid grid-cols-3 gap-2">
                 {[15, 30, 60].map((m) => (
-                  <button key={m} type="button" onClick={() => setDuration(m)} className={cn("rounded-xl border-2 py-3 text-lg font-extrabold", duration === m ? "border-marun-600 bg-marun-50 text-marun-700" : "border-gray-200 bg-white")}>
+                  <button key={m} type="button" onClick={() => setDuration(m)} className={cn("rounded-xl border-2 py-3 text-lg font-extrabold", duration === m ? "border-marun-600 bg-marun-50 text-marun-700" : "border-gray-200 bg-paper")}>
                     {m} mnt
                   </button>
                 ))}
@@ -171,7 +171,7 @@ export function LogForm({ childId, categories, dates, initialTab, edit }: { chil
           </label>
           <textarea id="note" name="note" rows={2} maxLength={500} defaultValue={edit?.note ?? ""} className="input" placeholder="Contoh: menggambar ikan lele bersama kakak" />
         </div>
-        <SubmitButton className={cn("btn w-full text-lg text-white", tab === "digital" ? "bg-gelap-800 hover:bg-gelap-900" : "bg-marun-600 hover:bg-marun-700")}>
+        <SubmitButton className={cn("btn w-full text-lg text-white", tab === "digital" ? "bg-gelap-800 hover:bg-gelap-900 dark:bg-[#3a3a3a] dark:hover:bg-[#474747]" : "bg-marun-600 hover:bg-marun-700")}>
           {edit ? "Simpan Perubahan" : "Simpan Catatan"}
         </SubmitButton>
       </ActionForm>

@@ -5,6 +5,7 @@ import "./globals.css";
 import { ServiceWorker } from "@/components/service-worker";
 import { getSetting } from "@/lib/settings";
 import { og } from "@/lib/seo";
+import { THEME_SCRIPT } from "@/lib/theme";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap", weight: ["400", "500", "600", "700", "800"] });
 
@@ -37,7 +38,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id" className={jakarta.variable}>
+    // suppressHydrationWarning: kelas "dark" dipasang skrip sebelum React berjalan.
+    <html lang="id" className={jakarta.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-dvh font-sans antialiased">
         {children}
         <ServiceWorker />

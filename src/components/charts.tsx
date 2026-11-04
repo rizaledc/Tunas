@@ -17,7 +17,7 @@ import {
   YAxis,
 } from "recharts";
 
-export const PALETTE = ["#940000", "#e8b54d", "#333333", "#e60000", "#808080", "#5c1a33", "#c94848", "#b8a07a"];
+export const PALETTE = ["var(--chart-brand)", "#e8b54d", "var(--chart-ink)", "#e60000", "#808080", "#5c1a33", "#c94848", "#b8a07a"];
 
 export function ScreenTimeChart({ data, target }: { data: Array<{ label: string; digital: number; positif: number }>; target: number }) {
   return (
@@ -29,8 +29,8 @@ export function ScreenTimeChart({ data, target }: { data: Array<{ label: string;
           <YAxis tick={{ fontSize: 12 }} />
           <Tooltip formatter={(v) => [`${v} menit`]} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar dataKey="digital" name="Screen time" fill="#333333" radius={[6, 6, 0, 0]} />
-          <Bar dataKey="positif" name="Aktivitas positif" fill="#940000" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="digital" name="Screen time" fill="var(--chart-ink)" radius={[6, 6, 0, 0]} />
+          <Bar dataKey="positif" name="Aktivitas positif" fill="var(--chart-brand)" radius={[6, 6, 0, 0]} />
           <ReferenceLine y={target} stroke="#e8b54d" strokeDasharray="6 4" strokeWidth={2} label={{ value: `Target ${target}`, fill: "#cf9327", fontSize: 12, position: "insideTopRight" }} />
         </ComposedChart>
       </ResponsiveContainer>
@@ -77,7 +77,7 @@ export function TrendChart({ data, lines }: { data: Array<Record<string, string 
   );
 }
 
-export function SimpleBars({ data, color = "#940000", unit = "" }: { data: Array<{ name: string; value: number }>; color?: string; unit?: string }) {
+export function SimpleBars({ data, color = "var(--chart-brand)", unit = "" }: { data: Array<{ name: string; value: number }>; color?: string; unit?: string }) {
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer>

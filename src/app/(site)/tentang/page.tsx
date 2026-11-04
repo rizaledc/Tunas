@@ -22,11 +22,11 @@ export default async function TentangPage() {
   const brand = s["public.brand"];
   return (
     <>
-      <section className="sa-dark-texture relative overflow-hidden text-white">
+      <section className="sa-texture relative overflow-hidden text-ink">
         <div className="mx-auto max-w-6xl px-4 pt-32 pb-20 md:pt-40">
           <Eyebrow>Tentang program</Eyebrow>
           <Headline as="h1" text={t.title} className="mt-5 text-4xl md:text-7xl" />
-          <div className="mt-8 max-w-2xl text-lg leading-relaxed text-white/70 [&_strong]:text-white" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.intro) }} />
+          <div className="mt-8 max-w-2xl text-lg leading-relaxed text-ink/70 [&_strong]:text-ink" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.intro) }} />
           <div className="mt-10 flex flex-wrap items-center gap-6">
             <ArrowLink href="/daftar">Daftar sekarang</ArrowLink>
             <ArrowLink href="/panduan">Panduan pemakaian</ArrowLink>
@@ -35,7 +35,7 @@ export default async function TentangPage() {
       </section>
 
       {t.image && (
-        <div className="bg-gelap-950 px-4 pb-4">
+        <div className="bg-surface px-4 pb-4">
           <div className="relative mx-auto aspect-[21/9] max-w-6xl overflow-hidden rounded-3xl">
             <Image src={t.image} alt={t.title} fill sizes="(min-width:1152px) 1152px, 100vw" className="object-cover" />
           </div>
@@ -43,20 +43,20 @@ export default async function TentangPage() {
       )}
 
       {t.show_logo && (
-        <section className="bg-gelap-950 text-white">
+        <section className="bg-surface text-ink">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 lg:grid-cols-[1fr_1.4fr]">
             <div className="relative flex justify-center">
               <div className="absolute inset-10 rounded-full bg-marun-600/40 blur-3xl" aria-hidden />
-              {brand.logo ? <LogoMark src={brand.logo} className="relative h-56 w-56" /> : <LogoMark tile={false} onDark className="relative h-64 w-64" />}
+              {brand.logo ? <LogoMark src={brand.logo} className="relative h-56 w-56" /> : <LogoMark auto className="relative h-64 w-64" />}
             </div>
             <div>
               <Eyebrow>Identitas</Eyebrow>
               <Headline text="Makna Logo" className="mt-5 text-4xl md:text-5xl" breakLine={false} />
-              <dl className="mt-10 grid gap-px overflow-hidden rounded-3xl bg-white/10 sm:grid-cols-2">
+              <dl className="mt-10 grid gap-px overflow-hidden rounded-3xl bg-ink/10 sm:grid-cols-2">
                 {MEANING.map((m) => (
-                  <div key={m.title} className="bg-gelap-950 p-6">
-                    <dt className="eyebrow text-emas-400">{m.title}</dt>
-                    <dd className="mt-3 text-sm leading-relaxed text-white/65">{m.text}</dd>
+                  <div key={m.title} className="bg-surface p-6">
+                    <dt className="eyebrow text-gold">{m.title}</dt>
+                    <dd className="mt-3 text-sm leading-relaxed text-ink/65">{m.text}</dd>
                   </div>
                 ))}
               </dl>
@@ -67,7 +67,7 @@ export default async function TentangPage() {
 
       <section className="bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20">
-          <div className="prose-sa prose-tentang rounded-3xl bg-white p-8 text-lg md:p-14" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.body) }} />
+          <div className="prose-sa prose-tentang rounded-3xl bg-paper p-8 text-lg md:p-14" dangerouslySetInnerHTML={{ __html: renderMarkdown(t.body) }} />
         </div>
       </section>
     </>

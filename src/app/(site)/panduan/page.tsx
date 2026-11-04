@@ -15,19 +15,19 @@ export default async function PanduanPage() {
       <PageHero eyebrow="Panduan" title="Panduan Pemakaian" text="Langkah demi langkah memakai SAHABAT ANAK, dari mendaftar sampai membaca insight mingguan." />
       <div className="bg-surface">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1.7fr_1fr]">
-          <div className="prose-sa rounded-3xl bg-white p-8 text-lg md:p-10" dangerouslySetInnerHTML={{ __html: renderMarkdown(p.body) }} />
-          <aside className="h-fit rounded-3xl bg-gelap-950 p-7 text-white lg:sticky lg:top-28">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-emas-400">
+          <div className="prose-sa rounded-3xl bg-paper p-8 text-lg md:p-10" dangerouslySetInnerHTML={{ __html: renderMarkdown(p.body) }} />
+          <aside className="h-fit rounded-3xl bg-surface p-7 text-ink lg:sticky lg:top-28">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-gold">
               <Icon name="book" className="h-6 w-6" />
             </span>
             <p className="mt-5 text-xl font-extrabold tracking-tight">{p.module_name}</p>
-            <p className="mt-2 text-sm text-white/60">Modul pendamping program untuk dibaca dan dicetak.</p>
+            <p className="mt-2 text-sm text-ink/60">Modul pendamping program untuk dibaca dan dicetak.</p>
             {p.module_url ? (
               <a href={p.module_url} className="btn-primary mt-6 w-full" download target="_blank" rel="noopener noreferrer">
                 <Icon name="download" className="h-5 w-5" /> Unduh PDF
               </a>
             ) : (
-              <p className="eyebrow mt-6 text-white/40">Modul segera tersedia</p>
+              <p className="eyebrow mt-6 text-ink/60">Modul segera tersedia</p>
             )}
           </aside>
         </div>

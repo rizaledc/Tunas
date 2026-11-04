@@ -25,7 +25,7 @@ export function ChildLogForm({ categories }: { categories: Cat[] }) {
                   key={c.id}
                   onClick={() => setCat(c.id)}
                   aria-pressed={cat === c.id}
-                  className={cn("flex flex-col items-center gap-1 rounded-3xl border-4 bg-white p-4 shadow-sm transition", cat === c.id ? "scale-105 border-aksen-500" : "border-transparent")}
+                  className={cn("flex flex-col items-center gap-1 rounded-3xl border-4 bg-paper p-4 shadow-sm transition", cat === c.id ? "scale-105 border-aksen-500" : "border-transparent")}
                 >
                   <CategoryIcon icon={c.icon} className="h-12 w-12 text-aksen-500" />
                   <span className="text-center text-base leading-tight font-extrabold [overflow-wrap:anywhere]">{c.name.replace("/", "/\u200b")}</span>
@@ -46,7 +46,7 @@ export function ChildLogForm({ categories }: { categories: Cat[] }) {
                   key={m}
                   onClick={() => setDur(Number(m))}
                   aria-pressed={dur === m}
-                  className={cn("flex flex-col items-center rounded-3xl border-4 bg-white p-3 font-extrabold", dur === m ? "border-marun-500" : "border-transparent")}
+                  className={cn("flex flex-col items-center rounded-3xl border-4 bg-paper p-3 font-extrabold", dur === m ? "border-marun-500" : "border-transparent")}
                 >
                   <Icon name={icon} className="h-10 w-10 text-marun-600" />
                   {label}
@@ -72,7 +72,7 @@ export function EnterForm({ kids }: { kids: Array<{ id: string; nickname: string
       <input type="hidden" name="child_id" value={id} />
       <div className="grid grid-cols-2 gap-3">
         {kids.map((k) => (
-          <button type="button" key={k.id} disabled={!k.hasPin} onClick={() => setId(k.id)} className={cn("rounded-3xl border-4 bg-white p-4 text-xl font-extrabold disabled:opacity-40", id === k.id ? "border-aksen-500" : "border-transparent")}>
+          <button type="button" key={k.id} disabled={!k.hasPin} onClick={() => setId(k.id)} className={cn("rounded-3xl border-4 bg-paper p-4 text-xl font-extrabold disabled:opacity-40", id === k.id ? "border-aksen-500" : "border-transparent")}>
             <Icon name="child" className="mx-auto mb-1 block h-8 w-8 text-marun-600" />
             {k.nickname}
             {!k.hasPin && <span className="block text-xs font-semibold">PIN belum diatur</span>}

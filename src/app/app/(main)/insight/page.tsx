@@ -52,7 +52,7 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
       <ActionForm action={runInsight} className="card space-y-2 bg-gradient-to-br from-marun-50 to-marun-50">
         <input type="hidden" name="child_id" value={child.id} />
         <p className="text-ink-soft">Sistem menghitung angka dari catatan Anda, lalu AI menuliskannya menjadi saran. Nama anak tidak dikirim ke AI.</p>
-        <div className="flex items-center gap-3 rounded-2xl border border-emas-400/40 bg-white p-3">
+        <div className="flex items-center gap-3 rounded-2xl border border-emas-400/40 bg-paper p-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emas-300/40 text-[#8a5a0b]">
             <Icon name="coin" className="h-6 w-6" />
           </span>
