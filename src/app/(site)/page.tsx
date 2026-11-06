@@ -10,6 +10,7 @@ import { GalleryGrid } from "@/components/site/gallery";
 import { PhoneMockup } from "@/components/site/phone-mockup";
 import { ArrowLink, DarkMedia, Eyebrow, Headline, splitHighlight } from "@/components/site/parts";
 import { ArticleCard } from "@/components/site/article-card";
+import { EventPhotos } from "@/components/site/event-photos";
 
 export const revalidate = 300;
 
@@ -31,6 +32,7 @@ export default async function LandingPage() {
   const features = L.features.filter((f) => f.title);
   const [heroA, heroB] = splitHighlight(hero.title);
   const heroLines = heroA ? [heroA] : [];
+  const eventPhotos = (L.events_photos ?? []).filter((p) => p.url);
   const marquee = [brand.tagline, ...features.map((f) => f.title)].filter(Boolean);
 
   return (
@@ -153,12 +155,17 @@ export default async function LandingPage() {
 
             <div className="mt-12 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
               <div className="grid gap-6 sm:grid-cols-2">
-                {featured.length === 0 && (
-                  <div className="sa-texture flex aspect-[4/5] flex-col justify-end rounded-3xl border border-ink/10 p-7 sm:col-span-2 sm:aspect-[16/9]">
-                    <p className="eyebrow text-hl">Segera hadir</p>
-                    <p className="display mt-3 text-3xl">Kegiatan unggulan akan tampil di sini</p>
-                  </div>
-                )}
+                {featured.length === 0 &&
+                  (eventPhotos.length ? (
+                    <div className="sm:col-span-2">
+                      <EventPhotos photos={eventPhotos} compact />
+                    </div>
+                  ) : (
+                    <div className="sa-texture flex aspect-[4/5] flex-col justify-end rounded-3xl border border-ink/10 p-7 sm:col-span-2 sm:aspect-[16/9]">
+                      <p className="eyebrow text-hl">Segera hadir</p>
+                      <p className="display mt-3 text-3xl">Kegiatan unggulan akan tampil di sini</p>
+                    </div>
+                  ))}
                 {featured.slice(0, 2).map((e, i) => (
                   <Link key={e.id} href={`/kegiatan/${e.slug}`} className={`theme-dark group relative block overflow-hidden rounded-3xl border border-ink/10 ${featured.length === 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/5]"} ${i === 1 ? "sm:mt-12" : ""}`}>
                     <DarkMedia src={e.cover_photo} alt={e.title} sizes="(min-width:1024px) 30vw, 100vw" className="absolute inset-0 transition duration-700 group-hover:scale-105">
@@ -205,6 +212,11 @@ export default async function LandingPage() {
                 )}
               </div>
             </div>
+            {featured.length > 0 && eventPhotos.length > 0 && (
+              <div className="mt-6">
+                <EventPhotos photos={eventPhotos} />
+              </div>
+            )}
           </div>
         </section>
       )}

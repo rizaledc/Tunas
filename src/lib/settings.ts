@@ -71,6 +71,12 @@ export const DEFAULT_SETTINGS = {
     stats_text: "Diukur pada peserta sebelum dan sesudah mengikuti program. Skor memakai skala 1 sampai 5, semakin tinggi semakin baik.",
     events_title: "Kegiatan Pendampingan",
     agenda_title: "Agenda Mendatang",
+    // Foto dokumentasi di bagian Kegiatan Pendampingan (wajah sudah diburamkan demi privasi).
+    events_photos: [
+      { url: "/images/kegiatan/sosialisasi-aplikasi.jpg", caption: "Sosialisasi aplikasi bersama orang tua dan anak" },
+      { url: "/images/kegiatan/diskusi-orang-tua.jpg", caption: "Diskusi orang tua tentang pendampingan digital" },
+      { url: "/images/kegiatan/apresiasi-peserta.jpg", caption: "Apresiasi untuk peserta anak" },
+    ],
     features_title: "Fitur Aplikasi",
     features_text: "Dirancang untuk semua perangkat, dari HP, tablet, hingga laptop. Tombol besar, bahasa sederhana. Bukan aplikasi pemblokir, semua dicatat oleh Ayah dan Bunda.",
     features: [
