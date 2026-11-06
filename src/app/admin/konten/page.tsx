@@ -311,6 +311,24 @@ function LandingEditor({ L }: { L: (typeof DEFAULT_SETTINGS)["public.landing"] }
         <Field name="events_title" label="Judul bagian kegiatan" v={L.events_title} />
         <Field name="agenda_title" label="Judul agenda" v={L.agenda_title} />
       </section>
+      <section className="card space-y-3">
+        <h2 className="font-extrabold">Foto dokumentasi kegiatan pendampingan</h2>
+        <p className="text-sm text-ink-soft">
+          Tampil di bagian Kegiatan Pendampingan di beranda (maks. 3 foto). <strong>Pastikan wajah peserta sudah diburamkan</strong> atau ada izin publikasi. Hapus foto untuk menyembunyikannya.
+        </p>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[0, 1, 2].map((i) => {
+            const p = (L.events_photos ?? [])[i];
+            return (
+              <div key={i} className="space-y-2 rounded-xl border border-gray-200 p-3">
+                <p className="text-sm font-bold">Foto {i + 1}</p>
+                <SingleUpload name={`ep_url_${i}`} defaultValue={p?.url ?? ""} folder="beranda" label="Unggah foto" />
+                <input name={`ep_caption_${i}`} defaultValue={p?.caption ?? ""} maxLength={120} placeholder="Keterangan singkat" className="input py-2 text-sm" />
+              </div>
+            );
+          })}
+        </div>
+      </section>
       <section className="card grid gap-3 md:grid-cols-3">
         <h2 className="font-extrabold md:col-span-3">Angka capaian (judul bagian)</h2>
         <Field name="stats_eyebrow" label="Label kecil" v={L.stats_eyebrow} />

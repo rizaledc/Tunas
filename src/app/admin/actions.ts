@@ -676,6 +676,7 @@ export async function saveLanding(_: ActionState, fd: FormData): Promise<ActionS
     stats_text: t("stats_text", 240),
     events_title: t("events_title", 80),
     agenda_title: t("agenda_title", 80),
+    events_photos: list(3, (i) => ({ url: t(`ep_url_${i}`, 500), caption: t(`ep_caption_${i}`, 120) })).filter((p) => p.url),
     features_title: t("features_title", 80),
     features_text: t("features_text"),
     features: list(6, (i) => ({ icon: t(`f_icon_${i}`, 30) || "star", title: t(`f_title_${i}`, 60), text: t(`f_text_${i}`, 200) })),
