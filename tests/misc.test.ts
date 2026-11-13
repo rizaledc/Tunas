@@ -94,3 +94,20 @@ describe("koin AI & angka capaian", () => {
     expect(parseStat("")).toBeNull();
   });
 });
+
+describe("streak", () => {
+  it("menghitung hari berturut-turut seperti Duolingo", async () => {
+    const { computeStreak } = await import("../src/lib/streak");
+    const t = "2026-11-20";
+    const s = computeStreak(["2026-11-18", "2026-11-19", "2026-11-20", "2026-11-15"], t);
+    expect(s.current).toBe(3);
+    expect(s.doneToday).toBe(true);
+    // belum lapor hari ini: streak kemarin masih hidup tapi berisiko
+    const r = computeStreak(["2026-11-18", "2026-11-19"], t);
+    expect(r.current).toBe(2);
+    expect(r.atRisk).toBe(true);
+    // ada hari terlewat: putus
+    expect(computeStreak(["2026-11-17", "2026-11-18"], t).current).toBe(0);
+    expect(computeStreak(["2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04"], t).best).toBe(4);
+  });
+});

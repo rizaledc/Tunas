@@ -2,7 +2,8 @@ import { Icon } from "@/components/icons";
 import Link from "next/link";
 import { LeanMeter } from "@/components/app/lean-meter";
 import { requireParent } from "@/lib/auth";
-import { getActiveChild, getAgreement } from "@/lib/parent";
+import { getActiveChild, getAgreement, getFamilyStreak } from "@/lib/parent";
+import { StreakCard } from "@/components/app/streak";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, formatHari, formatMenit, formatTanggal, isoDaysAgo, todayStr } from "@/lib/date";
 import type { InsightOutput } from "@/lib/indicators";
@@ -20,6 +21,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   const today = todayStr();
   const supabase = await createClient();
+  const streak = await getFamilyStreak(parent.familyId);
   const [agreement, { data: logs }, { data: checkin }, { data: insight }, { data: event }, { data: pending }, { data: surveys }, { data: answered }] = await Promise.all([
     getAgreement(child.id),
     supabase.from("activity_logs").select("type,duration_min").eq("child_id", child.id).eq("log_date", today),
@@ -69,6 +71,8 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
           </Link>
         </div>
       )}
+
+      <StreakCard s={streak} />
 
       <Link href="/app/catat" className="card block">
         <div className="flex items-baseline justify-between gap-2">

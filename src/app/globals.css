@@ -240,3 +240,24 @@ body {
     background: white;
   }
 }
+
+/* Api streak berkedip lembut */
+@keyframes sa-flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.08) rotate(-3deg);
+  }
+}
+@keyframes sa-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

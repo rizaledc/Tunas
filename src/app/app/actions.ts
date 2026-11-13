@@ -16,7 +16,8 @@ import { scoreSurvey, type Question } from "@/lib/survey";
 import { bool, int, phoneToAuthEmail, SCHOOL_LEVEL_KEYS, str } from "@/lib/utils";
 import { emailError, normalizeEmail, normalizePhone, phoneError, validatePassword } from "@/lib/validation";
 import { emailTaken, phoneTaken, validateName, validateRt, loginMethods } from "@/lib/accounts";
-import { getChildren } from "@/lib/parent";
+import { getChildren, getFamilyStreak } from "@/lib/parent";
+import { MILESTONES } from "@/lib/streak";
 import type { ActionState } from "@/components/ui";
 
 async function assertChild(childId: string) {
@@ -151,8 +152,11 @@ export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState
     with_whom: type === "positif" ? str(fd, "with_whom") || null : null,
     note: str(fd, "note").slice(0, 500) || null,
   };
+  const p = id ? null : await requireParent();
+  const before = p ? await getFamilyStreak(p.familyId) : null;
   const { error } = id ? await supabase.from("activity_logs").update(row).eq("id", id).eq("child_id", childId) : await supabase.from("activity_logs").insert(row);
   if (error) return { error: "Gagal menyimpan catatan." };
+  const after = p ? await getFamilyStreak(p.familyId) : null;
 
   // Logbook lele harian (Instrumen I) saat kegiatan "Merawat lele".
   let leleSaved = false;
@@ -171,6 +175,7 @@ export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState
   const kind = type === "digital" ? "aktivitas digital" : type === "positif" ? "aktivitas positif" : "rutinitas";
   return {
     ok: true,
+    data: after && before && !before.doneToday ? { streak: after.current, best: after.best, milestone: (MILESTONES as readonly number[]).includes(after.current) } : undefined,
     message: `Tersimpan: ${formatMenit(duration)} ${kind}${leleSaved ? " + logbook lele" : ""}. ${left > 0 ? `Sisa ${formatMenit(left)} lagi agar 24 jam tercatat penuh.` : "24 jam hari ini sudah tercatat penuh."}`,
   };
 }
