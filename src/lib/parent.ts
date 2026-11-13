@@ -31,3 +31,19 @@ export async function getAgreement(childId: string) {
   const { data } = await supabase.from("agreements").select("*").eq("child_id", childId).maybeSingle();
   return data as { id: string; target_screen_min: number; no_device_hours: string | null; notes: string | null; updated_at: string } | null;
 }
+
+/**
+ * Streak keluarga: hari (WIB) saat orang tua/anak melapor aktivitas untuk anak mana pun.
+ * Dihitung dari waktu laporan dibuat (bukan tanggal catatan) agar mengisi hari lalu tidak "menambal" streak.
+ */
+export async function getFamilyStreak(familyId: string) {
+  const { computeStreak } = await import("./streak");
+  const { toDateStr, todayStr } = await import("./date");
+  const kids = await getChildren(familyId);
+  const today = todayStr();
+  if (!kids.length) return computeStreak([], today);
+  const supabase = await createClient();
+  const since = new Date(Date.now() - 400 * 86_400_000).toISOString();
+  const { data } = await supabase.from("activity_logs").select("created_at").in("child_id", kids.map((k) => k.id)).gte("created_at", since).limit(20000);
+  return computeStreak((data ?? []).map((r) => toDateStr(new Date(r.created_at as string))), today);
+}
