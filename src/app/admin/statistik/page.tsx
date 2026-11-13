@@ -2,9 +2,9 @@ import { Icon } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { filterChildren, groupStats, loadBase, type GroupStats } from "@/lib/stats";
 import { addDays, todayStr } from "@/lib/date";
-import { MIN_GROUP_FAMILIES } from "@/lib/privacy";
-import { LEVEL_GROUPS } from "@/lib/utils";
+import { levelKeysInData, schoolLevelLabel } from "@/lib/utils";
 import { PageTitle, Stat } from "@/components/blocks";
+import { LeanMeter, leanOf } from "@/components/app/lean-meter";
 import { Donut, SimpleBars } from "@/components/charts";
 
 export const metadata = { title: "Statistik" };
@@ -12,9 +12,9 @@ export const metadata = { title: "Statistik" };
 function Hidden() {
   return (
     <div className="card bg-gray-50 text-center">
-      <Icon name="lock" className="mx-auto h-10 w-10 text-ink-soft" />
-      <p className="font-bold">Data disembunyikan</p>
-      <p className="text-sm text-ink-soft">Kelompok ini berisi kurang dari {MIN_GROUP_FAMILIES} keluarga yang mencatat, sehingga angka tidak ditampilkan agar keluarga tidak bisa ditebak.</p>
+      <Icon name="note" className="mx-auto h-10 w-10 text-ink-soft" />
+      <p className="font-bold">Belum ada catatan</p>
+      <p className="text-sm text-ink-soft">Belum ada keluarga yang mencatat pada periode dan filter ini.</p>
     </div>
   );
 }
@@ -24,8 +24,8 @@ function Row({ label, g }: { label: string; g: GroupStats }) {
     <tr>
       <td className="font-bold">{label}</td>
       {g.suppressed ? (
-        <td colSpan={5} className="text-ink-soft">
-          <span className="inline-flex items-center gap-1"><Icon name="lock" className="h-4 w-4" /> &lt; {MIN_GROUP_FAMILIES} keluarga</span>
+        <td colSpan={6} className="text-ink-soft">
+          belum ada catatan
         </td>
       ) : (
         <>
@@ -34,6 +34,7 @@ function Row({ label, g }: { label: string; g: GroupStats }) {
           <td>{g.avgTarget ?? "-"} mnt</td>
           <td>{g.avgPositive} mnt</td>
           <td>{g.compliancePct}%</td>
+          <td className="whitespace-nowrap">{leanOf(g.avgScreen, g.avgPositive).label.replace("Lebih condong ke ", "")}</td>
         </>
       )}
     </tr>
@@ -50,10 +51,11 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
   const app = groupStats(base, ids, { source: "app" });
   const baseline = groupStats(base, ids, { source: "logbook_import" });
   const rts = [...new Set(base.families.map((f) => f.rt).filter(Boolean))].sort() as string[];
+  const levels = levelKeysInData(base.children.map((c) => c.school_level));
 
   return (
     <div className="space-y-6">
-      <PageTitle title="Statistik Agregat" subtitle={`Kelompok hanya ditampilkan jika berisi minimal ${MIN_GROUP_FAMILIES} keluarga.`} />
+      <PageTitle title="Statistik Agregat" subtitle="Seluruh data keluarga yang mencatat dianalisis, tanpa ada kelompok yang disembunyikan." />
       <form className="card grid grid-cols-2 gap-3 md:grid-cols-5">
         <label>
           <span className="label">Dari</span>
@@ -67,9 +69,9 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
           <span className="label">Jenjang</span>
           <select name="jenjang" defaultValue={sp.jenjang ?? ""} className="input">
             <option value="">Semua</option>
-            {Object.entries(LEVEL_GROUPS).map(([k, v]) => (
+            {levels.map((k) => (
               <option key={k} value={k}>
-                {v.label}
+                {schoolLevelLabel(k)}
               </option>
             ))}
           </select>
@@ -100,6 +102,7 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
             <Stat icon="family" label="Didampingi" value={`${app.accompaniedPct}%`} hint="menit gawai didampingi" />
             <Stat icon="home" label="Keluarga dalam filter" value={app.families} hint={`${app.children} anak · ${app.childDays} hari-anak`} tone="gray" />
           </div>
+          <LeanMeter digital={app.avgScreen} positif={app.avgPositive} period="anak dalam filter (rata-rata per hari)" />
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="card">
               <h2 className="font-extrabold">Komposisi tujuan gawai</h2>
@@ -121,8 +124,8 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
         <h2 className="font-extrabold">Sebelum vs sesudah (baseline logbook kertas vs aplikasi)</h2>
         {baseline.childDays === 0 ? (
           <p className="text-ink-soft">Belum ada data logbook kertas yang diimpor untuk periode/filter ini.</p>
-        ) : baseline.suppressed || app.suppressed ? (
-          <p className="flex items-center gap-1 text-ink-soft"><Icon name="lock" className="h-4 w-4" /> Salah satu kelompok berisi kurang dari {MIN_GROUP_FAMILIES} keluarga.</p>
+        ) : app.suppressed ? (
+          <p className="text-ink-soft">Belum ada catatan aplikasi untuk dibandingkan pada periode/filter ini.</p>
         ) : (
           <table className="tbl mt-2">
             <thead>
@@ -164,11 +167,12 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
               <th>Target</th>
               <th>Positif</th>
               <th>Patuh</th>
+              <th>Kecenderungan</th>
             </tr>
           </thead>
           <tbody>
-            {Object.entries(LEVEL_GROUPS).map(([k, v]) => (
-              <Row key={k} label={`Jenjang ${v.label}`} g={groupStats(base, filterChildren(base, { level: k, rt: sp.rt }), { source: "app" })} />
+            {levels.map((k) => (
+              <Row key={k} label={schoolLevelLabel(k)} g={groupStats(base, filterChildren(base, { level: k, rt: sp.rt }), { source: "app" })} />
             ))}
             {rts.map((r) => (
               <Row key={r} label={`RT ${r}`} g={groupStats(base, filterChildren(base, { rt: r, level: sp.jenjang }), { source: "app" })} />

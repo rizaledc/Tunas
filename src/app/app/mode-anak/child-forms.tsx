@@ -2,6 +2,7 @@
 import { Icon, CategoryIcon, type IconName } from "@/components/icons";
 import { useState } from "react";
 import { ActionForm, SubmitButton } from "@/components/ui";
+import { HiddenUsername } from "@/components/fields";
 import { cn } from "@/lib/utils";
 import { childLog, enterChildMode, exitChildMode } from "../actions";
 
@@ -92,6 +93,7 @@ export function ExitForm() {
     <details className="rounded-2xl bg-white/70 p-3">
       <summary className="cursor-pointer text-center text-sm font-bold text-ink-soft"><span className="inline-flex items-center gap-1"><Icon name="lock" className="h-4 w-4" /> Keluar mode anak (untuk orang tua)</span></summary>
       <ActionForm action={exitChildMode} className="mt-3 space-y-2">
+        <HiddenUsername />
         <input name="password" type="password" required placeholder="Password orang tua" className="input" autoComplete="current-password" />
         <SubmitButton className="btn-outline w-full">Keluar</SubmitButton>
       </ActionForm>

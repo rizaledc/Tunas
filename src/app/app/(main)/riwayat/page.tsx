@@ -81,7 +81,7 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                 <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3">
                   <h2 className="font-extrabold">{formatHari(date)}</h2>
                   <p className="text-xs text-ink-soft">
-                    <Icon name="device" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(dig)} · <Icon name="leaf" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(pos)} · <Icon name="sleep" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(rut)}
+                    <Icon name="device" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(dig)} · <Icon name="leaf" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(pos)} · <Icon name="school" className="h-3.5 w-3.5 align-[-2px]" /> {formatMenit(rut)}
                   </p>
                 </div>
                 <div className="mb-2 flex items-center gap-2">

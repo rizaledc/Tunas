@@ -122,7 +122,7 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
     <div className="space-y-4">
       {(["digital", "positif", "rutin"] as const).map((type) => (
         <section key={type} className="card overflow-x-auto">
-          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : type === "rutin" ? "sleep" : "leaf"} className="text-hijau-600" /> {type === "digital" ? "Tujuan gawai (digital)" : type === "rutin" ? "Rutinitas (tidur, sekolah, dll.)" : "Aktivitas positif"}</span></h2>
+          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : type === "rutin" ? "school" : "leaf"} className="text-hijau-600" /> {type === "digital" ? "Tujuan gawai (digital)" : type === "rutin" ? "Rutinitas (sekolah, makan & mandi, dll.)" : "Aktivitas positif"}</span></h2>
           <p className="mb-2 text-xs text-ink-soft">Kategori bernama &quot;Lainnya&quot; otomatis meminta orang tua menuliskan nama kegiatannya. Kategori dengan ikon ikan / nama berisi &quot;lele&quot; memunculkan logbook lele harian.</p>
           <table className="tbl">
             <thead>
@@ -279,6 +279,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
         <ActionForm action={saveOpenRouterKey} resetOnSuccess className="space-y-2">
           <label className="block">
             <span className="label">{source === "panel" ? "Ganti API key" : "API key OpenRouter"}</span>
+            <input type="text" name="username" autoComplete="username" value="openrouter" readOnly hidden aria-hidden tabIndex={-1} />
             <input name="api_key" type="password" autoComplete="off" spellCheck={false} placeholder="sk-or-v1-…" className="input font-mono" />
           </label>
           <ol className="list-decimal space-y-0.5 pl-5 text-xs text-ink-soft">

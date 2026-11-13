@@ -229,3 +229,11 @@ export function EmailField({ name = "email", id, label = "Email", required = tru
     </div>
   );
 }
+
+/**
+ * Kolom username tersembunyi untuk formulir yang hanya berisi password
+ * (dibutuhkan pengelola password & aksesibilitas browser).
+ */
+export function HiddenUsername({ value }: { value?: string | null }) {
+  return <input type="text" name="username" autoComplete="username" value={value ?? ""} readOnly hidden aria-hidden tabIndex={-1} />;
+}

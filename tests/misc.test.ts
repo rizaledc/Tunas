@@ -25,10 +25,12 @@ describe("SUS", () => {
 });
 
 describe("privasi statistik", () => {
-  it("menyembunyikan kelompok < 5 keluarga", () => {
-    expect(canShowGroup(4)).toBe(false);
-    expect(canShowGroup(5)).toBe(true);
-    expect(suppress(3, 10)).toBeNull();
+  it("menampilkan seluruh kelompok yang punya data, sekecil apa pun", () => {
+    expect(canShowGroup(1)).toBe(true);
+    expect(canShowGroup(4)).toBe(true);
+    expect(canShowGroup(0)).toBe(false);
+    expect(suppress(1, 10)).toBe(10);
+    expect(suppress(0, 10)).toBeNull();
   });
 });
 

@@ -4,9 +4,8 @@ import autoTable from "jspdf-autotable";
 import { createAdminClient } from "./supabase/admin";
 import { groupStats, loadBase, filterChildren } from "./stats";
 import { addDays, dateRange, formatTanggal } from "./date";
-import { MIN_GROUP_FAMILIES } from "./privacy";
 import { sha256 } from "./crypto";
-import { LEVEL_GROUPS, schoolLevelLabel } from "./utils";
+import { levelKeysInData, schoolLevelLabel } from "./utils";
 import { label as leleLabel } from "./lele";
 import type { Sheet } from "./excel";
 
@@ -24,7 +23,7 @@ export async function monthlyReport(month: string): Promise<Report> {
   const base = await loadBase(from, to);
   const all = filterChildren(base, {});
   const g = groupStats(base, all, { source: "app" });
-  const hide = (v: string | number) => (g.suppressed ? `disembunyikan (<${MIN_GROUP_FAMILIES} keluarga)` : v);
+  const hide = (v: string | number) => (g.suppressed ? "belum ada data" : v);
   const db = createAdminClient();
   const [{ count: insights }, { count: newFamilies }] = await Promise.all([
     db.from("ai_insights").select("id", { count: "exact", head: true }).gte("created_at", `${from}T00:00:00+07:00`).lte("created_at", `${to}T23:59:59+07:00`),
@@ -55,14 +54,15 @@ export async function monthlyReport(month: string): Promise<Report> {
     weeks.push({
       minggu: `${formatTanggal(w, { day: "numeric", month: "short" })} – ${formatTanggal(end, { day: "numeric", month: "short" })}`,
       keluarga_mencatat: new Set([...ids].map((id) => base.children.find((c) => c.id === id)?.family_id)).size,
-      screen_time_mnt: gw.suppressed ? "disembunyikan" : gw.avgScreen,
-      positif_mnt: gw.suppressed ? "disembunyikan" : gw.avgPositive,
-      patuh_persen: gw.suppressed ? "disembunyikan" : gw.compliancePct,
+      screen_time_mnt: gw.suppressed ? "belum ada data" : gw.avgScreen,
+      positif_mnt: gw.suppressed ? "belum ada data" : gw.avgPositive,
+      patuh_persen: gw.suppressed ? "belum ada data" : gw.compliancePct,
     });
   }
-  const levels = Object.entries(LEVEL_GROUPS).map(([k, { label: v }]) => {
+  const levels = levelKeysInData(base.children.map((c) => c.school_level)).map((k) => {
+    const v = schoolLevelLabel(k);
     const gl = groupStats(base, filterChildren(base, { level: k }), { source: "app" });
-    return { jenjang: v, keluarga: gl.families, screen_time_mnt: gl.suppressed ? "disembunyikan" : gl.avgScreen, positif_mnt: gl.suppressed ? "disembunyikan" : gl.avgPositive, patuh_persen: gl.suppressed ? "disembunyikan" : gl.compliancePct };
+    return { jenjang: v, keluarga: gl.families, screen_time_mnt: gl.suppressed ? "belum ada data" : gl.avgScreen, positif_mnt: gl.suppressed ? "belum ada data" : gl.avgPositive, patuh_persen: gl.suppressed ? "belum ada data" : gl.compliancePct };
   });
   const purposes = g.suppressed ? [] : g.purposes.map((p) => ({ tujuan_gawai: p.name, total_menit: p.value }));
   const positives = g.suppressed ? [] : g.positives.map((p) => ({ aktivitas_positif: p.name, total_menit: p.value }));

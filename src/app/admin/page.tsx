@@ -10,7 +10,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   await requireAdmin();
   const { akses } = await searchParams;
   const k = await dashboardKpis();
-  const hidden = `Disembunyikan (< ${k.minFamilies} keluarga)`;
+  const hidden = "Belum ada catatan 7 hari terakhir";
   return (
     <div className="space-y-6">
       <PageTitle title="Dashboard" subtitle="Angka gabungan komunitas, tanpa data per keluarga." />
@@ -26,7 +26,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
       </div>
       <section className="card">
         <h2 className="font-extrabold">Tren 8 minggu</h2>
-        <p className="text-sm text-ink-soft">Rata-rata menit per anak-hari; minggu dengan kurang dari {k.minFamilies} keluarga ditampilkan 0.</p>
+        <p className="text-sm text-ink-soft">Rata-rata menit per anak-hari dari seluruh keluarga yang mencatat.</p>
         <TrendChart
           data={k.trend}
           lines={[

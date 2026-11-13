@@ -5,6 +5,7 @@ import { addDays, dateRange, formatMenit, formatTanggal, startOfWeek, todayStr }
 import { composition, dailyTotals, sumBy, type LogRow } from "@/lib/indicators";
 import { PageTitle, Tabs } from "@/components/blocks";
 import { Donut, ScreenTimeChart } from "@/components/charts";
+import { LeanMeter } from "@/components/app/lean-meter";
 import { cn } from "@/lib/utils";
 import { NoChild } from "../no-child";
 
@@ -71,6 +72,12 @@ export default async function AnalitikPage({ searchParams }: { searchParams: Pro
           { key: "minggu", label: "7 hari", href: "/app/analitik" },
           { key: "bulan", label: "30 hari", href: "/app/analitik?rentang=bulan" },
         ]}
+      />
+
+      <LeanMeter
+        digital={inRange.filter((l) => l.type === "digital").reduce((a, l) => a + l.duration_min, 0)}
+        positif={inRange.filter((l) => l.type === "positif").reduce((a, l) => a + l.duration_min, 0)}
+        period={month ? "30 hari terakhir" : "7 hari terakhir"}
       />
 
       <section className="card">

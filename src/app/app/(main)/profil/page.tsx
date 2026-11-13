@@ -6,7 +6,7 @@ import { ActionForm, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
 import { changePassword, deleteAccount, updateProfile } from "../../actions";
 import { PushToggle } from "./push-toggle";
-import { EmailField, NewPasswordField, PhoneField } from "@/components/fields";
+import { EmailField, HiddenUsername, NewPasswordField, PhoneField } from "@/components/fields";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { loginMethods } from "@/lib/accounts";
 
@@ -76,6 +76,7 @@ export default async function ProfilPage() {
         <h2 className="mb-3 text-lg font-extrabold">{hasPassword ? "Ubah password" : "Buat password (opsional)"}</h2>
         {!hasPassword && <p className="mb-3 text-sm text-ink-soft">Anda masuk dengan Google. Buat password jika ingin bisa masuk juga dengan email/nomor HP.</p>}
         <ActionForm action={changePassword} resetOnSuccess className="space-y-3">
+          <HiddenUsername value={parent.no_hp ? `0${parent.no_hp.slice(2)}` : au.user?.email} />
           {hasPassword && (
             <div>
               <label className="label" htmlFor="current">
