@@ -1,7 +1,7 @@
 import { Icon } from "@/components/icons";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild } from "@/lib/parent";
-import { SCHOOL_LEVELS } from "@/lib/utils";
+import { SCHOOL_LEVELS, schoolLevelLabel } from "@/lib/utils";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
 import { deleteChild, saveChild } from "../../actions";
@@ -29,7 +29,10 @@ function ChildForm({ child }: { child?: Child }) {
         </div>
         <div>
           <label className="label">Jenjang sekolah</label>
-          <select name="school_level" defaultValue={child?.school_level ?? "sd_awal"} className="input">
+          <select name="school_level" required defaultValue={child?.school_level && SCHOOL_LEVELS[child.school_level] ? child.school_level : ""} className="input">
+            <option value="" disabled>
+              Pilih kelas
+            </option>
             {Object.entries(SCHOOL_LEVELS).map(([k, v]) => (
               <option key={k} value={k}>
                 {v}
@@ -59,7 +62,7 @@ export default async function AnakPage({ searchParams }: { searchParams: Promise
         <details key={c.id} className="card">
           <summary className="flex cursor-pointer items-center justify-between font-extrabold">
             <span>
-              <Icon name="child" className="h-5 w-5 align-[-3px] text-hijau-600" /> {c.nickname} <span className="font-normal text-ink-soft">· {SCHOOL_LEVELS[c.school_level]} · lahir {c.birth_year}</span>
+              <Icon name="child" className="h-5 w-5 align-[-3px] text-hijau-600" /> {c.nickname} <span className="font-normal text-ink-soft">· {schoolLevelLabel(c.school_level)} · lahir {c.birth_year}</span>
             </span>
             <span className="text-xs text-ink-soft">{c.pin_hash ? <span className="inline-flex items-center gap-1"><Icon name="lock" className="h-3.5 w-3.5" /> PIN aktif</span> : "PIN belum diatur"}</span>
           </summary>

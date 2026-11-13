@@ -10,7 +10,7 @@ import { parseInsight, type InsightOutput } from "@/lib/indicators";
 import { readXlsx } from "@/lib/excel";
 import { SURVEY_TEMPLATES } from "@/lib/survey";
 import { DEFAULT_SETTINGS, getSettings, type ScreenRef } from "@/lib/settings";
-import { bool, int, phoneToAuthEmail, randomCode, slugify, str } from "@/lib/utils";
+import { bool, int, isSyntheticEmail, phoneToAuthEmail, randomCode, slugify, str } from "@/lib/utils";
 import { emailError, normalizeEmail, normalizePhone, phoneError } from "@/lib/validation";
 import { createParent, emailTaken, phoneTaken, validateName, validateRt, loginMethods } from "@/lib/accounts";
 import { googleProviderStatus } from "@/lib/auth-providers";
@@ -76,17 +76,37 @@ export async function setUserStatus(fd: FormData) {
   revalidatePath("/admin/anggota");
 }
 
+/** Hapus akun orang tua beserta keluarga, anak, dan seluruh catatannya (tidak bisa dibatalkan). */
+export async function deleteMember(_: ActionState, fd: FormData): Promise<ActionState> {
+  const me = await requireAdmin();
+  const id = str(fd, "id");
+  if (id === me.id) return { error: "Tidak bisa menghapus akun sendiri." };
+  const { data: target } = await db().from("users").select("role,nama").eq("id", id).maybeSingle();
+  if (!target) return { error: "Akun tidak ditemukan." };
+  if (target.role !== "parent" && me.role !== "superadmin") return { error: "Hanya superadmin yang boleh menghapus akun pengurus." };
+  // Menghapus auth user → cascade ke users, families, children, dan semua catatan.
+  const { error } = await db().auth.admin.deleteUser(id);
+  if (error) return { error: "Gagal menghapus akun. Coba lagi." };
+  await audit(me.id, "user.delete", id, { nama: target.nama, role: target.role });
+  revalidatePath("/admin/anggota");
+  return { ok: true, message: `Akun ${target.nama} dan seluruh datanya sudah dihapus.` };
+}
+
 export async function resetPassword(_: ActionState, fd: FormData): Promise<ActionState> {
   const me = await requireAdmin();
   const id = str(fd, "id");
-  const { data: target } = await db().from("users").select("role,nama").eq("id", id).maybeSingle();
+  const { data: target } = await db().from("users").select("role,nama,no_hp,email").eq("id", id).maybeSingle();
   if (!target) return { error: "Akun tidak ditemukan." };
   if (target.role !== "parent" && me.role !== "superadmin") return { error: "Tidak diizinkan." };
   const pw = tempPassword();
   const { error } = await db().auth.admin.updateUserById(id, { password: pw });
   if (error) return { error: "Gagal mereset password." };
+  // Keluarkan sesi lama di perangkat lain.
+  await db().auth.admin.signOut(id).catch(() => {});
   await audit(me.id, "user.reset_password", id);
-  return { ok: true, message: `Password sementara untuk ${target.nama}: ${pw}. Sampaikan langsung dan minta segera diganti.` };
+  const phone = (target.no_hp as string | null) ?? "";
+  const login = phone ? `0${phone.slice(2)}` : isSyntheticEmail(target.email) ? "" : (target.email ?? "");
+  return { ok: true, message: "Password sementara dibuat.", data: { nama: target.nama, login, password: pw, phone } };
 }
 
 /** Admin membuat satu akun orang tua. Orang tua diminta menyetujui consent saat pertama masuk. */

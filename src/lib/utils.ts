@@ -53,13 +53,47 @@ export function pct(part: number, total: number): number {
   return total > 0 ? Math.round((part / total) * 100) : 0;
 }
 
+/** Pilihan jenjang yang bisa dipilih orang tua (urut dari kecil ke besar). */
 export const SCHOOL_LEVELS: Record<string, string> = {
   paud: "PAUD",
   tk: "TK",
-  sd_awal: "SD kelas 1–3",
-  sd_akhir: "SD kelas 4–6",
-  smp: "SMP",
+  sd1: "SD kelas 1",
+  sd2: "SD kelas 2",
+  sd3: "SD kelas 3",
+  sd4: "SD kelas 4",
+  sd5: "SD kelas 5",
+  sd6: "SD kelas 6",
+  smp1: "SMP kelas 1 (7)",
+  smp2: "SMP kelas 2 (8)",
+  smp3: "SMP kelas 3 (9)",
+  sma1: "SMA/SMK kelas 1 (10)",
+  sma2: "SMA/SMK kelas 2 (11)",
+  sma3: "SMA/SMK kelas 3 (12)",
   lainnya: "Lainnya",
+};
+
+/** Nilai lama (sebelum pilihan per kelas) tetap dikenali untuk data yang sudah tersimpan. */
+const LEGACY_LEVELS: Record<string, string> = { sd_awal: "SD kelas 1–3", sd_akhir: "SD kelas 4–6", smp: "SMP" };
+
+export const SCHOOL_LEVEL_KEYS = Object.keys(SCHOOL_LEVELS) as [string, ...string[]];
+
+export function schoolLevelLabel(level: string | null | undefined): string {
+  if (!level) return "";
+  return SCHOOL_LEVELS[level] ?? LEGACY_LEVELS[level] ?? level;
+}
+
+/**
+ * Kelompok jenjang untuk statistik komunitas. Sengaja lebih kasar daripada per kelas
+ * agar setiap kelompok cukup besar (minimal 5 keluarga) dan keluarga tidak bisa ditebak.
+ */
+export const LEVEL_GROUPS: Record<string, { label: string; levels: string[] }> = {
+  paud: { label: "PAUD", levels: ["paud"] },
+  tk: { label: "TK", levels: ["tk"] },
+  sd_awal: { label: "SD kelas 1–3", levels: ["sd1", "sd2", "sd3", "sd_awal"] },
+  sd_akhir: { label: "SD kelas 4–6", levels: ["sd4", "sd5", "sd6", "sd_akhir"] },
+  smp: { label: "SMP", levels: ["smp1", "smp2", "smp3", "smp"] },
+  sma: { label: "SMA/SMK", levels: ["sma1", "sma2", "sma3"] },
+  lainnya: { label: "Lainnya", levels: ["lainnya"] },
 };
 
 export const GALLERY_CATEGORIES: Record<string, string> = {
