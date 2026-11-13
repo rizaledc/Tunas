@@ -6,7 +6,7 @@ import { addDays, coinPeriod, todayStr } from "./date";
 import { computeIndicators, parseInsight, ruleBasedInsight, type CategoryRow, type CheckinRow, type Indicators, type InsightOutput, type LogRow } from "./indicators";
 import { sha256 } from "./crypto";
 import { logError } from "./audit";
-import { SCHOOL_LEVELS } from "./utils";
+import { schoolLevelLabel } from "./utils";
 import { chatCompletion, extractJson, fetchKeyInfo, resolveOpenRouterKey } from "./openrouter";
 
 export type InsightResult =
@@ -36,7 +36,7 @@ export async function buildIndicators(childId: string): Promise<Indicators | nul
     categories: (cats ?? []) as CategoryRow[],
     targetMin: agreement?.target_screen_min ?? ref?.max_min ?? 120,
     childAge: age,
-    schoolLevel: SCHOOL_LEVELS[child.school_level] ?? child.school_level,
+    schoolLevel: schoolLevelLabel(child.school_level),
     reference: ref,
     lastReflection: refl?.[0] ?? null,
   });

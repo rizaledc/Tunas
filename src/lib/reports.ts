@@ -6,7 +6,7 @@ import { groupStats, loadBase, filterChildren } from "./stats";
 import { addDays, dateRange, formatTanggal } from "./date";
 import { MIN_GROUP_FAMILIES } from "./privacy";
 import { sha256 } from "./crypto";
-import { SCHOOL_LEVELS } from "./utils";
+import { LEVEL_GROUPS, schoolLevelLabel } from "./utils";
 import type { Sheet } from "./excel";
 
 export type Report = { title: string; sheets: Sheet[] };
@@ -59,7 +59,7 @@ export async function monthlyReport(month: string): Promise<Report> {
       patuh_persen: gw.suppressed ? "disembunyikan" : gw.compliancePct,
     });
   }
-  const levels = Object.entries(SCHOOL_LEVELS).map(([k, v]) => {
+  const levels = Object.entries(LEVEL_GROUPS).map(([k, { label: v }]) => {
     const gl = groupStats(base, filterChildren(base, { level: k }), { source: "app" });
     return { jenjang: v, keluarga: gl.families, screen_time_mnt: gl.suppressed ? "disembunyikan" : gl.avgScreen, positif_mnt: gl.suppressed ? "disembunyikan" : gl.avgPositive, patuh_persen: gl.suppressed ? "disembunyikan" : gl.compliancePct };
   });
@@ -87,7 +87,7 @@ export async function anonymousReport(from: string, to: string): Promise<Report>
     return {
       kode_anak: code(l.child_id),
       usia: c ? Number(l.log_date.slice(0, 4)) - c.birth_year : "",
-      jenjang: c ? SCHOOL_LEVELS[c.school_level] : "",
+      jenjang: c ? schoolLevelLabel(c.school_level) : "",
       tanggal: l.log_date,
       jenis: l.type,
       kategori: base.cats.find((x) => x.id === l.category_id)?.name ?? "",

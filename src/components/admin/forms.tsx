@@ -1,7 +1,7 @@
 "use client";
 import { ActionForm, SubmitButton } from "@/components/ui";
 import { useState } from "react";
-import { createMember, importLogbookFile, importMembers, resetPassword, updateMember } from "@/app/admin/actions";
+import { createMember, deleteMember, importLogbookFile, importMembers, resetPassword, updateMember } from "@/app/admin/actions";
 import { EmailField, NewPasswordField, PhoneField } from "@/components/fields";
 import { Icon } from "@/components/icons";
 
@@ -73,12 +73,78 @@ export function LogbookFileForm() {
   );
 }
 
+type Credentials = { nama: string; login: string; password: string; phone: string };
+
+function loginMessage(d: Credentials, kind: "baru" | "reset") {
+  const site = typeof window !== "undefined" ? window.location.origin : "";
+  const intro = kind === "baru" ? `Halo ${d.nama}, akun SAHABAT ANAK Anda sudah dibuat.` : `Halo ${d.nama}, password akun SAHABAT ANAK Anda sudah direset.`;
+  return `${intro}\n\nMasuk di: ${site}/login\nNomor HP/email: ${d.login}\nPassword sementara: ${d.password}\n\nSetelah masuk, segera ganti password di menu Profil.`;
+}
+
+/** Kotak data masuk + tombol salin & kirim WhatsApp. */
+function CredentialBox({ d, kind, manual = false }: { d: Credentials; kind: "baru" | "reset"; manual?: boolean }) {
+  const msg = loginMessage(d, kind);
+  return (
+    <div className="space-y-2 rounded-xl border border-hijau-200 bg-hijau-50 p-4 text-left text-sm">
+      <p className="font-extrabold text-hijau-700">Sampaikan data masuk ini kepada {d.nama}:</p>
+      {d.login && (
+        <p className="flex flex-wrap items-center gap-2">
+          Nomor HP/email: <code className="rounded bg-paper px-2 py-1 font-bold">{d.login}</code> <Copy text={d.login} />
+        </p>
+      )}
+      <p className="flex flex-wrap items-center gap-2">
+        Password{manual ? "" : " sementara"}: <code className="rounded bg-paper px-2 py-1 font-bold">{d.password}</code> <Copy text={d.password} />
+      </p>
+      <p className="text-xs text-ink-soft">
+        Password tidak ditampilkan lagi setelah halaman ini ditutup.{" "}
+        {kind === "baru" ? "Orang tua akan diminta menyetujui persetujuan data saat pertama masuk. " : "Sesi lama di perangkat lain otomatis dikeluarkan. "}
+        Jika kelak lupa password: akun dengan email bisa memakai menu Lupa password; akun yang hanya memakai nomor HP minta pengurus menekan Reset password.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {d.phone && (
+          <a className="btn-sm btn bg-[#128C4A] text-white hover:bg-[#0E7A3F]" target="_blank" rel="noopener noreferrer" href={`https://wa.me/${d.phone}?text=${encodeURIComponent(msg)}`}>
+            <Icon name="chat" className="h-4 w-4" /> Kirim lewat WhatsApp
+          </a>
+        )}
+        <Copy text={msg} />
+      </div>
+    </div>
+  );
+}
+
 export function ResetPasswordForm({ id }: { id: string }) {
   return (
-    <ActionForm action={resetPassword} className="space-y-1" confirm="Buat password sementara baru untuk akun ini?">
+    <ActionForm action={resetPassword} className="space-y-1" confirm="Buat password sementara baru untuk akun ini? Password lama tidak bisa dipakai lagi.">
+      {(state) => {
+        const d = state?.ok ? (state.data as Credentials) : null;
+        return (
+          <>
+            <input type="hidden" name="id" value={id} />
+            <SubmitButton className="btn-ghost btn-sm text-hijau-600" pendingText="…">
+              Reset password
+            </SubmitButton>
+            {d && (
+              <div className="w-80">
+                <CredentialBox d={d} kind="reset" />
+              </div>
+            )}
+          </>
+        );
+      }}
+    </ActionForm>
+  );
+}
+
+export function DeleteMemberForm({ id, nama }: { id: string; nama: string }) {
+  return (
+    <ActionForm
+      action={deleteMember}
+      className="space-y-1"
+      confirm={`Hapus akun ${nama}?\n\nSemua data keluarga ini ikut terhapus permanen: profil anak, catatan aktivitas, check-in, kesepakatan, dan insight. Tindakan ini tidak bisa dibatalkan.`}
+    >
       <input type="hidden" name="id" value={id} />
-      <SubmitButton className="btn-ghost btn-sm text-hijau-600" pendingText="…">
-        Reset password
+      <SubmitButton className="btn-ghost btn-sm text-merah-600 hover:bg-red-50" pendingText="Menghapus…">
+        <Icon name="trash" className="h-4 w-4" /> Hapus akun
       </SubmitButton>
     </ActionForm>
   );
@@ -106,8 +172,7 @@ export function CreateMemberForm() {
   return (
     <ActionForm action={createMember} resetOnSuccess className="space-y-3">
       {(state) => {
-        const d = state?.ok ? (state.data as { nama: string; login: string; password: string; phone: string; manual: boolean }) : null;
-        const msg = d ? `Halo ${d.nama}, akun SAHABAT ANAK Anda sudah dibuat.\n\nMasuk di: ${typeof window !== "undefined" ? window.location.origin : ""}/login\nNomor HP/email: ${d.login}\nPassword sementara: ${d.password}\n\nSetelah masuk, segera ganti password di menu Profil.` : "";
+        const d = state?.ok ? (state.data as Credentials & { manual: boolean }) : null;
         return (
           <>
             <div>
@@ -141,26 +206,7 @@ export function CreateMemberForm() {
             <SubmitButton className="btn-green" pendingText="Membuat akun…">
               <Icon name="plus" /> Buat Akun
             </SubmitButton>
-            {d && (
-              <div className="space-y-2 rounded-xl border border-hijau-200 bg-hijau-50 p-4 text-sm">
-                <p className="font-extrabold text-hijau-700">Sampaikan data masuk ini kepada {d.nama}:</p>
-                <p className="flex flex-wrap items-center gap-2">
-                  Nomor HP/email: <code className="rounded bg-paper px-2 py-1 font-bold">{d.login}</code> <Copy text={d.login} />
-                </p>
-                <p className="flex flex-wrap items-center gap-2">
-                  Password{d.manual ? "" : " sementara"}: <code className="rounded bg-paper px-2 py-1 font-bold">{d.password}</code> <Copy text={d.password} />
-                </p>
-                <p className="text-xs text-ink-soft">Password tidak ditampilkan lagi setelah halaman ini ditutup. Orang tua akan diminta menyetujui persetujuan data saat pertama masuk.</p>
-                <div className="flex flex-wrap gap-2">
-                  {d.phone && (
-                    <a className="btn-sm btn bg-[#128C4A] text-white hover:bg-[#0E7A3F]" target="_blank" rel="noopener noreferrer" href={`https://wa.me/${d.phone}?text=${encodeURIComponent(msg)}`}>
-                      <Icon name="chat" className="h-4 w-4" /> Kirim lewat WhatsApp
-                    </a>
-                  )}
-                  <Copy text={msg} />
-                </div>
-              </div>
-            )}
+            {d && <CredentialBox d={d} kind="baru" manual={d.manual} />}
           </>
         );
       }}

@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { filterChildren, groupStats, loadBase, type GroupStats } from "@/lib/stats";
 import { addDays, todayStr } from "@/lib/date";
 import { MIN_GROUP_FAMILIES } from "@/lib/privacy";
-import { SCHOOL_LEVELS } from "@/lib/utils";
+import { LEVEL_GROUPS } from "@/lib/utils";
 import { PageTitle, Stat } from "@/components/blocks";
 import { Donut, SimpleBars } from "@/components/charts";
 
@@ -67,9 +67,9 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
           <span className="label">Jenjang</span>
           <select name="jenjang" defaultValue={sp.jenjang ?? ""} className="input">
             <option value="">Semua</option>
-            {Object.entries(SCHOOL_LEVELS).map(([k, v]) => (
+            {Object.entries(LEVEL_GROUPS).map(([k, v]) => (
               <option key={k} value={k}>
-                {v}
+                {v.label}
               </option>
             ))}
           </select>
@@ -167,8 +167,8 @@ export default async function StatistikPage({ searchParams }: { searchParams: Pr
             </tr>
           </thead>
           <tbody>
-            {Object.entries(SCHOOL_LEVELS).map(([k, v]) => (
-              <Row key={k} label={`Jenjang ${v}`} g={groupStats(base, filterChildren(base, { level: k, rt: sp.rt }), { source: "app" })} />
+            {Object.entries(LEVEL_GROUPS).map(([k, v]) => (
+              <Row key={k} label={`Jenjang ${v.label}`} g={groupStats(base, filterChildren(base, { level: k, rt: sp.rt }), { source: "app" })} />
             ))}
             {rts.map((r) => (
               <Row key={r} label={`RT ${r}`} g={groupStats(base, filterChildren(base, { rt: r, level: sp.jenjang }), { source: "app" })} />

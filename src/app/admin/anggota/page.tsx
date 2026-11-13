@@ -4,7 +4,7 @@ import { formatTanggal } from "@/lib/date";
 import { isSyntheticEmail } from "@/lib/utils";
 import { ActionForm, ConfirmButton, SubmitButton } from "@/components/ui";
 import { PageTitle } from "@/components/blocks";
-import { CreateMemberForm, EditMemberForm, ImportMembersForm, ResetPasswordForm } from "@/components/admin/forms";
+import { CreateMemberForm, DeleteMemberForm, EditMemberForm, ImportMembersForm, ResetPasswordForm } from "@/components/admin/forms";
 import { createInvites, deleteInvite, setUserStatus } from "../actions";
 
 export const metadata = { title: "Anggota" };
@@ -154,6 +154,7 @@ export default async function AnggotaPage({ searchParams }: { searchParams: Prom
                   </form>
                   <ResetPasswordForm id={m.id} />
                   <EditMemberForm m={{ id: m.id, nama: m.nama, no_hp: m.no_hp, email: isSyntheticEmail(m.email) ? null : m.email, rt: m.rt ?? null }} />
+                  <DeleteMemberForm id={m.id} nama={m.nama} />
                 </td>
               </tr>
             ))}

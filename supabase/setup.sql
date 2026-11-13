@@ -57,7 +57,7 @@ create table public.children (
   family_id uuid not null references public.families(id) on delete cascade,
   nickname text not null check (char_length(nickname) between 1 and 40),
   birth_year int not null check (birth_year between 2005 and 2030),
-  school_level text not null check (school_level in ('paud','tk','sd_awal','sd_akhir','smp','lainnya')),
+  school_level text not null check (school_level in ('paud','tk','sd1','sd2','sd3','sd4','sd5','sd6','smp1','smp2','smp3','sma1','sma2','sma3','lainnya','sd_awal','sd_akhir','smp')),
   pin_hash text,
   created_at timestamptz not null default now()
 );

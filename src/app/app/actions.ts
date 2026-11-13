@@ -11,7 +11,7 @@ import { clearChildMode, getChildModeId, setChildMode } from "@/lib/child-mode";
 import { addDays, todayStr, wibToIso } from "@/lib/date";
 import { generateInsight } from "@/lib/insight";
 import { scoreSurvey, type Question } from "@/lib/survey";
-import { bool, int, phoneToAuthEmail, str } from "@/lib/utils";
+import { bool, int, phoneToAuthEmail, SCHOOL_LEVEL_KEYS, str } from "@/lib/utils";
 import { emailError, normalizeEmail, normalizePhone, phoneError, validatePassword } from "@/lib/validation";
 import { emailTaken, phoneTaken, validateName, validateRt, loginMethods } from "@/lib/accounts";
 import { getChildren } from "@/lib/parent";
@@ -35,7 +35,7 @@ export async function selectChild(childId: string) {
 const childSchema = z.object({
   nickname: z.string().trim().min(1, "Nama panggilan wajib diisi").max(40),
   birth_year: z.coerce.number().int().min(2005).max(new Date().getFullYear()),
-  school_level: z.enum(["paud", "tk", "sd_awal", "sd_akhir", "smp", "lainnya"]),
+  school_level: z.enum(SCHOOL_LEVEL_KEYS),
 });
 
 export async function saveChild(_: ActionState, fd: FormData): Promise<ActionState> {
