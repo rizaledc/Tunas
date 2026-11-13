@@ -603,7 +603,7 @@ export async function testOpenRouter(_: ActionState, fd: FormData): Promise<Acti
       json: true,
       timeoutMs: 45_000,
     });
-    const output = parseInsight(extractJson(r.content));
+    const output = parseInsight(extractJson(r.content, r.finishReason));
     if (!output) throw new Error("Model menjawab, tetapi formatnya bukan 5 bagian insight. Periksa prompt sistem.");
     steps.push({ label: "Uji insight", ok: true, detail: `Berhasil dalam ${((Date.now() - t0) / 1000).toFixed(1)} detik` });
     return { ok: true, data: { steps, sample: { output, model: r.model, tokensIn: r.tokensIn, tokensOut: r.tokensOut, cost: r.cost, ms: Date.now() - t0 } } };

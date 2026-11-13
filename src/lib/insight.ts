@@ -79,7 +79,7 @@ async function callOpenRouter(ind: Indicators, cfg: { model: string; prompt: str
     maxTokens: cfg.maxTokens,
     json: true,
   });
-  const parsed = parseInsight(extractJson(r.content));
+  const parsed = parseInsight(extractJson(r.content, r.finishReason));
   if (!parsed) throw new Error("Format output AI tidak valid");
   return { output: parsed, model: r.model, tokensIn: r.tokensIn, tokensOut: r.tokensOut, cost: r.cost };
 }
