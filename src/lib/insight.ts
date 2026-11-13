@@ -16,17 +16,30 @@ export type InsightResult =
 export async function buildIndicators(childId: string): Promise<Indicators | null> {
   const supabase = await createClient();
   const end = todayStr();
-  const start = addDays(end, -13);
-  const [{ data: child }, { data: agreement }, { data: logs }, { data: checkins }, { data: cats }, { data: refl }, settings] = await Promise.all([
+  const start = addDays(end, -27); // 4 minggu: 2 minggu terakhir untuk tren + konteks jangka panjang
+  const [{ data: child }, { data: agreement }, { data: logs }, { data: firstLog }, { data: checkins }, { data: cats }, { data: refl }, settings] = await Promise.all([
     supabase.from("children").select("id,birth_year,school_level").eq("id", childId).maybeSingle(),
     supabase.from("agreements").select("target_screen_min").eq("child_id", childId).maybeSingle(),
     supabase.from("activity_logs").select("log_date,type,category_id,duration_min,accompanied,follows_agreement,start_at,end_at").eq("child_id", childId).gte("log_date", start).lte("log_date", end),
+    supabase.from("activity_logs").select("log_date").eq("child_id", childId).order("log_date", { ascending: true }).limit(1),
     supabase.from("daily_checkins").select("date,mood,stop_response,sleep_time,device_before_sleep").eq("child_id", childId).gte("date", addDays(end, -6)),
     supabase.from("categories").select("id,type,name,icon"),
     supabase.from("reflections").select("action_text,outcome").eq("child_id", childId).order("created_at", { ascending: false }).limit(1),
     getSettings(["screen_time.reference"]),
   ]);
   if (!child) return null;
+  const firstLogDate = (firstLog?.[0]?.log_date as string | undefined) ?? null;
+  // Catatan minggu pertama hanya diambil jika berada di luar rentang 4 minggu yang sudah dimuat.
+  let firstWeekLogs = (logs ?? []) as LogRow[];
+  if (firstLogDate && firstLogDate < start) {
+    const { data } = await supabase
+      .from("activity_logs")
+      .select("log_date,type,category_id,duration_min,accompanied,follows_agreement,start_at,end_at")
+      .eq("child_id", childId)
+      .gte("log_date", firstLogDate)
+      .lte("log_date", addDays(firstLogDate, 6));
+    firstWeekLogs = (data ?? []) as LogRow[];
+  }
   const age = Number(end.slice(0, 4)) - child.birth_year;
   const ref = referenceForAge(settings["screen_time.reference"], age);
   return computeIndicators({
@@ -39,6 +52,7 @@ export async function buildIndicators(childId: string): Promise<Indicators | nul
     schoolLevel: schoolLevelLabel(child.school_level),
     reference: ref,
     lastReflection: refl?.[0] ?? null,
+    history: { firstLogDate, firstWeekLogs },
   });
 }
 

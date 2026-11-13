@@ -642,6 +642,14 @@ const SAMPLE_INDICATORS = {
   tren: { rata_screen_minggu_lalu: 130, perubahan_screen_persen: -12, positif_minggu_lalu: 300, perubahan_positif_persen: 40 },
   checkin: { jumlah: 5, suasana_hati: { senang: 3, biasa: 2 }, respons_berhenti: { diingatkan: 3, mudah: 2 } },
   tindak_lanjut_sebelumnya: { rencana: "Memberi tanda 5 menit sebelum waktu gawai habis", hasil: "sebagian" },
+  jangka_panjang: {
+    minggu_sejak_mulai_mencatat: 6,
+    rata_screen_4_minggu: 124,
+    rata_positif_4_minggu: 55,
+    minggu_pertama: { mulai: "contoh", rata_screen_min_per_hari: 160, rata_positif_min_per_hari: 35 },
+    perubahan_screen_sejak_awal_persen: -28,
+    perubahan_positif_sejak_awal_persen: 100,
+  },
 };
 
 export async function resetSystemPrompt(fd: FormData) {

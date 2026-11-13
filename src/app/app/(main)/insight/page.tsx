@@ -151,6 +151,24 @@ export default async function InsightPage({ searchParams }: { searchParams: Prom
                 <dd className="font-bold">{ind.hari_patuh_kesepakatan} / 7 hari</dd>
                 <dt className="text-ink-soft">Variasi aktivitas positif</dt>
                 <dd className="font-bold">{ind.variasi_aktivitas_positif} jenis</dd>
+                {ind.jangka_panjang && (
+                  <>
+                    <dt className="text-ink-soft">Rata-rata 4 minggu</dt>
+                    <dd className="font-bold">
+                      {ind.jangka_panjang.rata_screen_4_minggu} mnt layar · {ind.jangka_panjang.rata_positif_4_minggu} mnt positif /hari
+                    </dd>
+                    {ind.jangka_panjang.minggu_pertama && (
+                      <>
+                        <dt className="text-ink-soft">Minggu pertama mencatat</dt>
+                        <dd className="font-bold">
+                          {ind.jangka_panjang.minggu_pertama.rata_screen_min_per_hari} mnt layar · {ind.jangka_panjang.minggu_pertama.rata_positif_min_per_hari} mnt positif /hari
+                        </dd>
+                      </>
+                    )}
+                    <dt className="text-ink-soft">Lama mencatat</dt>
+                    <dd className="font-bold">{ind.jangka_panjang.minggu_sejak_mulai_mencatat} minggu</dd>
+                  </>
+                )}
               </dl>
             </details>
           )}
