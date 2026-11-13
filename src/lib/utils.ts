@@ -82,19 +82,11 @@ export function schoolLevelLabel(level: string | null | undefined): string {
   return SCHOOL_LEVELS[level] ?? LEGACY_LEVELS[level] ?? level;
 }
 
-/**
- * Kelompok jenjang untuk statistik komunitas. Sengaja lebih kasar daripada per kelas
- * agar setiap kelompok cukup besar (minimal 5 keluarga) dan keluarga tidak bisa ditebak.
- */
-export const LEVEL_GROUPS: Record<string, { label: string; levels: string[] }> = {
-  paud: { label: "PAUD", levels: ["paud"] },
-  tk: { label: "TK", levels: ["tk"] },
-  sd_awal: { label: "SD kelas 1–3", levels: ["sd1", "sd2", "sd3", "sd_awal"] },
-  sd_akhir: { label: "SD kelas 4–6", levels: ["sd4", "sd5", "sd6", "sd_akhir"] },
-  smp: { label: "SMP", levels: ["smp1", "smp2", "smp3", "smp"] },
-  sma: { label: "SMA/SMK", levels: ["sma1", "sma2", "sma3"] },
-  lainnya: { label: "Lainnya", levels: ["lainnya"] },
-};
+/** Semua kelas untuk statistik (lengkap per kelas), ditambah nilai lama yang masih ada di data. */
+export function levelKeysInData(present: string[]): string[] {
+  const legacy = [...new Set(present)].filter((k) => !SCHOOL_LEVELS[k] && LEGACY_LEVELS[k]);
+  return [...Object.keys(SCHOOL_LEVELS), ...legacy];
+}
 
 export const GALLERY_CATEGORIES: Record<string, string> = {
   anak: "Anak",

@@ -39,11 +39,11 @@ export const DEFAULT_SETTINGS = {
   ] as ScreenRef[],
   "reminder.message": "Sudah mencatat aktivitas si kecil hari ini? Cukup 1 menit.",
   "public.consent": {
-    version: "1.0",
+    version: "1.1",
     text: `Dengan mendaftar, saya menyetujui bahwa:
 1. Data yang saya isi (nama, nomor HP/email, RT) dan data anak (nama panggilan, tahun lahir, jenjang sekolah, catatan aktivitas) disimpan untuk keperluan pendampingan dalam program SAHABAT ANAK.
 2. Ringkasan angka aktivitas anak (tanpa nama atau identitas) dikirim ke layanan AI untuk dibuatkan saran.
-3. Pengurus komunitas hanya melihat data gabungan (minimal 5 keluarga), bukan catatan harian keluarga saya.
+3. Pengurus komunitas melihat statistik gabungan seluruh keluarga (misalnya rata-rata per kelas atau per RT), bukan catatan harian keluarga saya. Karena dihitung dari semua data, kelompok kecil tetap ditampilkan.
 4. Pengelola program dapat memakai data anonim untuk evaluasi program dan penelitian.
 5. Saya dapat mengunduh dan menghapus seluruh data saya kapan saja melalui menu Profil.`,
   },
@@ -155,7 +155,7 @@ Orang tua mencatat sendiri, melihat polanya, lalu memutuskan sendiri langkah pen
 ## Siapa yang bisa melihat?
 
 - Hanya orang tua yang bersangkutan yang bisa melihat catatan harian anaknya.
-- Pengurus komunitas hanya melihat angka gabungan, dan hanya untuk kelompok berisi minimal 5 keluarga.
+- Pengurus komunitas hanya melihat angka gabungan (rata-rata per kelas, per RT, atau seluruh komunitas), bukan catatan harian keluarga. Seluruh data dihitung tanpa ada kelompok yang disembunyikan, sehingga kelompok kecil pun tetap tampil.
 - Layanan AI hanya menerima ringkasan angka, tanpa nama atau identitas anak.
 
 ## Hak Anda

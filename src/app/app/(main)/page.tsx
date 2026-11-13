@@ -1,10 +1,11 @@
 import { Icon } from "@/components/icons";
 import Link from "next/link";
+import { LeanMeter } from "@/components/app/lean-meter";
 import { requireParent } from "@/lib/auth";
 import { getActiveChild, getAgreement } from "@/lib/parent";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, formatHari, formatMenit, formatTanggal, isoDaysAgo, todayStr } from "@/lib/date";
-import { balancePercent, type InsightOutput } from "@/lib/indicators";
+import type { InsightOutput } from "@/lib/indicators";
 import { Progress } from "@/components/blocks";
 import { saveReflectionOutcome } from "../actions";
 import { NoChild } from "./no-child";
@@ -35,7 +36,6 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
   const rutin = (logs ?? []).filter((l) => l.type === "rutin").reduce((a, l) => a + l.duration_min, 0);
   const totalDay = digital + positif + rutin;
   const target = agreement?.target_screen_min ?? 120;
-  const balance = balancePercent(digital, positif);
   const openSurvey = (surveys ?? []).find((s) => !(answered ?? []).some((a) => a.survey_id === s.id));
   const out = insight?.output as InsightOutput | undefined;
 
@@ -99,17 +99,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         {digital > target && <p className="mt-2 text-sm font-semibold text-merah-600">Sudah melewati target hari ini.</p>}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="card">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-hijau-700"><Icon name="leaf" className="h-4 w-4" /> Aktivitas positif</p>
-          <p className="mt-1 text-2xl font-extrabold">{formatMenit(positif)}</p>
-        </div>
-        <div className="card">
-          <p className="flex items-center gap-1.5 text-sm font-bold text-hijau-700"><Icon name="scale" className="h-4 w-4" /> Keseimbangan</p>
-          <p className="mt-1 text-2xl font-extrabold">{digital + positif ? `${balance}%` : "–"}</p>
-          <p className="text-xs text-ink-soft">porsi aktivitas positif</p>
-        </div>
-      </div>
+      <LeanMeter digital={digital} positif={positif} period="hari ini" />
 
       <div className="grid grid-cols-4 gap-2">
         <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm">
@@ -119,7 +109,7 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
           <Icon name="palette" className="h-7 w-7 text-hijau-600" />Catat positif
         </Link>
         <Link href="/app/catat?tab=rutin" className="card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm">
-          <Icon name="sleep" className="h-7 w-7 text-kuning-700" />Catat rutinitas
+          <Icon name="school" className="h-7 w-7 text-kuning-700" />Catat rutinitas
         </Link>
         <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm ${checkin ? "opacity-60" : "ring-2 ring-hijau-500"}`}>
           <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-hijau-700" />Check-in

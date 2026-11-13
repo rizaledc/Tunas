@@ -1,6 +1,6 @@
 "use client";
 import { Icon, CategoryIcon, type IconName } from "@/components/icons";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ActionForm, SubmitButton } from "@/components/ui";
 import { DurationWheel } from "@/components/app/duration-wheel";
 import { cn, WITH_WHOM } from "@/lib/utils";
@@ -29,7 +29,7 @@ export type EditLog = {
 const TABS: Array<{ key: ActivityType; label: string; icon: IconName; color: string }> = [
   { key: "digital", label: "Digital", icon: "device", color: "bg-gelap-800 text-white" },
   { key: "positif", label: "Positif", icon: "leaf", color: "bg-hijau-600 text-white" },
-  { key: "rutin", label: "Rutinitas", icon: "sleep", color: "bg-kuning-500 text-hijau-950" },
+  { key: "rutin", label: "Rutinitas", icon: "school", color: "bg-kuning-500 text-hijau-950" },
 ];
 const TYPE_TEXT: Record<ActivityType, string> = { digital: "digital", positif: "positif", rutin: "rutinitas" };
 const DAY = 1440;
@@ -39,6 +39,12 @@ const fmt = (min: number) => {
   const m = min % 60;
   return h ? (m ? `${h} j ${m} mnt` : `${h} jam`) : `${m} mnt`;
 };
+
+function addMinutes(time: string, min: number) {
+  if (!/^\d{2}:\d{2}$/.test(time)) return "";
+  const t = (Number(time.slice(0, 2)) * 60 + Number(time.slice(3)) + min) % DAY;
+  return `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
+}
 
 function minutesBetween(start: string, end: string) {
   if (!/^\d{2}:\d{2}$/.test(start) || !/^\d{2}:\d{2}$/.test(end)) return 0;
@@ -179,14 +185,29 @@ export function LogForm({
   const [date, setDate] = useState(edit?.log_date ?? dates[0].value);
   const [catId, setCatId] = useState<string | null>(edit?.category_id ?? null);
   const [duration, setDuration] = useState<number>(edit?.duration_min ?? 0);
-  const [mode, setMode] = useState<"durasi" | "jam">(edit ? (edit.start && edit.end ? "jam" : "durasi") : initialTab === "digital" ? "jam" : "durasi");
+  // Jam mulai–selesai opsional; durasi dan jam saling menyesuaikan.
+  const [showTimes, setShowTimes] = useState<boolean>(edit ? Boolean(edit.start && edit.end) : initialTab === "digital");
   const [start, setStart] = useState(edit?.start ?? "");
   const [end, setEnd] = useState(edit?.end ?? "");
+  const changeDuration = (min: number) => {
+    setDuration(min);
+    if (start && min > 0) setEnd(addMinutes(start, min));
+  };
+  const changeStart = (v: string) => {
+    setStart(v);
+    if (v && duration > 0) setEnd(addMinutes(v, duration));
+    else if (v && end) setDuration(minutesBetween(v, end));
+  };
+  const changeEnd = (v: string) => {
+    setEnd(v);
+    if (start && v) setDuration(minutesBetween(start, v));
+  };
   const cats = categories.filter((c) => c.type === tab);
   const cat = categories.find((c) => c.id === catId) ?? null;
   const used = usage[date] ?? { digital: 0, positif: 0, rutin: 0 };
   const remaining = Math.max(0, DAY - used.digital - used.positif - used.rutin);
-  const adding = useMemo(() => (mode === "jam" ? minutesBetween(start, end) : duration), [mode, start, end, duration]);
+  const adding = duration;
+  const presets = cat?.icon === "sleep" ? [60, 120, 420, 480] : tab === "rutin" ? [30, 60, 120, 360] : [15, 30, 60, 120];
   const showLele = tab === "positif" && cat && isLeleCategory(cat);
   const showOther = cat && cat.type === tab && isOtherCategory(cat);
 
@@ -203,7 +224,7 @@ export function LogForm({
               onClick={() => {
                 setTab(t.key);
                 setCatId(null);
-                setMode(t.key === "digital" ? "jam" : "durasi");
+                setShowTimes(t.key === "digital");
               }}
               className={cn("rounded-xl px-1 py-3 text-sm font-extrabold sm:text-base", tab === t.key ? t.color : "text-ink-soft")}
             >
@@ -269,53 +290,49 @@ export function LogForm({
         )}
 
         <div>
-          <div className="mb-2 flex gap-2 text-sm">
-            <button type="button" onClick={() => setMode("durasi")} className={cn("rounded-full px-3 py-1 font-bold", mode === "durasi" ? "bg-ink text-surface" : "bg-gray-100")}>
-              Durasi
-            </button>
-            <button type="button" onClick={() => setMode("jam")} className={cn("rounded-full px-3 py-1 font-bold", mode === "jam" ? "bg-ink text-surface" : "bg-gray-100")}>
-              Jam mulai–selesai
-            </button>
+          <p className="label">Berapa lama?</p>
+          <DurationWheel value={duration} onChange={changeDuration} max={remaining} />
+          <div className="mt-2 flex flex-wrap justify-center gap-2">
+            {presets.map((m) => (
+              <button key={m} type="button" onClick={() => changeDuration(m)} className={cn("rounded-full border px-3 py-1.5 text-sm font-bold", duration === m ? "border-hijau-600 bg-hijau-50 text-hijau-800" : "border-gray-200 bg-paper text-ink-soft")}>
+                {fmt(m)}
+              </button>
+            ))}
+            {remaining > 0 && remaining < DAY && (
+              <button type="button" onClick={() => changeDuration(remaining)} className="rounded-full border border-kuning-500 bg-kuning-50 px-3 py-1.5 text-sm font-bold text-kuning-800">
+                Sisa hari ini ({fmt(remaining)})
+              </button>
+            )}
           </div>
-          {mode === "jam" ? (
-            <div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label" htmlFor="start_time">
-                    Mulai
-                  </label>
-                  <input id="start_time" name="start_time" type="time" required value={start} onChange={(e) => setStart(e.target.value)} className="input" />
+          <input type="hidden" name="duration_min" value={duration || ""} />
+
+          <div className="mt-4 rounded-2xl bg-gray-50 p-3">
+            <label className="flex items-center gap-2 text-sm font-bold">
+              <input type="checkbox" checked={showTimes} onChange={(e) => setShowTimes(e.target.checked)} className="h-5 w-5 accent-hijau-600" />
+              Isi jam mulai–selesai {tab === "digital" ? "(disarankan untuk gawai)" : "(opsional)"}
+            </label>
+            {showTimes && (
+              <>
+                <div className="mt-3 grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label" htmlFor="start_time">
+                      Mulai
+                    </label>
+                    <input id="start_time" name="start_time" type="time" required value={start} onChange={(e) => changeStart(e.target.value)} className="input" />
+                  </div>
+                  <div>
+                    <label className="label" htmlFor="end_time">
+                      Selesai
+                    </label>
+                    <input id="end_time" name="end_time" type="time" required value={end} onChange={(e) => changeEnd(e.target.value)} className="input" />
+                  </div>
                 </div>
-                <div>
-                  <label className="label" htmlFor="end_time">
-                    Selesai
-                  </label>
-                  <input id="end_time" name="end_time" type="time" required value={end} onChange={(e) => setEnd(e.target.value)} className="input" />
-                </div>
-              </div>
-              <p className="mt-2 text-xs text-ink-soft">
-                {adding ? `Durasi: ${fmt(adding)}.` : ""} Jika melewati tengah malam (mis. tidur 21.00–05.00), seluruhnya dicatat di tanggal mulai.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <p className="label">Berapa lama?</p>
-              <DurationWheel value={duration} onChange={setDuration} max={remaining} />
-              <div className="mt-2 flex flex-wrap justify-center gap-2">
-                {(tab === "rutin" ? [30, 60, 420, 480] : [15, 30, 60, 120]).map((m) => (
-                  <button key={m} type="button" onClick={() => setDuration(m)} className={cn("rounded-full border px-3 py-1.5 text-sm font-bold", duration === m ? "border-hijau-600 bg-hijau-50 text-hijau-800" : "border-gray-200 bg-paper text-ink-soft")}>
-                    {fmt(m)}
-                  </button>
-                ))}
-                {remaining > 0 && remaining < DAY && (
-                  <button type="button" onClick={() => setDuration(remaining)} className="rounded-full border border-kuning-500 bg-kuning-50 px-3 py-1.5 text-sm font-bold text-kuning-800">
-                    Sisa hari ini ({fmt(remaining)})
-                  </button>
-                )}
-              </div>
-              <input type="hidden" name="duration_min" value={duration || ""} />
-            </div>
-          )}
+                <p className="mt-2 text-xs text-ink-soft">
+                  Ubah jam mulai atau selesai, durasi di atas ikut menyesuaikan. Ubah durasi, jam selesai ikut bergeser. Jika melewati tengah malam (mis. tidur 21.00–05.00), seluruhnya dicatat di tanggal mulai.
+                </p>
+              </>
+            )}
+          </div>
         </div>
 
         {tab === "digital" && (

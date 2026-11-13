@@ -1,5 +1,4 @@
 import "server-only";
-import { LEVEL_GROUPS } from "./utils";
 import { createAdminClient } from "./supabase/admin";
 import { addDays, startOfWeek, todayStr, wibHour } from "./date";
 import { canShowGroup, MIN_GROUP_FAMILIES } from "./privacy";
@@ -117,12 +116,11 @@ export function groupStats(base: Awaited<ReturnType<typeof loadBase>>, childIds:
   };
 }
 
-/** `level` = kunci LEVEL_GROUPS (kelompok jenjang), bukan kelas satuan. */
+/** `level` = kunci kelas (mis. "sd3"), sama persis dengan yang dipilih orang tua. */
 export function filterChildren(base: Awaited<ReturnType<typeof loadBase>>, f: { level?: string; rt?: string }) {
   const famRt = new Map(base.families.map((x) => [x.id, x.rt ?? ""]));
-  const levels = f.level ? new Set(LEVEL_GROUPS[f.level]?.levels ?? [f.level]) : null;
   return new Set(
-    base.children.filter((c) => (!levels || levels.has(c.school_level)) && (!f.rt || famRt.get(c.family_id) === f.rt)).map((c) => c.id),
+    base.children.filter((c) => (!f.level || c.school_level === f.level) && (!f.rt || famRt.get(c.family_id) === f.rt)).map((c) => c.id),
   );
 }
 

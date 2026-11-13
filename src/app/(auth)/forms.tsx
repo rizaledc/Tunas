@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ActionForm, SubmitButton } from "@/components/ui";
-import { EmailField, NewPasswordField, PhoneField } from "@/components/fields";
+import { EmailField, HiddenUsername, NewPasswordField, PhoneField } from "@/components/fields";
 import { Icon } from "@/components/icons";
 import { completeGoogleProfile, loginAdmin, loginParent, register, requestReset, signInWithGoogle, updatePassword, verifyMfa } from "./actions";
 
@@ -192,6 +192,7 @@ export function ResetRequestForm() {
 export function NewPasswordForm() {
   return (
     <ActionForm action={updatePassword}>
+      <HiddenUsername />
       <NewPasswordField label="Password baru" />
       <SubmitButton>Simpan password</SubmitButton>
     </ActionForm>

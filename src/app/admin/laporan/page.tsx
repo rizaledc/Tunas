@@ -13,7 +13,7 @@ export default async function LaporanPage() {
       <PageTitle title="Laporan & Ekspor" subtitle="Unduh rekap dalam format Excel atau PDF." />
       <section className="card">
         <h2 className="flex items-center gap-2 font-extrabold"><Icon name="chart" className="text-hijau-600" /> Rekap bulanan komunitas</h2>
-        <p className="text-sm text-ink-soft">Angka agregat; kelompok berisi kurang dari 5 keluarga disembunyikan.</p>
+        <p className="text-sm text-ink-soft">Angka agregat seluruh keluarga, lengkap per kelas; tidak ada kelompok yang disembunyikan.</p>
         <form action="/api/admin/laporan" className="mt-3 flex flex-wrap items-end gap-2">
           <input type="hidden" name="jenis" value="bulanan" />
           <label>

@@ -34,7 +34,7 @@ src/app/app/           Dashboard orang tua (/app, catat, checkin, riwayat, anali
 src/app/admin/         Panel admin (dashboard, anggota, statistik, laporan, konten, kegiatan,
                        evaluasi, impor logbook, monitoring AI, pengaturan, log)
 src/app/api/           data-saya (unduh data pribadi), admin/laporan, admin/template, cron/reminder
-src/lib/               auth, indikator & insight AI, statistik agregat (min. 5 keluarga), SUS, dll.
+src/lib/               auth, indikator & insight AI, statistik agregat (seluruh data, per kelas), SUS, dll.
 supabase/migrations/   Skema 17 tabel inti + RLS + bucket storage
 supabase/seed.sql      Kategori aktivitas & contoh konten
 tests/                 Unit test (vitest)
@@ -123,7 +123,7 @@ Untuk pengujian lokal tanpa internet, `OPENROUTER_BASE_URL` dapat diarahkan ke s
 
 ## Privasi & keamanan (ringkas)
 
-- RLS: orang tua hanya membaca/menulis data keluarganya. Admin komunitas **tidak** punya akses baris ke catatan, check-in, insight, atau refleksi, statistik dihitung di server dan kelompok di bawah **5 keluarga** disembunyikan.
+- RLS: orang tua hanya membaca/menulis data keluarganya. Admin komunitas **tidak** punya akses baris ke catatan, check-in, insight, atau refleksi, statistik dihitung di server dari seluruh data (lengkap per kelas, tanpa kelompok yang disembunyikan).
 - Data ke AI hanya ringkasan angka (tanpa nama). Jika AI gagal / saldo habis / dimatikan, sistem memakai ringkasan rule-based.
 - Batas 3 analisis/anak/hari, cache bila data tidak berubah, `max_tokens` 800.
 - Consent berversi: mengubah versi di Pengaturan meminta persetujuan ulang. Orang tua bisa unduh (Excel/JSON) dan hapus seluruh datanya.
