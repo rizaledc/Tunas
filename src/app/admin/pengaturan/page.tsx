@@ -269,7 +269,7 @@ async function AiSettings({ s }: { s: AiCfg }) {
           </div>
           {balance && (
             <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-bold">
-              Saldo/limit: {balance.remaining !== null ? `$${balance.remaining.toFixed(2)} tersisa` : "tanpa limit"} · terpakai ${balance.usage.toFixed(2)}
+              Saldo/limit: {balance.remaining !== null ? `$${balance.remaining.toFixed(4)} tersisa` : "tanpa limit"} · terpakai ${balance.usage.toFixed(4)}
             </span>
           )}
         </div>

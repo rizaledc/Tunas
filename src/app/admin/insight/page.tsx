@@ -43,9 +43,9 @@ export default async function MonitoringAiPage() {
         <Stat
           icon="wallet"
           label="Saldo / limit API key"
-          value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(2)}` : "tanpa limit") : "-"}
-          hint={balance ? `terpakai total $${balance.usage.toFixed(2)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "API key belum diisi, buka Pengaturan → AI"}
-          tone={balance?.remaining !== null && balance && balance.remaining < 2 ? "red" : "green"}
+          value={balance ? (balance.remaining !== null ? `$${balance.remaining.toFixed(4)}` : "tanpa limit") : "-"}
+          hint={balance ? `terpakai total $${balance.usage.toFixed(4)}${balance.limit !== null ? ` dari $${balance.limit}` : ""}` : "API key belum diisi, buka Pengaturan → AI"}
+          tone={balance && balance.remaining !== null && balance.remaining < Math.min(2, (balance.limit ?? Infinity) * 0.2) ? "red" : "green"}
         />
         <Stat icon="thumbsUp" label="Membantu" value={up} tone="green" />
         <Stat icon="thumbsDown" label="Tidak membantu" value={down} tone="red" hint={up + down ? `${Math.round((up / (up + down)) * 100)}% positif` : "belum ada rating"} />
