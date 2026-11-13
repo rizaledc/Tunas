@@ -120,9 +120,10 @@ async function Categories({ db }: { db: ReturnType<typeof createAdminClient> }) 
   const { data: cats } = await db.from("categories").select("*").order("type").order("sort");
   return (
     <div className="space-y-4">
-      {(["digital", "positif"] as const).map((type) => (
+      {(["digital", "positif", "rutin"] as const).map((type) => (
         <section key={type} className="card overflow-x-auto">
-          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : "leaf"} className="text-hijau-600" /> {type === "digital" ? "Tujuan gawai (digital)" : "Aktivitas positif"}</span></h2>
+          <h2 className="mb-2 font-extrabold"><span className="inline-flex items-center gap-2"><Icon name={type === "digital" ? "device" : type === "rutin" ? "sleep" : "leaf"} className="text-hijau-600" /> {type === "digital" ? "Tujuan gawai (digital)" : type === "rutin" ? "Rutinitas (tidur, sekolah, dll.)" : "Aktivitas positif"}</span></h2>
+          <p className="mb-2 text-xs text-ink-soft">Kategori bernama &quot;Lainnya&quot; otomatis meminta orang tua menuliskan nama kegiatannya. Kategori dengan ikon ikan / nama berisi &quot;lele&quot; memunculkan logbook lele harian.</p>
           <table className="tbl">
             <thead>
               <tr>

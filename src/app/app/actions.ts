@@ -8,7 +8,9 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { hashPin, verifyPin } from "@/lib/crypto";
 import { clearChildMode, getChildModeId, setChildMode } from "@/lib/child-mode";
-import { addDays, todayStr, wibToIso } from "@/lib/date";
+import { addDays, formatMenit, todayStr, wibToIso } from "@/lib/date";
+import { isLeleCategory, isOtherCategory, parseLeleForm } from "@/lib/lele";
+import type { ActivityType } from "@/lib/indicators";
 import { generateInsight } from "@/lib/insight";
 import { scoreSurvey, type Question } from "@/lib/survey";
 import { bool, int, phoneToAuthEmail, SCHOOL_LEVEL_KEYS, str } from "@/lib/utils";
@@ -89,15 +91,20 @@ export async function saveAgreement(_: ActionState, fd: FormData): Promise<Actio
 export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState> {
   const childId = str(fd, "child_id");
   await assertChild(childId);
-  const type = str(fd, "type") as "digital" | "positif";
-  if (type !== "digital" && type !== "positif") return { error: "Jenis aktivitas tidak valid." };
+  const type = str(fd, "type") as ActivityType;
+  if (type !== "digital" && type !== "positif" && type !== "rutin") return { error: "Jenis aktivitas tidak valid." };
   const date = str(fd, "log_date");
   const today = todayStr();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || date > today || date < addDays(today, -7)) {
     return { error: "Tanggal hanya bisa hari ini sampai 7 hari ke belakang." };
   }
   const categoryId = str(fd, "category_id");
-  if (!categoryId) return { error: type === "digital" ? "Pilih tujuan memakai gawai." : "Pilih kategori aktivitas." };
+  if (!categoryId) return { error: type === "digital" ? "Pilih tujuan memakai gawai." : "Pilih kegiatan." };
+  const supabase = await createClient();
+  const { data: cat } = await supabase.from("categories").select("id,type,name,icon").eq("id", categoryId).maybeSingle();
+  if (!cat || cat.type !== type) return { error: "Kegiatan tidak valid." };
+  const customLabel = str(fd, "custom_label").trim().slice(0, 60);
+  if (isOtherCategory(cat) && !customLabel) return { error: "Tulis nama kegiatannya untuk pilihan Lainnya." };
 
   let duration = int(fd, "duration_min", 0);
   let startAt: string | null = null;
@@ -118,12 +125,22 @@ export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState
     startAt = wibToIso(date, start);
     endAt = new Date(new Date(startAt).getTime() + duration * 60000).toISOString();
   }
-  if (duration < 1 || duration > 1440) return { error: "Isi durasi atau jam mulai–selesai." };
+  if (duration < 1 || duration > 1440) return { error: "Isi durasi (jam dan menit) atau jam mulai–selesai." };
+
+  // Satu hari = 24 jam: total semua catatan pada tanggal ini tidak boleh melebihi 1.440 menit.
+  const id = str(fd, "id");
+  const { data: sameDay } = await supabase.from("activity_logs").select("id,duration_min").eq("child_id", childId).eq("log_date", date);
+  const usedMin = (sameDay ?? []).filter((l) => l.id !== id).reduce((a, l) => a + l.duration_min, 0);
+  if (usedMin + duration > 1440) {
+    const left = Math.max(0, 1440 - usedMin);
+    return { error: left ? `Melebihi 24 jam. Sisa waktu yang belum dicatat pada tanggal ini: ${formatMenit(left)}.` : "Tanggal ini sudah tercatat penuh 24 jam. Ubah atau hapus catatan lain di Riwayat bila perlu." };
+  }
 
   const row = {
     child_id: childId,
     type,
     category_id: categoryId,
+    custom_label: isOtherCategory(cat) ? customLabel : null,
     log_date: date,
     start_at: startAt,
     end_at: endAt,
@@ -134,13 +151,28 @@ export async function saveLog(_: ActionState, fd: FormData): Promise<ActionState
     with_whom: type === "positif" ? str(fd, "with_whom") || null : null,
     note: str(fd, "note").slice(0, 500) || null,
   };
-  const supabase = await createClient();
-  const id = str(fd, "id");
   const { error } = id ? await supabase.from("activity_logs").update(row).eq("id", id).eq("child_id", childId) : await supabase.from("activity_logs").insert(row);
   if (error) return { error: "Gagal menyimpan catatan." };
+
+  // Logbook lele harian (Instrumen I) saat kegiatan "Merawat lele".
+  let leleSaved = false;
+  if (type === "positif" && isLeleCategory(cat)) {
+    const lele = parseLeleForm(fd);
+    if (lele) {
+      const { error: le } = await supabase
+        .from("lele_logs")
+        .upsert({ child_id: childId, log_date: date, ...lele, catatan: str(fd, "note").slice(0, 500) || null, updated_at: new Date().toISOString() }, { onConflict: "child_id,log_date" });
+      leleSaved = !le;
+    }
+  }
   revalidatePath("/app", "layout");
   if (id) redirect("/app/riwayat");
-  return { ok: true, message: `Tersimpan: ${duration} menit ${type === "digital" ? "aktivitas digital" : "aktivitas positif"}.` };
+  const left = 1440 - usedMin - duration;
+  const kind = type === "digital" ? "aktivitas digital" : type === "positif" ? "aktivitas positif" : "rutinitas";
+  return {
+    ok: true,
+    message: `Tersimpan: ${formatMenit(duration)} ${kind}${leleSaved ? " + logbook lele" : ""}. ${left > 0 ? `Sisa ${formatMenit(left)} lagi agar 24 jam tercatat penuh.` : "24 jam hari ini sudah tercatat penuh."}`,
+  };
 }
 
 export async function deleteLog(fd: FormData) {
@@ -365,6 +397,8 @@ export async function childLog(_: ActionState, fd: FormData): Promise<ActionStat
   const duration = int(fd, "duration_min", 0);
   if (!categoryId || ![15, 30, 60].includes(duration)) return { error: "Pilih kegiatan dan lamanya." };
   const supabase = await createClient();
+  const { data: sameDay } = await supabase.from("activity_logs").select("duration_min").eq("child_id", childId).eq("log_date", todayStr());
+  if ((sameDay ?? []).reduce((a, l) => a + l.duration_min, 0) + duration > 1440) return { error: "Catatan hari ini sudah penuh 24 jam. Minta Ayah/Bunda memeriksa riwayat ya." };
   const { error } = await supabase.from("activity_logs").insert({
     child_id: childId,
     type: "positif",

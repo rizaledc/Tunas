@@ -32,6 +32,8 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
 
   const digital = (logs ?? []).filter((l) => l.type === "digital").reduce((a, l) => a + l.duration_min, 0);
   const positif = (logs ?? []).filter((l) => l.type === "positif").reduce((a, l) => a + l.duration_min, 0);
+  const rutin = (logs ?? []).filter((l) => l.type === "rutin").reduce((a, l) => a + l.duration_min, 0);
+  const totalDay = digital + positif + rutin;
   const target = agreement?.target_screen_min ?? 120;
   const balance = balancePercent(digital, positif);
   const openSurvey = (surveys ?? []).find((s) => !(answered ?? []).some((a) => a.survey_id === s.id));
@@ -68,6 +70,21 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         </div>
       )}
 
+      <Link href="/app/catat" className="card block">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="flex items-center gap-1.5 font-bold text-hijau-700"><Icon name="clock" /> Catatan 24 jam hari ini</p>
+          <p className="text-sm font-bold text-ink-soft">{totalDay >= 1440 ? "Lengkap" : `Sisa ${formatMenit(1440 - totalDay)}`}</p>
+        </div>
+        <div className="mt-2 flex h-3 overflow-hidden rounded-full bg-gray-100" aria-hidden>
+          <span className="bg-gelap-700" style={{ width: `${(digital / 1440) * 100}%` }} />
+          <span className="bg-hijau-600" style={{ width: `${(positif / 1440) * 100}%` }} />
+          <span className="bg-kuning-500" style={{ width: `${(rutin / 1440) * 100}%` }} />
+        </div>
+        <p className="mt-2 text-xs text-ink-soft">
+          Digital {formatMenit(digital)} · Positif {formatMenit(positif)} · Rutinitas {formatMenit(rutin)} · tercatat {formatMenit(totalDay)} dari 24 jam
+        </p>
+      </Link>
+
       <div className="card">
         <div className="flex items-baseline justify-between">
           <p className="flex items-center gap-1.5 font-bold text-hijau-600"><Icon name="device" /> Screen time</p>
@@ -94,14 +111,17 @@ export default async function BerandaPage({ searchParams }: { searchParams: Prom
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
-        <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
+      <div className="grid grid-cols-4 gap-2">
+        <Link href="/app/catat?tab=digital" className="card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm">
           <Icon name="device" className="h-7 w-7 text-hijau-600" />Catat gawai
         </Link>
-        <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold">
+        <Link href="/app/catat?tab=positif" className="card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm">
           <Icon name="palette" className="h-7 w-7 text-hijau-600" />Catat positif
         </Link>
-        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-3 text-center text-sm font-bold ${checkin ? "opacity-60" : "ring-2 ring-hijau-500"}`}>
+        <Link href="/app/catat?tab=rutin" className="card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm">
+          <Icon name="sleep" className="h-7 w-7 text-kuning-700" />Catat rutinitas
+        </Link>
+        <Link href="/app/checkin" className={`card flex flex-col items-center gap-1 p-2.5 text-center text-xs font-bold sm:text-sm ${checkin ? "opacity-60" : "ring-2 ring-hijau-500"}`}>
           <Icon name={checkin ? "check-circle" : "face-smile"} className="h-7 w-7 text-hijau-700" />Check-in
         </Link>
       </div>

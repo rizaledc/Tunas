@@ -7,7 +7,7 @@ import { addDays, dateRange, wibHour } from "./date";
 export type LogRow = {
   id?: string;
   log_date: string;
-  type: "digital" | "positif";
+  type: ActivityType;
   category_id: string | null;
   duration_min: number;
   accompanied: boolean | null;
@@ -25,7 +25,8 @@ export type CheckinRow = {
   device_before_sleep: boolean | null;
 };
 
-export type CategoryRow = { id: string; type: "digital" | "positif"; name: string; icon: string };
+export type ActivityType = "digital" | "positif" | "rutin";
+export type CategoryRow = { id: string; type: ActivityType; name: string; icon: string };
 
 export type Indicators = {
   periode: { mulai: string; selesai: string };

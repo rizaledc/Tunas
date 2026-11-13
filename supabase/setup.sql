@@ -76,7 +76,7 @@ create table public.agreements (
 -- ---------- categories ----------
 create table public.categories (
   id uuid primary key default gen_random_uuid(),
-  type text not null check (type in ('digital','positif')),
+  type text not null check (type in ('digital','positif','rutin')),
   name text not null,
   icon text not null default 'star',
   active boolean not null default true,
@@ -87,8 +87,9 @@ create table public.categories (
 create table public.activity_logs (
   id uuid primary key default gen_random_uuid(),
   child_id uuid not null references public.children(id) on delete cascade,
-  type text not null check (type in ('digital','positif')),
+  type text not null check (type in ('digital','positif','rutin')),
   category_id uuid references public.categories(id) on delete set null,
+  custom_label text check (char_length(custom_label) <= 60),
   log_date date not null,
   start_at timestamptz,
   end_at timestamptz,
@@ -104,6 +105,23 @@ create table public.activity_logs (
 );
 create index on public.activity_logs(child_id, log_date);
 create index on public.activity_logs(log_date);
+
+-- ---------- lele_logs (logbook harian pemeliharaan lele) ----------
+create table public.lele_logs (
+  id uuid primary key default gen_random_uuid(),
+  child_id uuid not null references public.children(id) on delete cascade,
+  log_date date not null,
+  pakan_pagi text check (pakan_pagi in ('tepat','terlambat','tidak')),
+  pakan_sore text check (pakan_sore in ('tepat','terlambat','tidak')),
+  air text[] not null default '{}' check (air <@ array['hijau','keruh','jernih','berbusa']::text[]),
+  perilaku text[] not null default '{}' check (perilaku <@ array['aktif','pasif','menggantung','kematian']::text[]),
+  cuaca text check (cuaca in ('cerah','hujan')),
+  didampingi boolean not null default false,
+  catatan text check (char_length(catatan) <= 500),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (child_id, log_date)
+);
 
 -- ---------- daily_checkins ----------
 create table public.daily_checkins (
@@ -294,6 +312,7 @@ alter table public.children enable row level security;
 alter table public.agreements enable row level security;
 alter table public.categories enable row level security;
 alter table public.activity_logs enable row level security;
+alter table public.lele_logs enable row level security;
 alter table public.daily_checkins enable row level security;
 alter table public.ai_insights enable row level security;
 alter table public.reflections enable row level security;
@@ -324,6 +343,7 @@ create policy children_owner_all on public.children for all
 -- data per anak
 create policy agreements_owner on public.agreements for all using (public.owns_child(child_id)) with check (public.owns_child(child_id));
 create policy logs_owner on public.activity_logs for all using (public.owns_child(child_id)) with check (public.owns_child(child_id));
+create policy lele_owner on public.lele_logs for all using (public.owns_child(child_id)) with check (public.owns_child(child_id));
 create policy checkins_owner on public.daily_checkins for all using (public.owns_child(child_id)) with check (public.owns_child(child_id));
 create policy insights_owner_select on public.ai_insights for select using (public.owns_child(child_id));
 create policy insights_owner_rate on public.ai_insights for update using (public.owns_child(child_id)) with check (public.owns_child(child_id));
@@ -429,7 +449,14 @@ insert into public.categories (type, name, icon, sort) values
   ('positif','Membantu di rumah','broom',5),
   ('positif','Ibadah/Mengaji','mosque',6),
   ('positif','Bermain bersama keluarga','family',7),
-  ('positif','Belajar/PR tanpa gawai','pencil2',8)
+  ('positif','Belajar/PR tanpa gawai','pencil2',8),
+  ('positif','Lainnya','more',99),
+  ('digital','Lainnya','more',99),
+  ('rutin','Tidur','sleep',1),
+  ('rutin','Sekolah','school',2),
+  ('rutin','Makan & mandi','utensils',3),
+  ('rutin','Perjalanan','bus',4),
+  ('rutin','Lainnya','more',99)
 on conflict do nothing;
 
 insert into public.events (title, slug, date, location, description, featured, published) values
