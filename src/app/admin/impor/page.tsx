@@ -21,7 +21,7 @@ export default async function ImporPage() {
         <h2 className="font-extrabold">Unggah Excel</h2>
         <p className="text-sm text-ink-soft">
           Kolom: <code>no_hp</code> (orang tua), <code>anak</code> (nama panggilan persis seperti di aplikasi), <code>tanggal</code> (YYYY-MM-DD), <code>jenis</code> (digital/positif), <code>kategori</code>, <code>durasi</code> (menit), <code>didampingi</code> (ya/tidak), <code>catatan</code>.{" "}
-          <a href="/api/admin/template?jenis=logbook" className="font-bold text-marun-600">
+          <a href="/api/admin/template?jenis=logbook" className="font-bold text-hijau-600">
             Unduh template
           </a>
         </p>

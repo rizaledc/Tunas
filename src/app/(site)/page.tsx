@@ -10,7 +10,6 @@ import { GalleryGrid } from "@/components/site/gallery";
 import { PhoneMockup } from "@/components/site/phone-mockup";
 import { ArrowLink, DarkMedia, Eyebrow, Headline, splitHighlight } from "@/components/site/parts";
 import { ArticleCard } from "@/components/site/article-card";
-import { EventPhotos } from "@/components/site/event-photos";
 
 export const revalidate = 300;
 
@@ -33,6 +32,8 @@ export default async function LandingPage() {
   const [heroA, heroB] = splitHighlight(hero.title);
   const heroLines = heroA ? [heroA] : [];
   const eventPhotos = (L.events_photos ?? []).filter((p) => p.url);
+  // Kartu kegiatan tanpa foto sampul memakai foto dokumentasi secara bergantian.
+  const coverFor = (i: number) => eventPhotos[i % Math.max(1, eventPhotos.length)]?.url ?? null;
   const marquee = [brand.tagline, ...features.map((f) => f.title)].filter(Boolean);
 
   return (
@@ -95,12 +96,12 @@ export default async function LandingPage() {
 
       {/* PITA BERJALAN */}
       {marquee.length > 0 && (
-        <div className="theme-dark overflow-hidden border-y border-ink/10 bg-marun-700 py-4 text-ink" aria-hidden>
+        <div className="overflow-hidden bg-kuning-500 py-4 text-hijau-950" aria-hidden>
           <div className="sa-marquee flex w-max whitespace-nowrap">
             {[...marquee, ...marquee, ...marquee, ...marquee].map((t, i) => (
-              <span key={i} className="eyebrow flex shrink-0 items-center gap-10 pr-10 text-[13px] text-ink/90">
+              <span key={i} className="eyebrow flex shrink-0 items-center gap-10 pr-10 text-[13px] font-bold text-hijau-950">
                 {t}
-                <Icon name="star-solid" className="h-3 w-3 text-gold" />
+                <Icon name="star-solid" className="h-3 w-3 text-hijau-800" />
               </span>
             ))}
           </div>
@@ -128,8 +129,8 @@ export default async function LandingPage() {
             </div>
             <div className="grid gap-px overflow-hidden rounded-3xl bg-ink/10 sm:grid-cols-2 lg:grid-cols-3">
               {features.map((f) => (
-                <div key={f.title} className="group bg-paper/90 p-7 transition hover:bg-marun-50">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-gold transition group-hover:border-hl group-hover:text-hl">
+                <div key={f.title} className="group bg-paper/90 p-7 transition hover:bg-hijau-50">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-kuning-400/30 bg-kuning-400/10 text-gold transition group-hover:border-hl group-hover:text-hl">
                     <CategoryIcon icon={f.icon} className="h-6 w-6" />
                   </span>
                   <p className="eyebrow mt-6 text-ink">{f.title}</p>
@@ -157,9 +158,15 @@ export default async function LandingPage() {
               <div className="grid gap-6 sm:grid-cols-2">
                 {featured.length === 0 &&
                   (eventPhotos.length ? (
-                    <div className="sm:col-span-2">
-                      <EventPhotos photos={eventPhotos} compact />
-                    </div>
+                    eventPhotos.slice(0, 2).map((p, i) => (
+                      <figure key={p.url + i} className={`theme-dark group relative aspect-[4/5] overflow-hidden rounded-3xl border border-ink/10 ${i === 1 ? "sm:mt-12" : ""}`}>
+                        <DarkMedia src={p.url} alt={p.caption || "Dokumentasi kegiatan pendampingan"} sizes="(min-width:1024px) 30vw, 100vw" className="absolute inset-0 transition duration-700 group-hover:scale-105">
+                          <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
+                        </DarkMedia>
+                        <span className="absolute top-5 left-5 rounded-full border border-ink/20 bg-surface/50 px-3 py-1.5 text-[11px] font-semibold tracking-[0.2em] uppercase backdrop-blur">Dokumentasi</span>
+                        {p.caption && <figcaption className="display absolute inset-x-0 bottom-0 p-6 text-2xl">{p.caption}</figcaption>}
+                      </figure>
+                    ))
                   ) : (
                     <div className="sa-texture flex aspect-[4/5] flex-col justify-end rounded-3xl border border-ink/10 p-7 sm:col-span-2 sm:aspect-[16/9]">
                       <p className="eyebrow text-hl">Segera hadir</p>
@@ -168,13 +175,13 @@ export default async function LandingPage() {
                   ))}
                 {featured.slice(0, 2).map((e, i) => (
                   <Link key={e.id} href={`/kegiatan/${e.slug}`} className={`theme-dark group relative block overflow-hidden rounded-3xl border border-ink/10 ${featured.length === 1 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/5]"} ${i === 1 ? "sm:mt-12" : ""}`}>
-                    <DarkMedia src={e.cover_photo} alt={e.title} sizes="(min-width:1024px) 30vw, 100vw" className="absolute inset-0 transition duration-700 group-hover:scale-105">
+                    <DarkMedia src={e.cover_photo || coverFor(i)} alt={e.title} sizes="(min-width:1024px) 30vw, 100vw" className="absolute inset-0 transition duration-700 group-hover:scale-105">
                       <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
                     </DarkMedia>
                     <span className="absolute top-5 left-5 rounded-full border border-ink/20 bg-surface/50 px-3 py-1.5 text-[11px] font-semibold tracking-[0.2em] uppercase backdrop-blur">
                       {formatTanggal(e.date, { day: "numeric", month: "short", year: "numeric" })}
                     </span>
-                    <span className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-aksen-500 text-white transition group-hover:rotate-[-45deg]">
+                    <span className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-hijau-700 text-white transition group-hover:rotate-[-45deg]">
                       <Icon name="arrow-right" className="h-4 w-4" />
                     </span>
                     <div className="absolute inset-x-0 bottom-0 p-6">
@@ -194,7 +201,7 @@ export default async function LandingPage() {
                     {upcoming.map((e) => (
                       <li key={e.id}>
                         <Link href={`/kegiatan/${e.slug}`} className="group flex items-center gap-5 py-5">
-                          <span className="theme-dark flex w-16 shrink-0 flex-col items-center rounded-2xl bg-marun-600 py-3">
+                          <span className="theme-dark flex w-16 shrink-0 flex-col items-center rounded-2xl bg-hijau-600 py-3">
                             <span className="display text-2xl">{formatTanggal(e.date, { day: "numeric" })}</span>
                             <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-ink/80">{formatTanggal(e.date, { month: "short" })}</span>
                           </span>
@@ -212,11 +219,6 @@ export default async function LandingPage() {
                 )}
               </div>
             </div>
-            {featured.length > 0 && eventPhotos.length > 0 && (
-              <div className="mt-6">
-                <EventPhotos photos={eventPhotos} />
-              </div>
-            )}
           </div>
         </section>
       )}
@@ -231,7 +233,7 @@ export default async function LandingPage() {
               <ol className="mt-12 space-y-0 border-t border-ink/10">
                 {L.steps.filter((s) => s.title).map((st, i) => (
                   <li key={i} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-ink/10 py-7">
-                    <span className="display text-4xl text-marun-600">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="display text-4xl text-hijau-600">{String(i + 1).padStart(2, "0")}</span>
                     <span>
                       <span className="block text-xl font-extrabold tracking-tight">{st.title}</span>
                       <span className="mt-1.5 block text-ink-soft">{st.text}</span>
@@ -244,7 +246,7 @@ export default async function LandingPage() {
               </ArrowLink>
             </div>
             <div className="relative">
-              <div className="absolute inset-8 -z-0 rounded-full bg-marun-500/20 blur-3xl" aria-hidden />
+              <div className="absolute inset-8 -z-0 rounded-full bg-hijau-500/20 blur-3xl" aria-hidden />
               {L.steps_image ? (
                 <div className="relative mx-auto aspect-[9/16] w-64 overflow-hidden rounded-[2.5rem] border-[10px] border-gelap-900 shadow-2xl">
                   <Image src={L.steps_image} alt="Tampilan aplikasi SAHABAT ANAK" fill sizes="256px" className="object-cover" />
@@ -259,13 +261,13 @@ export default async function LandingPage() {
 
       {/* ALUR PROGRAM */}
       {show.roadmap && (
-        <section className="theme-dark bg-gradient-to-br from-marun-800 via-marun-700 to-marun-900 py-24 text-ink">
+        <section className="theme-dark bg-gradient-to-br from-hijau-800 via-hijau-700 to-hijau-900 py-24 text-ink">
           <div className="mx-auto max-w-6xl px-4">
             <Eyebrow>Perjalanan</Eyebrow>
             <Headline text={L.roadmap_title} className="mt-5 text-4xl md:text-6xl" breakLine={false} />
             <ol className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-ink/15 md:grid-cols-2 lg:grid-cols-4">
               {L.roadmap.filter((r) => r.title).map((r, i) => (
-                <li key={i} className="relative bg-marun-800/90 p-7">
+                <li key={i} className="relative bg-hijau-800/90 p-7">
                   <span className="display absolute top-5 right-6 text-6xl text-gold">{String(i + 1).padStart(2, "0")}</span>
                   <p className="eyebrow text-gold">{r.label}</p>
                   <p className="mt-10 text-xl font-extrabold tracking-tight">{r.title}</p>
@@ -306,7 +308,7 @@ export default async function LandingPage() {
             </div>
             {articles.length === 0 ? (
               <div className="rounded-3xl bg-paper p-10 text-center">
-                <Icon name="book-open" className="mx-auto h-10 w-10 text-marun-600" />
+                <Icon name="book-open" className="mx-auto h-10 w-10 text-hijau-600" />
                 <p className="mt-3 font-bold">Artikel pertama sedang ditulis</p>
                 <p className="text-ink-soft">Nantikan tips digital parenting untuk keluarga.</p>
               </div>
@@ -323,9 +325,9 @@ export default async function LandingPage() {
 
       {/* AJAKAN */}
       {show.cta && (
-        <section className="theme-dark relative isolate overflow-hidden bg-gradient-to-br from-gelap-950 via-marun-950 to-marun-800 text-ink">
+        <section className="theme-dark relative isolate overflow-hidden bg-gradient-to-br from-gelap-950 via-hijau-950 to-hijau-800 text-ink">
           <DarkMedia src={hero.image} className="absolute inset-0 -z-10 opacity-40">
-            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-marun-900/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/70 to-hijau-900/60" />
           </DarkMedia>
           <div className="mx-auto grid max-w-6xl items-end gap-10 px-4 py-28 md:grid-cols-[1.4fr_1fr]">
             <div>
@@ -335,7 +337,7 @@ export default async function LandingPage() {
             <div className="md:justify-self-end">
               <p className="max-w-xs text-ink/70">{L.cta_text}</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/daftar" className="btn-primary px-7">
+                <Link href="/daftar" className="btn-yellow px-7">
                   {L.cta_button} <Icon name="arrow-right" className="h-5 w-5" />
                 </Link>
                 {contact.whatsapp && (

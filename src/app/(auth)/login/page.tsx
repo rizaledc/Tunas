@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <div className="card rounded-3xl p-6 shadow-xl shadow-black/5 sm:p-9">
       <h1 className="display text-[1.75rem] leading-tight text-ink sm:text-3xl">Masuk</h1>
       <p className="mb-5 text-ink-soft">Untuk orang tua.</p>
-      {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-emas-300/25 p-3 text-sm font-semibold text-aksen-600">{REASONS[alasan]}</p>}
+      {alasan && REASONS[alasan] && <p className="mb-4 rounded-xl bg-kuning-300/25 p-3 text-sm font-semibold text-hijau-700">{REASONS[alasan]}</p>}
       {auth.google && (
         <>
           <GoogleButton label="Masuk dengan Google" />
@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <LoginForm next={next} />
       <div className="mt-6 border-t pt-4 text-center text-sm">
         Belum punya akun?{" "}
-        <Link href="/daftar" className="font-bold text-marun-600">
+        <Link href="/daftar" className="font-bold text-hijau-600">
           Daftar dengan kode undangan
         </Link>
       </div>

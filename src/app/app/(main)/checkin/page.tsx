@@ -31,7 +31,7 @@ export default async function CheckinPage() {
             {Object.entries(MOODS).map(([k, m]) => (
               <label key={k} className="chip flex-col justify-center rounded-2xl py-3">
                 <input type="radio" name="mood" value={k} defaultChecked={c?.mood === k} className="sr-only" />
-                <Icon name={m.icon} className="h-9 w-9 text-aksen-500" />
+                <Icon name={m.icon} className="h-9 w-9 text-hijau-700" />
                 <span className="text-xs">{m.label}</span>
               </label>
             ))}
@@ -43,7 +43,7 @@ export default async function CheckinPage() {
             {Object.entries(STOP_RESPONSES).map(([k, label]) => (
               <label key={k} className="chip justify-start rounded-xl py-3 text-base">
                 <input type="radio" name="stop_response" value={k} defaultChecked={c?.stop_response === k} className="sr-only" />
-                <Icon name={k === "mudah" ? "face-smile" : k === "diingatkan" ? "megaphone" : "face-angry"} className="h-6 w-6 text-marun-600" /> {label}
+                <Icon name={k === "mudah" ? "face-smile" : k === "diingatkan" ? "megaphone" : "face-angry"} className="h-6 w-6 text-hijau-600" /> {label}
               </label>
             ))}
           </div>

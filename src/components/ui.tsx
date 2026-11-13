@@ -30,7 +30,7 @@ export function Alert({ state }: { state: ActionState }) {
     );
   if (state.message)
     return (
-      <p role="status" className="rounded-xl bg-marun-50 px-3 py-2 text-sm font-semibold text-marun-700">
+      <p role="status" className="rounded-xl bg-hijau-50 px-3 py-2 text-sm font-semibold text-hijau-700">
         {state.message}
       </p>
     );

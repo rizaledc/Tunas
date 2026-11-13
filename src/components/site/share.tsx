@@ -35,11 +35,11 @@ export function ShareButtons({ path, title }: { path: string; title: string }) {
   return (
     <div className="mt-8 border-t pt-5">
       <p className="mb-3 flex items-center gap-2 font-extrabold">
-        <Icon name="share" className="text-marun-600" /> Bagikan
+        <Icon name="share" className="text-hijau-600" /> Bagikan
       </p>
       <div className="flex flex-wrap gap-2">
         {canNativeShare && (
-          <button type="button" className="btn-sm btn bg-marun-600 text-white" onClick={() => navigator.share({ title, url: url() }).catch(() => {})}>
+          <button type="button" className="btn-sm btn bg-hijau-600 text-white" onClick={() => navigator.share({ title, url: url() }).catch(() => {})}>
             <Icon name="share" className="h-4 w-4" /> Bagikan…
           </button>
         )}

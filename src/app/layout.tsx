@@ -1,12 +1,13 @@
 import { SITE_URL } from "@/lib/site";
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Fredoka, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ServiceWorker } from "@/components/service-worker";
 import { getSetting } from "@/lib/settings";
 import { og } from "@/lib/seo";
-import { THEME_SCRIPT } from "@/lib/theme";
 
+// Judul memakai huruf bulat yang serasi dengan logo; teks biasa tetap Plus Jakarta Sans agar mudah dibaca.
+const fredoka = Fredoka({ subsets: ["latin"], variable: "--font-fredoka", display: "swap", weight: ["500", "600", "700"] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap", weight: ["400", "500", "600", "700", "800"] });
 
 const DEFAULT_DESCRIPTION =
@@ -31,18 +32,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#940000",
+  themeColor: "#0d4e30",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // suppressHydrationWarning: kelas "dark" dipasang skrip sebelum React berjalan.
-    <html lang="id" className={jakarta.variable} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      </head>
+    <html lang="id" className={`${jakarta.variable} ${fredoka.variable}`}>
       <body className="min-h-dvh font-sans antialiased">
         {children}
         <ServiceWorker />

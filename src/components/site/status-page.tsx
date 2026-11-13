@@ -3,7 +3,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { Logo, LogoMark } from "@/components/logo";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const PAGES = [
   { href: "/", label: "Beranda" },
@@ -61,8 +60,7 @@ export function StatusPage({ code, eyebrow, title, text, notFound, onRetry, refe
         <Link href="/" aria-label="SAHABAT ANAK, beranda" className="min-w-0">
           <Logo auto />
         </Link>
-        <ThemeToggle />
-      </header>
+              </header>
 
       <main className="relative mx-auto flex w-full max-w-6xl flex-1 items-center px-4 pb-16">
         <div className="max-w-2xl">
@@ -82,7 +80,7 @@ export function StatusPage({ code, eyebrow, title, text, notFound, onRetry, refe
           {hint && (
             <p className="mt-6 text-ink/80">
               Mungkin maksud Anda{" "}
-              <Link href={hint.href} className="font-bold text-gold underline decoration-gold/40 underline-offset-4 hover:decoration-emas-300">
+              <Link href={hint.href} className="font-bold text-gold underline decoration-gold/40 underline-offset-4 hover:decoration-kuning-300">
                 halaman {hint.label}
               </Link>
               ?

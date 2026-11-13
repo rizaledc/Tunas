@@ -80,13 +80,13 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                     const cat = cats.find((c) => c.id === l.category_id);
                     return (
                       <li key={l.id} className="card flex items-start gap-3 p-3">
-                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${l.type === "digital" ? "bg-ink/[0.045] text-marun-600" : "bg-marun-50 text-marun-600"}`}>
+                        <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${l.type === "digital" ? "bg-ink/[0.045] text-hijau-600" : "bg-hijau-50 text-hijau-600"}`}>
                           <CategoryIcon icon={cat?.icon} className="h-6 w-6" />
                         </span>
                         <div className="min-w-0 flex-1">
                           <p className="font-bold">
                             {cat?.name ?? "Lainnya"} · {formatMenit(l.duration_min)}
-                            {l.input_by === "child" && <span className="ml-1 inline-flex items-center gap-0.5 text-xs text-aksen-600"><Icon name="star-solid" className="h-3 w-3" /> dicatat anak</span>}
+                            {l.input_by === "child" && <span className="ml-1 inline-flex items-center gap-0.5 text-xs text-hijau-700"><Icon name="star-solid" className="h-3 w-3" /> dicatat anak</span>}
                             {l.source === "logbook_import" && <span className="ml-1 text-xs text-ink-soft">(logbook)</span>}
                           </p>
                           <p className="text-sm text-ink-soft">
@@ -101,7 +101,7 @@ export default async function RiwayatPage({ searchParams }: { searchParams: Prom
                         {l.source === "app" && (
                           <div className="flex flex-col items-end">
                             {l.log_date >= editable && (
-                              <Link href={`/app/catat?edit=${l.id}`} className="btn-ghost btn-sm text-marun-600">
+                              <Link href={`/app/catat?edit=${l.id}`} className="btn-ghost btn-sm text-hijau-600">
                                 Ubah
                               </Link>
                             )}

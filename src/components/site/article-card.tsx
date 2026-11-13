@@ -6,12 +6,12 @@ import { excerpt } from "@/lib/markdown";
 
 export function ArticleCard({ a, accent }: { a: { slug: string; title: string; cover: string | null; excerpt: string | null; body: string; published_at: string | null }; accent?: boolean }) {
   return (
-    <Link href={`/artikel/${a.slug}`} className={`group flex flex-col overflow-hidden rounded-3xl p-5 transition hover:-translate-y-1 ${accent ? "theme-dark bg-marun-600 text-ink" : "bg-paper"}`}>
+    <Link href={`/artikel/${a.slug}`} className={`group flex flex-col overflow-hidden rounded-3xl p-5 transition hover:-translate-y-1 ${accent ? "theme-dark bg-hijau-600 text-ink" : "bg-paper"}`}>
       <div className="flex items-start justify-between gap-3">
         <span className={`rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.2em] uppercase ${accent ? "border-ink/30 text-ink/80" : "border-ink/10 text-ink-soft"}`}>
           {a.published_at ? formatTanggal(a.published_at, { day: "numeric", month: "short", year: "numeric" }) : "Artikel"}
         </span>
-        <span className={`flex h-9 w-9 items-center justify-center rounded-full transition group-hover:rotate-[-45deg] ${accent ? "bg-paper text-marun-700" : "bg-surface text-ink"}`}>
+        <span className={`flex h-9 w-9 items-center justify-center rounded-full transition group-hover:rotate-[-45deg] ${accent ? "bg-paper text-hijau-700" : "bg-surface text-ink"}`}>
           <Icon name="arrow-right" className="h-4 w-4" />
         </span>
       </div>

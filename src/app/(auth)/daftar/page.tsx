@@ -23,7 +23,7 @@ export default async function DaftarPage({ searchParams }: { searchParams: Promi
       <RegisterForm consentText={consent.text} consentVersion={consent.version} code={kode} />
       <p className="mt-6 border-t pt-4 text-center text-sm">
         Sudah punya akun?{" "}
-        <Link href="/login" className="font-bold text-marun-600">
+        <Link href="/login" className="font-bold text-hijau-600">
           Masuk
         </Link>
       </p>

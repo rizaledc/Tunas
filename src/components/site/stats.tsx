@@ -36,7 +36,7 @@ function Bar({ label, value, width, strong }: { label: string; value: string; wi
     <div className="grid grid-cols-[4.25rem_1fr_auto] items-center gap-3 text-xs">
       <span className={strong ? "font-semibold text-ink" : "text-ink/65"}>{label}</span>
       <span className="h-2 overflow-hidden rounded-full bg-ink/10">
-        <span className={`block h-full rounded-full ${strong ? "bg-gradient-to-r from-aksen-600 to-emas-400" : "bg-ink/35"}`} style={{ width: `${width}%` }} />
+        <span className={`block h-full rounded-full ${strong ? "bg-gradient-to-r from-hijau-600 to-kuning-400" : "bg-ink/35"}`} style={{ width: `${width}%` }} />
       </span>
       <span className={`tabular-nums ${strong ? "font-bold text-ink" : "text-ink/60"}`}>{value}</span>
     </div>
@@ -65,7 +65,7 @@ export function StatsSection({ stats, eyebrow, title, text }: { stats: StatItem[
                 <div className="mt-auto pt-6">
                   <p className="display text-5xl text-ink">{s.after}</p>
                   {d?.change ? (
-                    <p className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${d.up ? "bg-emas-400/15 text-gold" : "bg-ink/10 text-ink/70"}`}>
+                    <p className={`mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${d.up ? "bg-kuning-400/15 text-gold" : "bg-ink/10 text-ink/70"}`}>
                       <Icon name="chart" className="h-3.5 w-3.5" /> {d.change}
                     </p>
                   ) : (

@@ -17,8 +17,8 @@ export function AiTestForm({ model }: { model: string }) {
             {r?.steps && (
               <ul className="space-y-2">
                 {r.steps.map((s) => (
-                  <li key={s.label} className={`flex gap-2 rounded-xl p-3 text-sm ${s.ok ? "bg-marun-50" : "bg-red-50"}`}>
-                    <Icon name={s.ok ? "check-circle" : "warning"} className={s.ok ? "text-marun-600" : "text-merah-600"} />
+                  <li key={s.label} className={`flex gap-2 rounded-xl p-3 text-sm ${s.ok ? "bg-hijau-50" : "bg-red-50"}`}>
+                    <Icon name={s.ok ? "check-circle" : "warning"} className={s.ok ? "text-hijau-600" : "text-merah-600"} />
                     <span>
                       <strong>{s.label}:</strong> {s.detail}
                     </span>
@@ -27,7 +27,7 @@ export function AiTestForm({ model }: { model: string }) {
               </ul>
             )}
             {r?.sample && (
-              <div className="space-y-2 rounded-xl border border-marun-200 p-4 text-sm">
+              <div className="space-y-2 rounded-xl border border-hijau-200 p-4 text-sm">
                 <p className="text-xs text-ink-soft">
                   Contoh output dari data anonim · {r.sample.model} · {r.sample.tokensIn}+{r.sample.tokensOut} token · ${r.sample.cost.toFixed(5)}
                 </p>

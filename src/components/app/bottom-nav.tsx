@@ -22,8 +22,8 @@ export function BottomNav() {
           if (it.center)
             return (
               <li key={it.href} className="-mt-6">
-                <Link href={it.href} className="flex flex-col items-center gap-0.5 text-xs font-bold text-aksen-600" aria-current={active ? "page" : undefined}>
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-aksen-500 text-white shadow-lg ring-4 ring-white">
+                <Link href={it.href} className="flex flex-col items-center gap-0.5 text-xs font-bold text-hijau-700" aria-current={active ? "page" : undefined}>
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-hijau-700 text-white shadow-lg ring-4 ring-white">
                     <Icon name="plus" className="h-8 w-8" strokeWidth={2.5} />
                   </span>
                   {it.label}
@@ -35,7 +35,7 @@ export function BottomNav() {
               <Link
                 href={it.href}
                 aria-current={active ? "page" : undefined}
-                className={cn("flex min-w-16 flex-col items-center gap-0.5 py-2 text-xs font-bold", active ? "text-marun-700" : "text-ink-soft")}
+                className={cn("flex min-w-16 flex-col items-center gap-0.5 py-2 text-xs font-bold", active ? "text-hijau-700" : "text-ink-soft")}
               >
                 <Icon name={it.icon} className="h-7 w-7" />
                 {it.label}

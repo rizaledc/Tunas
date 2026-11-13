@@ -42,10 +42,10 @@ export default async function AdminKegiatanPage() {
                 <tr key={e.id}>
                   <td className="whitespace-nowrap">{formatTanggal(e.date, { day: "numeric", month: "short", year: "numeric" })}</td>
                   <td>
-                    <Link href={`/admin/kegiatan/${e.id}`} className="font-bold text-marun-600">
+                    <Link href={`/admin/kegiatan/${e.id}`} className="font-bold text-hijau-600">
                       {e.title}
                     </Link>
-                    {e.featured && <Icon name="star-solid" className="ml-1 h-3.5 w-3.5 text-aksen-500" title="Unggulan" />}
+                    {e.featured && <Icon name="star-solid" className="ml-1 h-3.5 w-3.5 text-hijau-700" title="Unggulan" />}
                   </td>
                   <td>{e.published ? "Tayang" : "Draf"}</td>
                   <td>{a.filter((x) => x.rsvp === "hadir").length}</td>

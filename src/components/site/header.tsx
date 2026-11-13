@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Icon } from "@/components/icons";
 import { Logo, type Brand } from "@/components/logo";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const MENU = [
   { href: "/", label: "Beranda" },
@@ -29,7 +28,7 @@ export function SiteHeader({ brand }: { brand?: Brand }) {
   const solid = scrolled || open;
 
   return (
-    <header className={cn("fixed inset-x-0 top-0 z-40 text-ink transition-colors duration-300", solid ? "border-b border-ink/10 bg-surface/85 backdrop-blur-xl" : "bg-surface/60 backdrop-blur-md dark:bg-transparent dark:backdrop-blur-none")}>
+    <header className={cn("fixed inset-x-0 top-0 z-40 text-ink transition-colors duration-300", solid ? "border-b border-ink/10 bg-surface/85 backdrop-blur-xl" : "bg-surface/70 backdrop-blur-md")}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-5">
         <Link href="/" aria-label="SAHABAT ANAK, beranda">
           <Logo auto brand={brand} />
@@ -46,14 +45,12 @@ export function SiteHeader({ brand }: { brand?: Brand }) {
           })}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-        <ThemeToggle />
-        <Link href="/login" className="hidden shrink-0 items-center gap-3 rounded-full border border-hl/70 py-2.5 pr-3 pl-5 whitespace-nowrap text-[12px] font-semibold tracking-[0.18em] text-ink uppercase transition hover:border-aksen-500 hover:bg-aksen-500 hover:text-white lg:inline-flex">
+                <Link href="/login" className="hidden shrink-0 items-center gap-3 rounded-full border border-hl/70 py-2.5 pr-3 pl-5 whitespace-nowrap text-[12px] font-semibold tracking-[0.18em] text-ink uppercase transition hover:border-hijau-700 hover:bg-hijau-700 hover:text-white lg:inline-flex">
           Masuk / Daftar <Icon name="arrow-right" className="h-4 w-4" />
         </Link>
         </div>
         <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle />
-        <button className="rounded-full border border-ink/20 p-2.5" aria-expanded={open} aria-label={open ? "Tutup menu" : "Buka menu"} onClick={() => setOpen(!open)}>
+                  <button className="rounded-full border border-ink/20 p-2.5" aria-expanded={open} aria-label={open ? "Tutup menu" : "Buka menu"} onClick={() => setOpen(!open)}>
           <Icon name={open ? "close" : "menu"} className="h-5 w-5" />
         </button>
         </div>
