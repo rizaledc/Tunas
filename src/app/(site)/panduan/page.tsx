@@ -17,7 +17,7 @@ export default async function PanduanPage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1.7fr_1fr]">
           <div className="prose-sa rounded-3xl bg-paper p-8 text-lg md:p-10" dangerouslySetInnerHTML={{ __html: renderMarkdown(p.body) }} />
           <aside className="h-fit rounded-3xl bg-surface p-7 text-ink lg:sticky lg:top-28">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emas-400/30 bg-emas-400/10 text-gold">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-kuning-400/30 bg-kuning-400/10 text-gold">
               <Icon name="book" className="h-6 w-6" />
             </span>
             <p className="mt-5 text-xl font-extrabold tracking-tight">{p.module_name}</p>

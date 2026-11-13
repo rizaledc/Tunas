@@ -68,7 +68,7 @@ export default async function EventDetail({ params }: { params: Promise<{ slug: 
         </div>
         {photos.length > 0 && (
           <section className="mx-auto max-w-6xl px-4 pb-20">
-            <h2 className="eyebrow mb-6 text-marun-600">Dokumentasi</h2>
+            <h2 className="eyebrow mb-6 text-hijau-600">Dokumentasi</h2>
             <GalleryGrid photos={photos} />
           </section>
         )}

@@ -22,7 +22,7 @@ export default async function ArticleEditPage({ params }: { params: Promise<{ id
   }
   return (
     <div>
-      <Link href="/admin/konten?tab=artikel" className="inline-flex items-center gap-1 text-sm font-bold text-marun-600">
+      <Link href="/admin/konten?tab=artikel" className="inline-flex items-center gap-1 text-sm font-bold text-hijau-600">
         <Icon name="arrow-left" className="h-4 w-4" /> Daftar artikel
       </Link>
       <PageTitle title={a ? "Ubah Artikel" : "Artikel Baru"} />
@@ -35,7 +35,7 @@ export default async function ArticleEditPage({ params }: { params: Promise<{ id
         <ArticleEditor defaultValue={a?.body ?? ""} />
         <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2 font-bold">
-            <input type="checkbox" name="publish" defaultChecked={Boolean(a?.published_at)} className="h-5 w-5 accent-marun-600" /> Terbitkan
+            <input type="checkbox" name="publish" defaultChecked={Boolean(a?.published_at)} className="h-5 w-5 accent-hijau-600" /> Terbitkan
           </label>
           <label className="text-sm">
             Tanggal terbit{" "}

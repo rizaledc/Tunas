@@ -7,9 +7,9 @@ import { emailError, emailTypoHint, generateStrongPassword, passwordChecks, pass
 const STRENGTH = [
   { label: "Sangat lemah", color: "bg-merah-500", text: "text-merah-600" },
   { label: "Lemah", color: "bg-merah-500", text: "text-merah-600" },
-  { label: "Cukup", color: "bg-aksen-500", text: "text-aksen-600" },
-  { label: "Kuat", color: "bg-marun-500", text: "text-marun-700" },
-  { label: "Sangat kuat", color: "bg-marun-600", text: "text-marun-700" },
+  { label: "Cukup", color: "bg-hijau-700", text: "text-hijau-700" },
+  { label: "Kuat", color: "bg-hijau-500", text: "text-hijau-700" },
+  { label: "Sangat kuat", color: "bg-hijau-600", text: "text-hijau-700" },
 ];
 
 /** Membaca nilai field lain di form yang sama (untuk cek "bukan nama/nomor HP"). */
@@ -82,9 +82,9 @@ export function NewPasswordField({ name = "password", label = "Buat password", c
           onChange={(e) => setPw(e.target.value)}
           aria-describedby={`${name}-rules`}
           aria-invalid={pw.length > 0 && !allOk}
-          className={cn("input pr-20", pw && (allOk ? "border-marun-500" : "border-aksen-400"))}
+          className={cn("input pr-20", pw && (allOk ? "border-hijau-500" : "border-kuning-500"))}
         />
-        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1 rounded-lg px-2 py-1 text-sm font-bold text-marun-700" aria-label={show ? "Sembunyikan password" : "Lihat password"}>
+        <button type="button" onClick={() => setShow(!show)} className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1 rounded-lg px-2 py-1 text-sm font-bold text-hijau-700" aria-label={show ? "Sembunyikan password" : "Lihat password"}>
           <Icon name="eye" className="h-4 w-4" /> {show ? "Tutup" : "Lihat"}
         </button>
       </div>
@@ -102,8 +102,8 @@ export function NewPasswordField({ name = "password", label = "Buat password", c
 
       <ul id={`${name}-rules`} className="grid gap-1 rounded-xl bg-gray-50 p-3 text-xs sm:grid-cols-2">
         {checks.map((c) => (
-          <li key={c.id} className={cn("flex items-center gap-1.5", c.ok ? "text-marun-700" : "text-ink-soft")}>
-            <Icon name={c.ok ? "check-circle" : "info"} className={cn("h-4 w-4", c.ok ? "text-marun-600" : "text-gray-400")} />
+          <li key={c.id} className={cn("flex items-center gap-1.5", c.ok ? "text-hijau-700" : "text-ink-soft")}>
+            <Icon name={c.ok ? "check-circle" : "info"} className={cn("h-4 w-4", c.ok ? "text-hijau-600" : "text-gray-400")} />
             {c.label}
           </li>
         ))}
@@ -111,7 +111,7 @@ export function NewPasswordField({ name = "password", label = "Buat password", c
       <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
         <button
           type="button"
-          className="btn-ghost btn-sm text-marun-600 ring-1 ring-gray-200"
+          className="btn-ghost btn-sm text-hijau-600 ring-1 ring-gray-200"
           onClick={() => {
             const g = generateStrongPassword();
             setPw(g);
@@ -137,11 +137,11 @@ export function NewPasswordField({ name = "password", label = "Buat password", c
             autoComplete="new-password"
             value={pw2}
             onChange={(e) => setPw2(e.target.value)}
-            className={cn("input", pw2 && (pw2 === pw ? "border-marun-500" : "border-merah-500"))}
+            className={cn("input", pw2 && (pw2 === pw ? "border-hijau-500" : "border-merah-500"))}
           />
           {pw2 && pw2 !== pw && <p className="mt-1 text-xs font-semibold text-merah-600">Password belum sama.</p>}
           {pw2 && pw2 === pw && allOk && (
-            <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-marun-700">
+            <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-hijau-700">
               <Icon name="check" className="h-3.5 w-3.5" /> Password cocok
             </p>
           )}
@@ -176,7 +176,7 @@ export function PhoneField({ name = "no_hp", id, label = "Nomor HP", required = 
         onChange={(e) => setV(e.target.value.replace(/[^\d+]/g, "").replace(/(?!^)\+/g, ""))}
         onBlur={() => setTouched(true)}
         aria-invalid={touched && !!err}
-        className={cn("input tracking-wide", touched && err && "border-merah-500", v && !err && "border-marun-500")}
+        className={cn("input tracking-wide", touched && err && "border-merah-500", v && !err && "border-hijau-500")}
       />
       {touched && err ? <p className="mt-1 text-xs font-semibold text-merah-600">{err}</p> : <p className="mt-1 text-xs text-ink-soft">{hint ?? "Hanya angka. Nomor seluler aktif, diawali 08 atau 628."}</p>}
     </div>
@@ -211,10 +211,10 @@ export function EmailField({ name = "email", id, label = "Email", required = tru
         onChange={(e) => setV(e.target.value.replace(/\s/g, ""))}
         onBlur={() => setTouched(true)}
         aria-invalid={touched && !!err}
-        className={cn("input", touched && err && "border-merah-500", v && !err && "border-marun-500")}
+        className={cn("input", touched && err && "border-merah-500", v && !err && "border-hijau-500")}
       />
       {typo ? (
-        <p className="mt-1 text-xs text-aksen-600">
+        <p className="mt-1 text-xs text-hijau-700">
           Maksud Anda{" "}
           <button type="button" className="font-bold underline" onClick={() => setV(typo)}>
             {typo}

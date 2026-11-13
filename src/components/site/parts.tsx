@@ -45,7 +45,7 @@ export function ArrowLink({ href, children, className }: { href: string; childre
     <Link href={href} className={cn("group inline-flex items-center gap-4", className)}>
       <span
         className={cn(
-          "flex h-12 w-12 items-center justify-center rounded-full border border-hl text-hl transition duration-300 group-hover:border-aksen-500 group-hover:bg-aksen-500 group-hover:text-white",
+          "flex h-12 w-12 items-center justify-center rounded-full border border-hl text-hl transition duration-300 group-hover:border-hijau-700 group-hover:bg-hijau-700 group-hover:text-white",
         )}
       >
         <Icon name="arrow-right" className="h-5 w-5 transition group-hover:translate-x-0.5" />

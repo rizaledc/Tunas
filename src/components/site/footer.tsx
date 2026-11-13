@@ -7,7 +7,7 @@ export async function SiteFooter() {
   const [contact, brand, landing] = await Promise.all([getSetting("public.contact"), getSetting("public.brand"), getSetting("public.landing")]);
   return (
     <footer className="relative overflow-hidden bg-surface text-ink/70">
-      <div className="h-1 bg-gradient-to-r from-marun-700 via-aksen-500 to-marun-700" aria-hidden />
+      <div className="h-1 bg-gradient-to-r from-hijau-700 via-kuning-500 to-hijau-700" aria-hidden />
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-[1.6fr_1fr_1fr]">
         <div>
           <Logo auto brand={brand} />

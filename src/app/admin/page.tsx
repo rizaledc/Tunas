@@ -32,12 +32,12 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
           lines={[
             { key: "screen", name: "Screen time", color: "var(--chart-ink)" },
             { key: "positif", name: "Aktivitas positif", color: "var(--chart-brand)" },
-            { key: "keluarga", name: "Keluarga mencatat", color: "#e8b54d" },
+            { key: "keluarga", name: "Keluarga mencatat", color: "#f9ab1e" },
           ]}
         />
       </section>
       <section className="card">
-        <h2 className="mb-2 flex items-center gap-2 font-extrabold"><Icon name="warning" className="text-aksen-500" /> Peringatan</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-extrabold"><Icon name="warning" className="text-hijau-700" /> Peringatan</h2>
         {k.alerts.length ? (
           <ul className="list-disc space-y-1 pl-5">
             {k.alerts.map((a) => (

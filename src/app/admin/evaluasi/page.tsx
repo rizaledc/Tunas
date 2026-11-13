@@ -67,9 +67,9 @@ export default async function EvaluasiPage() {
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
-              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-marun-50 text-marun-700" : "bg-gray-100"}`}>{s.is_open ? <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-marun-500" /> Terbuka</span> : "Tertutup"}</span>
+              <span className={`rounded-full px-3 py-1 text-sm font-bold ${s.is_open ? "bg-hijau-50 text-hijau-700" : "bg-gray-100"}`}>{s.is_open ? <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-hijau-500" /> Terbuka</span> : "Tertutup"}</span>
               {mean !== null && (
-                <span className="rounded-full bg-emas-300/25 px-3 py-1 text-sm font-bold text-aksen-600">
+                <span className="rounded-full bg-kuning-300/25 px-3 py-1 text-sm font-bold text-hijau-700">
                   Skor rata-rata: {mean}
                   {s.kind === "sus" ? ` / 100 (${susGrade(mean)})` : " / 5"}
                 </span>

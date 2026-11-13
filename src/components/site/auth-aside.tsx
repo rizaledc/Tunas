@@ -34,7 +34,7 @@ export function AuthAside() {
       <ul className="space-y-2.5 [@media(max-height:820px)]:hidden">
         {PROMISES.map((p) => (
           <li key={p.text} className="flex items-center gap-3 text-sm text-ink/75">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emas-400/30 bg-emas-400/10 text-gold">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-kuning-400/30 bg-kuning-400/10 text-gold">
               <Icon name={p.icon} className="h-4 w-4" />
             </span>
             {p.text}

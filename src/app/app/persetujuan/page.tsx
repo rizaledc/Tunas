@@ -23,7 +23,7 @@ export default async function PersetujuanPage() {
         <ActionForm action={acceptConsent}>
           <input type="hidden" name="version" value={consent.version} />
           <label className="flex items-start gap-3 text-sm">
-            <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-marun-600" />
+            <input type="checkbox" name="consent" required className="mt-1 h-5 w-5 accent-hijau-600" />
             <span>Saya sudah membaca dan menyetujui.</span>
           </label>
           <SubmitButton>Setuju dan lanjutkan</SubmitButton>

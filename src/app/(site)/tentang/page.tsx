@@ -10,10 +10,10 @@ export const revalidate = 300;
 export const metadata: Metadata = pageMeta("/tentang", "Tentang Program", "Latar belakang, makna logo, dan alur program SAHABAT ANAK.");
 
 const MEANING = [
-  { title: "Daun besar putih", text: "Orang tua yang menaungi dan menjaga, memberi ruang aman bagi anak untuk tumbuh. Di latar terang, daun ini berwarna marun." },
-  { title: "Daun kecil merah", text: "Anak yang sedang tumbuh: hangat, ceria, dan penuh rasa ingin tahu." },
-  { title: "Satu titik tumbuh", text: "Keduanya berangkat dari akar yang sama, yaitu keluarga dan komunitas tempat anak tumbuh." },
-  { title: "Bersama membentuk tunas", text: "Dua daun yang tumbuh berdampingan membentuk tunas: awal pertumbuhan yang dirawat bersama hingga seimbang." },
+  { title: "Sosok hijau yang merangkul", text: "Orang tua yang hadir mendampingi dan menjaga, bukan mengawasi dari jauh." },
+  { title: "Sosok kuning yang bersorak", text: "Anak yang ceria, aktif, dan percaya diri, tumbuh di dunia nyata maupun digital." },
+  { title: "Bintang di atasnya", text: "Harapan dan cita-cita anak: masa depan cerah yang dituju bersama keluarga." },
+  { title: "Hijau dan kuning", text: "Hijau melambangkan tumbuh dan seimbang; kuning melambangkan keceriaan dan semangat." },
 ];
 
 export default async function TentangPage() {
@@ -46,7 +46,7 @@ export default async function TentangPage() {
         <section className="bg-surface text-ink">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 lg:grid-cols-[1fr_1.4fr]">
             <div className="relative flex justify-center">
-              <div className="absolute inset-10 rounded-full bg-marun-600/40 blur-3xl" aria-hidden />
+              <div className="absolute inset-10 rounded-full bg-kuning-200/70 blur-3xl" aria-hidden />
               {brand.logo ? <LogoMark src={brand.logo} className="relative h-56 w-56" /> : <LogoMark auto className="relative h-64 w-64" />}
             </div>
             <div>

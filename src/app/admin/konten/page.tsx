@@ -128,7 +128,7 @@ export default async function KontenPage({ searchParams }: { searchParams: Promi
           </label>
           <SingleUpload name="image" defaultValue={s["public.tentang"].image} folder="tentang" label="Unggah foto (opsional)" />
           <label className="flex items-center gap-2 text-sm font-bold">
-            <input type="checkbox" name="show_logo" defaultChecked={s["public.tentang"].show_logo} className="h-5 w-5 accent-marun-600" /> Tampilkan bagian &quot;Makna Logo&quot;
+            <input type="checkbox" name="show_logo" defaultChecked={s["public.tentang"].show_logo} className="h-5 w-5 accent-hijau-600" /> Tampilkan bagian &quot;Makna Logo&quot;
           </label>
           <ArticleEditor defaultValue={s["public.tentang"].body} />
           <SubmitButton className="btn-green">Simpan</SubmitButton>
@@ -185,7 +185,7 @@ async function ArticleList({ db }: { db: ReturnType<typeof createAdminClient> })
               <td className="font-bold">{a.title}</td>
               <td>{a.published_at ? `Terbit ${formatTanggal(a.published_at)}` : "Draf"}</td>
               <td className="flex gap-1">
-                <Link href={`/admin/konten/artikel/${a.id}`} className="btn-ghost btn-sm text-marun-600">
+                <Link href={`/admin/konten/artikel/${a.id}`} className="btn-ghost btn-sm text-hijau-600">
                   Ubah
                 </Link>
                 <form action={deleteArticle}>
@@ -230,7 +230,7 @@ async function GalleryAdmin({ db }: { db: ReturnType<typeof createAdminClient> }
           <input name="caption" placeholder="Keterangan (opsional)" className="input" />
         </div>
         <label className="flex items-start gap-2 text-sm">
-          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-marun-600" />
+          <input type="checkbox" name="publish_consent" className="mt-1 h-5 w-5 accent-hijau-600" />
           <span>
             <strong>Izin publikasi sudah ada</strong> dari orang tua anak yang wajahnya tampak. Tanpa centang, foto disimpan tetapi tidak tampil di website.
           </span>
@@ -297,7 +297,7 @@ function LandingEditor({ L }: { L: (typeof DEFAULT_SETTINGS)["public.landing"] }
         <div className="flex flex-wrap gap-2">
           {Object.entries(labels).map(([k, v]) => (
             <label key={k} className="chip">
-              <input type="checkbox" name={`show_${k}`} defaultChecked={show[k as keyof typeof show]} className="h-4 w-4 accent-marun-600" /> {v}
+              <input type="checkbox" name={`show_${k}`} defaultChecked={show[k as keyof typeof show]} className="h-4 w-4 accent-hijau-600" /> {v}
             </label>
           ))}
         </div>
@@ -312,9 +312,9 @@ function LandingEditor({ L }: { L: (typeof DEFAULT_SETTINGS)["public.landing"] }
         <Field name="agenda_title" label="Judul agenda" v={L.agenda_title} />
       </section>
       <section className="card space-y-3">
-        <h2 className="font-extrabold">Foto dokumentasi kegiatan pendampingan</h2>
+        <h2 className="font-extrabold">Foto sampul cadangan kartu kegiatan</h2>
         <p className="text-sm text-ink-soft">
-          Tampil di bagian Kegiatan Pendampingan di beranda (maks. 3 foto). <strong>Pastikan wajah peserta sudah diburamkan</strong> atau ada izin publikasi. Hapus foto untuk menyembunyikannya.
+          Dipakai bergantian sebagai foto sampul kartu kegiatan yang belum punya foto sendiri (di beranda dan halaman Kegiatan). Foto sampul yang diunggah di menu Kegiatan selalu diutamakan. Maks. 3 foto. <strong>Pastikan wajah peserta sudah diburamkan</strong> atau ada izin publikasi.
         </p>
         <div className="grid gap-4 md:grid-cols-3">
           {[0, 1, 2].map((i) => {

@@ -1,41 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palet Telkom: merah #FF0000, merah tua #B00000, putih, abu #808080, abu gelap #333333, hitam.
-     Warna utama: merah marun (turunan #B00000). */
-  --color-marun-50: #fdf3f3;
-  --color-marun-100: #fae1e1;
-  --color-marun-200: #f2bcbc;
-  --color-marun-300: #e48a8a;
-  --color-marun-400: #c94848;
-  --color-marun-500: #b00000;
-  --color-marun-600: #940000;
-  --color-marun-700: #760000;
-  --color-marun-800: #560000;
-  --color-marun-900: #3b0000;
-  --color-marun-950: #220000;
-  /* Merah Telkom untuk sorotan & tombol utama. */
-  --color-aksen-400: #ff3d3d;
-  --color-aksen-500: #e60000;
-  --color-aksen-600: #c40000;
-  /* Merah untuk pesan galat. */
+  /* Palet dari logo: putih dominan, hijau tua (#0d4e30) dan kuning (#f9ab1e). */
+  --color-hijau-50: #eef7f1;
+  --color-hijau-100: #d7ece0;
+  --color-hijau-200: #b0d9c1;
+  --color-hijau-300: #7fbd9a;
+  --color-hijau-400: #4c9c72;
+  --color-hijau-500: #2b8055;
+  --color-hijau-600: #186b43;
+  --color-hijau-700: #105b38;
+  --color-hijau-800: #0d4e30;
+  --color-hijau-900: #0a3d26;
+  --color-hijau-950: #052416;
+  --color-kuning-50: #fff8e8;
+  --color-kuning-100: #ffefc6;
+  --color-kuning-200: #fedf8f;
+  --color-kuning-300: #fdcb5b;
+  --color-kuning-400: #fbbb38;
+  --color-kuning-500: #f9ab1e;
+  --color-kuning-600: #dc8c07;
+  --color-kuning-700: #a86a03;
+  --color-kuning-800: #7f5104;
+  --color-kuning-900: #613e06;
+  /* Merah hanya untuk pesan galat. */
   --color-merah-500: #d11a2a;
   --color-merah-600: #a8111f;
-  /* Netral Telkom. */
+  /* Netral */
   --color-abu-400: #a6a6a6;
   --color-abu-500: #808080;
-  --color-gelap-700: #333333;
-  --color-gelap-800: #1c1c1c;
-  --color-gelap-900: #0e0e0e;
-  --color-gelap-950: #060606;
-  /* Aksen tambahan (di luar palet) untuk ikon & detail kecil. */
-  --color-emas-300: #f4d99c;
-  --color-emas-400: #e8b54d;
-  --color-emas-500: #cf9327;
+  --color-gelap-700: #33403a;
+  --color-gelap-800: #1c2621;
+  --color-gelap-900: #0f1813;
+  --color-gelap-950: #07100b;
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-fredoka), var(--font-jakarta), ui-rounded, system-ui, sans-serif;
 }
 
-/* Warna semantik: berganti otomatis antara mode terang & gelap. */
+/* Warna semantik. */
 @theme inline {
   --color-ink: var(--sa-ink);
   --color-ink-soft: var(--sa-ink-soft);
@@ -45,104 +47,46 @@
   --color-gold: var(--sa-gold);
 }
 
-/* Varian dark: untuk penyesuaian kecil (berlaku di mode gelap dan di blok yang selalu gelap). */
-@custom-variant dark (&:where(.dark, .dark *, .theme-dark, .theme-dark *));
-
-/* Mode terang (bawaan) */
+/* Bawaan: latar putih. */
 :root,
 .theme-light {
-  --sa-ink: #161616;
-  --sa-ink-soft: #565656;
-  --sa-surface: #f7f5f3;
+  --sa-ink: #10231a;
+  --sa-ink-soft: #4b5a52;
+  --sa-surface: #ffffff;
   --sa-paper: #ffffff;
-  --sa-hl: #d00000;
-  --sa-gold: #8a5a0b;
-  --sa-tex: #f3efe9;
-  --sa-tex-red: rgba(230, 0, 0, 0.1);
-  --sa-tex-red-2: rgba(176, 0, 0, 0.07);
-  --sa-tex-line: rgba(0, 0, 0, 0.045);
+  --sa-hl: #186b43;
+  --sa-gold: #8a5600;
+  --sa-tex: #f6faf6;
+  --sa-tex-a: rgba(249, 171, 30, 0.16);
+  --sa-tex-b: rgba(13, 78, 48, 0.07);
+  --sa-tex-line: rgba(13, 78, 48, 0.05);
   color-scheme: light;
 }
-/* Mode gelap (html.dark) dan blok yang selalu gelap (.theme-dark: foto, pita marun). */
-.dark,
+/* Blok berwarna (hijau tua / di atas foto): teks putih, sorotan kuning. */
 .theme-dark {
   --sa-ink: #ffffff;
-  --sa-ink-soft: #a9a9a9;
-  --sa-surface: #060606;
-  --sa-paper: #121212;
-  --sa-hl: #ff3d3d;
-  --sa-gold: #f0c66e;
-  --sa-tex: #0e0e0e;
-  --sa-tex-red: rgba(176, 0, 0, 0.35);
-  --sa-tex-red-2: rgba(118, 0, 0, 0.35);
-  --sa-tex-line: rgba(255, 255, 255, 0.035);
-  color-scheme: dark;
+  --sa-ink-soft: #cfe0d6;
+  --sa-surface: #052416;
+  --sa-paper: #0a3d26;
+  --sa-hl: #fbbb38;
+  --sa-gold: #fdcb5b;
+  --sa-tex: #0a3d26;
+  --sa-tex-a: rgba(249, 171, 30, 0.18);
+  --sa-tex-b: rgba(255, 255, 255, 0.05);
+  --sa-tex-line: rgba(255, 255, 255, 0.04);
+  color: var(--sa-ink);
 }
 .theme-light {
   color: var(--sa-ink);
-}
-.theme-dark {
-  color: var(--sa-ink);
-}
-
-/* Aplikasi & panel admin di mode gelap: skala abu-abu dan rona marun dibalik. */
-.dark {
-  --color-gray-50: #161616;
-  --color-gray-100: #1d1d1d;
-  --color-gray-200: #2b2b2b;
-  --color-gray-300: #3d3d3d;
-  --color-gray-400: #707070;
-  --color-gray-500: #929292;
-  --color-gray-600: #b3b3b3;
-  --color-gray-700: #d0d0d0;
-  --color-gray-800: #e6e6e6;
-  --color-gray-900: #f3f3f3;
-  --color-marun-50: #2a0c0c;
-  --color-marun-100: #3a1111;
-  --color-marun-200: #5e1c1c;
-  --color-red-50: #2a0c0c;
-}
-.dark :where(.text-marun-600, .text-marun-700, .text-marun-800, .text-aksen-600) {
-  color: #ff7676;
-}
-.dark :where(.text-merah-500, .text-merah-600) {
-  color: #ff8590;
-}
-.dark :where(.text-emas-500) {
-  color: #f0c66e;
-}
-.dark .theme-light :where(.text-marun-600, .text-marun-700, .text-marun-800) {
-  color: revert-layer;
 }
 
 /* Warna grafik (recharts) */
 :root {
-  --chart-ink: #333333;
-  --chart-brand: #940000;
-}
-.dark {
-  --chart-ink: #c9c9c9;
-  --chart-brand: #ff4d4d;
+  --chart-ink: #3d4a43;
+  --chart-brand: #186b43;
 }
 .recharts-legend-item-text {
   color: var(--sa-ink) !important;
-}
-.dark .recharts-cartesian-grid line {
-  stroke: #2b2b2b;
-}
-.dark .recharts-cartesian-axis-line,
-.dark .recharts-cartesian-axis-tick-line {
-  stroke: #3d3d3d;
-}
-.dark .recharts-text {
-  fill: #a9a9a9;
-}
-.dark .recharts-default-tooltip {
-  background: #121212 !important;
-  border-color: #2b2b2b !important;
-}
-.dark .recharts-tooltip-cursor {
-  fill: rgba(255, 255, 255, 0.06);
 }
 
 html {
@@ -165,16 +109,20 @@ body {
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-base font-bold tracking-tight transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-marun-500 disabled:cursor-not-allowed disabled:opacity-60;
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-base font-bold tracking-tight transition duration-200 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-hijau-500 disabled:cursor-not-allowed disabled:opacity-60;
 }
 @utility btn-primary {
-  @apply btn bg-aksen-500 text-white shadow-[0_10px_30px_-10px_rgba(230,0,0,0.6)] hover:bg-aksen-600;
+  @apply btn bg-hijau-700 text-white shadow-[0_10px_30px_-12px_rgba(13,78,48,0.7)] hover:bg-hijau-800;
+}
+/* Tombol kuning (aksen ceria, teks hijau tua). */
+@utility btn-yellow {
+  @apply btn bg-kuning-500 text-hijau-950 shadow-[0_10px_30px_-12px_rgba(249,171,30,0.8)] hover:bg-kuning-400;
 }
 @utility btn-green {
-  @apply btn bg-marun-600 text-white hover:bg-marun-700;
+  @apply btn bg-hijau-600 text-white hover:bg-hijau-700;
 }
 @utility btn-outline {
-  @apply btn border border-marun-600 bg-paper text-marun-700 hover:bg-marun-50 dark:border-[#ff7676]/60 dark:text-[#ff7676];
+  @apply btn border border-hijau-600 bg-paper text-hijau-700 hover:bg-hijau-50;
 }
 /* Tombol garis di atas latar gelap (gaya referensi). */
 @utility btn-ghost-light {
@@ -186,7 +134,7 @@ body {
 }
 /* Judul besar bergaya editorial. */
 @utility display {
-  @apply font-extrabold tracking-[-0.035em] leading-[0.95];
+  @apply font-display font-bold tracking-[-0.01em] leading-[1.02];
 }
 @utility btn-ghost {
   @apply btn text-ink-soft hover:bg-ink/5;
@@ -201,13 +149,13 @@ body {
   @apply rounded-2xl border border-ink/5 bg-paper p-4 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.08)];
 }
 @utility input {
-  @apply w-full rounded-xl border border-gray-300 bg-paper px-3 py-3 text-base text-ink placeholder:text-gray-400 focus:border-marun-500 focus:ring-2 focus:ring-marun-200 focus:outline-none;
+  @apply w-full rounded-xl border border-gray-300 bg-paper px-3 py-3 text-base text-ink placeholder:text-gray-400 focus:border-hijau-500 focus:ring-2 focus:ring-hijau-200 focus:outline-none;
 }
 @utility label {
   @apply mb-1 block text-sm font-bold text-ink;
 }
 @utility chip {
-  @apply inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-gray-200 bg-paper px-3 py-2 text-sm font-semibold text-ink-soft transition has-[:checked]:border-marun-600 has-[:checked]:bg-marun-50 has-[:checked]:text-marun-700 dark:has-[:checked]:border-[#ff7676] dark:has-[:checked]:text-[#ff9a9a];
+  @apply inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-gray-200 bg-paper px-3 py-2 text-sm font-semibold text-ink-soft transition has-[:checked]:border-hijau-600 has-[:checked]:bg-hijau-50 has-[:checked]:text-hijau-700;
 }
 @layer components {
   .tbl {
@@ -226,10 +174,10 @@ body {
     @apply mt-0;
   }
   .prose-sa h3 {
-    @apply mt-6 mb-2 text-lg font-bold text-marun-700 dark:text-[#ff7676];
+    @apply mt-6 mb-2 text-lg font-bold text-hijau-700;
   }
   .prose-sa li::marker {
-    @apply text-marun-500;
+    @apply text-hijau-500;
   }
   .prose-sa strong {
     @apply font-bold text-ink;
@@ -244,7 +192,7 @@ body {
     @apply mb-3 list-decimal space-y-1 pl-6;
   }
   .prose-sa a {
-    @apply font-semibold text-marun-600 underline dark:text-[#ff7676];
+    @apply font-semibold text-hijau-600 underline;
   }
 }
 
@@ -273,8 +221,8 @@ body {
 .sa-texture {
   background-color: var(--sa-tex);
   background-image:
-    radial-gradient(ellipse 60% 50% at 80% 10%, var(--sa-tex-red), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 0% 100%, var(--sa-tex-red-2), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, var(--sa-tex-a), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, var(--sa-tex-b), transparent 70%),
     linear-gradient(var(--sa-tex-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--sa-tex-line) 1px, transparent 1px);
   background-size:
@@ -290,11 +238,5 @@ body {
   }
   body {
     background: white;
-  }
-  .dark {
-    --sa-ink: #161616;
-    --sa-ink-soft: #565656;
-    --sa-surface: #ffffff;
-    --sa-paper: #ffffff;
   }
 }

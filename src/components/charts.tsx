@@ -17,7 +17,7 @@ import {
   YAxis,
 } from "recharts";
 
-export const PALETTE = ["var(--chart-brand)", "#e8b54d", "var(--chart-ink)", "#e60000", "#808080", "#5c1a33", "#c94848", "#b8a07a"];
+export const PALETTE = ["var(--chart-brand)", "#f9ab1e", "var(--chart-ink)", "#7fbd9a", "#808080", "#a86a03", "#4c9c72", "#fdcb5b"];
 
 export function ScreenTimeChart({ data, target }: { data: Array<{ label: string; digital: number; positif: number }>; target: number }) {
   return (
@@ -31,7 +31,7 @@ export function ScreenTimeChart({ data, target }: { data: Array<{ label: string;
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="digital" name="Screen time" fill="var(--chart-ink)" radius={[6, 6, 0, 0]} />
           <Bar dataKey="positif" name="Aktivitas positif" fill="var(--chart-brand)" radius={[6, 6, 0, 0]} />
-          <ReferenceLine y={target} stroke="#e8b54d" strokeDasharray="6 4" strokeWidth={2} label={{ value: `Target ${target}`, fill: "#cf9327", fontSize: 12, position: "insideTopRight" }} />
+          <ReferenceLine y={target} stroke="#f9ab1e" strokeDasharray="6 4" strokeWidth={2} label={{ value: `Target ${target}`, fill: "#a86a03", fontSize: 12, position: "insideTopRight" }} />
         </ComposedChart>
       </ResponsiveContainer>
     </div>

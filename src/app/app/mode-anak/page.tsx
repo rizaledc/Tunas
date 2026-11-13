@@ -25,9 +25,9 @@ export default async function ModeAnakPage() {
   return (
     <div className="mx-auto max-w-lg space-y-6 px-4 py-6">
       <div className="text-center">
-        <Icon name="hand" className="mx-auto h-14 w-14 text-aksen-500" />
+        <Icon name="hand" className="mx-auto h-14 w-14 text-hijau-700" />
         <h1 className="text-3xl font-extrabold tracking-tight text-ink">Halo, {child.nickname}!</h1>
-        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2 text-2xl font-extrabold text-aksen-600 shadow"><Icon name="star-solid" className="h-7 w-7 text-emas-400" /> {stars} bintang</p>
+        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2 text-2xl font-extrabold text-hijau-700 shadow"><Icon name="star-solid" className="h-7 w-7 text-kuning-400" /> {stars} bintang</p>
       </div>
       <ChildLogForm categories={cats.filter((c) => c.type === "positif")} />
       <section>
@@ -35,7 +35,7 @@ export default async function ModeAnakPage() {
         <div className="grid grid-cols-3 gap-3">
           {badges.map((b) => (
             <div key={b.name} className={`rounded-3xl bg-paper p-3 text-center shadow-sm ${b.earned ? "" : "opacity-40 grayscale"}`} title={b.desc}>
-              <Icon name={b.icon} className="mx-auto h-10 w-10 text-aksen-500" />
+              <Icon name={b.icon} className="mx-auto h-10 w-10 text-hijau-700" />
               <p className="text-sm leading-tight font-extrabold">{b.name}</p>
               <p className="text-[11px] leading-tight text-ink-soft">{b.desc}</p>
             </div>
