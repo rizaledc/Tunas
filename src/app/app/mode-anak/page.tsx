@@ -29,7 +29,7 @@ export default async function ModeAnakPage() {
         <h1 className="text-3xl font-extrabold tracking-tight text-ink">Halo, {child.nickname}!</h1>
         <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-paper px-5 py-2 text-2xl font-extrabold text-hijau-700 shadow"><Icon name="star-solid" className="h-7 w-7 text-kuning-400" /> {stars} bintang</p>
       </div>
-      <ChildLogForm categories={cats.filter((c) => c.type === "positif")} />
+      <ChildLogForm categories={cats.filter((c) => c.type === "positif" && c.name.toLowerCase() !== "lainnya")} />
       <section>
         <h2 className="mb-3 text-center text-2xl font-extrabold tracking-tight text-ink">Lencanaku</h2>
         <div className="grid grid-cols-3 gap-3">

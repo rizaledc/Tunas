@@ -12,7 +12,14 @@ insert into public.categories (type, name, icon, sort) values
   ('positif','Membantu di rumah','broom',5),
   ('positif','Ibadah/Mengaji','mosque',6),
   ('positif','Bermain bersama keluarga','family',7),
-  ('positif','Belajar/PR tanpa gawai','pencil2',8)
+  ('positif','Belajar/PR tanpa gawai','pencil2',8),
+  ('positif','Lainnya','more',99),
+  ('digital','Lainnya','more',99),
+  ('rutin','Tidur','sleep',1),
+  ('rutin','Sekolah','school',2),
+  ('rutin','Makan & mandi','utensils',3),
+  ('rutin','Perjalanan','bus',4),
+  ('rutin','Lainnya','more',99)
 on conflict do nothing;
 
 insert into public.events (title, slug, date, location, description, featured, published) values

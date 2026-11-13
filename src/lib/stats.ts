@@ -64,7 +64,7 @@ export function groupStats(base: Awaited<ReturnType<typeof loadBase>>, childIds:
     const k = dayKey(l);
     const d = days.get(k) ?? { digital: 0, positif: 0, broke: false, child: l.child_id };
     if (l.type === "digital") d.digital += l.duration_min;
-    else d.positif += l.duration_min;
+    else if (l.type === "positif") d.positif += l.duration_min;
     if (l.follows_agreement === false) d.broke = true;
     days.set(k, d);
   }

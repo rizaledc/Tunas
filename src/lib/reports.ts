@@ -7,6 +7,7 @@ import { addDays, dateRange, formatTanggal } from "./date";
 import { MIN_GROUP_FAMILIES } from "./privacy";
 import { sha256 } from "./crypto";
 import { LEVEL_GROUPS, schoolLevelLabel } from "./utils";
+import { label as leleLabel } from "./lele";
 import type { Sheet } from "./excel";
 
 export type Report = { title: string; sheets: Sheet[] };
@@ -100,10 +101,36 @@ export async function anonymousReport(from: string, to: string): Promise<Report>
   const db = createAdminClient();
   const { data: checkins } = await db.from("daily_checkins").select("child_id,date,mood,stop_response,sleep_time,device_before_sleep").gte("date", from).lte("date", to);
   const { data: surveys } = await db.from("survey_responses").select("survey_id,user_id,score,answers,surveys(name,kind,period)");
+  const { data: lele } = await db.from("lele_logs").select("child_id,log_date,pakan_pagi,pakan_sore,air,perilaku,cuaca,didampingi,catatan").gte("log_date", from).lte("log_date", to).order("log_date");
+  // Ringkasan 24 jam per anak per hari.
+  const perDay = new Map<string, { child: string; date: string; digital: number; positif: number; rutin: number }>();
+  for (const l of base.logs) {
+    const k = `${l.child_id}|${l.log_date}`;
+    const d = perDay.get(k) ?? { child: l.child_id, date: l.log_date, digital: 0, positif: 0, rutin: 0 };
+    d[l.type as "digital" | "positif" | "rutin"] += l.duration_min;
+    perDay.set(k, d);
+  }
+  const dayRows = [...perDay.values()]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((d) => ({ kode_anak: code(d.child), tanggal: d.date, digital_mnt: d.digital, positif_mnt: d.positif, rutinitas_mnt: d.rutin, total_mnt: d.digital + d.positif + d.rutin, lengkap_24_jam: d.digital + d.positif + d.rutin >= 1440 ? "ya" : "tidak" }));
+  const leleRows = (lele ?? []).map((r) => ({
+    kode_anak: code(r.child_id),
+    tanggal: r.log_date,
+    pakan_pagi: leleLabel("pakan", r.pakan_pagi),
+    pakan_sore: leleLabel("pakan", r.pakan_sore),
+    kekeruhan_air: (r.air as string[]).map((v) => leleLabel("air", v)).join(", "),
+    perilaku_ikan: (r.perilaku as string[]).map((v) => leleLabel("perilaku", v)).join(", "),
+    cuaca: leleLabel("cuaca", r.cuaca),
+    durasi_gawai_jam: Math.round(((perDay.get(`${r.child_id}|${r.log_date}`)?.digital ?? 0) / 60) * 10) / 10,
+    paraf_orang_tua: r.didampingi ? "ya" : "tidak",
+    catatan: r.catatan ?? "",
+  }));
   return {
     title: `Data Anonim SAHABAT ANAK ${from} s.d. ${to}`,
     sheets: [
       { name: "Aktivitas", rows },
+      { name: "Ringkasan 24 jam", rows: dayRows },
+      { name: "Logbook lele harian", rows: leleRows },
       { name: "Check-in", rows: (checkins ?? []).map(({ child_id, ...r }) => ({ kode_anak: code(child_id), ...r })) },
       {
         name: "Kuesioner",

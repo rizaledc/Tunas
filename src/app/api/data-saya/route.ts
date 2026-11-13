@@ -15,12 +15,13 @@ export async function GET(request: NextRequest) {
     supabase.from("children").select("id,nickname,birth_year,school_level,created_at"),
   ]);
   const ids = (children ?? []).map((c) => c.id);
-  const [{ data: logs }, { data: checkins }, { data: agreements }, { data: insights }, { data: reflections }] = await Promise.all([
+  const [{ data: logs }, { data: checkins }, { data: agreements }, { data: insights }, { data: reflections }, { data: lele }] = await Promise.all([
     supabase.from("activity_logs").select("*").in("child_id", ids).order("log_date"),
     supabase.from("daily_checkins").select("*").in("child_id", ids).order("date"),
     supabase.from("agreements").select("*").in("child_id", ids),
     supabase.from("ai_insights").select("id,child_id,period_start,period_end,output,model,rating,created_at").in("child_id", ids),
     supabase.from("reflections").select("*").in("child_id", ids),
+    supabase.from("lele_logs").select("*").in("child_id", ids).order("log_date"),
   ]);
   const nick = (id: string) => children?.find((c) => c.id === id)?.nickname ?? id;
   const withNick = <T extends { child_id: string }>(rows: T[] | null) => (rows ?? []).map(({ child_id, ...r }) => ({ anak: nick(child_id), ...r }));
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
     check_in: withNick(checkins),
     insight: withNick(insights),
     refleksi: withNick(reflections),
+    logbook_lele: withNick(lele),
   };
   const name = `data-sahabat-anak-${todayStr()}`;
   if (request.nextUrl.searchParams.get("format") === "xlsx") {
@@ -43,6 +45,7 @@ export async function GET(request: NextRequest) {
       { name: "Anak", rows: children ?? [] },
       { name: "Kesepakatan", rows: payload.kesepakatan },
       { name: "Catatan", rows: payload.catatan_aktivitas },
+      { name: "Logbook lele", rows: payload.logbook_lele },
       { name: "Check-in", rows: payload.check_in },
       { name: "Insight", rows: payload.insight },
       { name: "Refleksi", rows: payload.refleksi },
