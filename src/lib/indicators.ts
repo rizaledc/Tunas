@@ -58,7 +58,61 @@ export type Indicators = {
     respons_berhenti: Record<string, number>;
   };
   tindak_lanjut_sebelumnya: { rencana: string; hasil: string | null } | null;
+  /** Konteks jangka panjang (opsional: insight lama belum memilikinya). */
+  jangka_panjang?: JangkaPanjang | null;
 };
+
+export type JangkaPanjang = {
+  minggu_sejak_mulai_mencatat: number;
+  /** Rata-rata per hari tercatat selama 28 hari terakhir (termasuk minggu ini). */
+  rata_screen_4_minggu: number;
+  rata_positif_4_minggu: number;
+  /** Minggu pertama mencatat; null jika riwayat belum cukup (minggu pertama masih tumpang tindih dengan 2 minggu terakhir). */
+  minggu_pertama: { mulai: string; rata_screen_min_per_hari: number; rata_positif_min_per_hari: number } | null;
+  perubahan_screen_sejak_awal_persen: number | null;
+  perubahan_positif_sejak_awal_persen: number | null;
+};
+
+/** Selisih hari antara dua tanggal YYYY-MM-DD (b - a). */
+function daysBetween(a: string, b: string): number {
+  return Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000);
+}
+
+/** Rata-rata menit digital & positif per hari yang punya catatan. */
+function perDayAverages(logs: LogRow[]): { screen: number; positif: number; days: number } {
+  const days = new Set(logs.map((l) => l.log_date)).size;
+  if (!days) return { screen: 0, positif: 0, days: 0 };
+  return {
+    screen: Math.round(sumBy(logs.filter((l) => l.type === "digital"), (l) => l.duration_min) / days),
+    positif: Math.round(sumBy(logs.filter((l) => l.type === "positif"), (l) => l.duration_min) / days),
+    days,
+  };
+}
+
+export function computeLongTerm(input: {
+  endDate: string;
+  logs: LogRow[]; // minimal 28 hari terakhir
+  firstLogDate: string | null;
+  firstWeekLogs: LogRow[];
+}): JangkaPanjang | null {
+  if (!input.firstLogDate || input.firstLogDate > input.endDate) return null;
+  const start28 = addDays(input.endDate, -27);
+  const last28 = perDayAverages(input.logs.filter((l) => l.log_date >= start28 && l.log_date <= input.endDate));
+  const cur = perDayAverages(input.logs.filter((l) => l.log_date >= addDays(input.endDate, -6) && l.log_date <= input.endDate));
+  // Minggu pertama hanya dibandingkan jika sudah lewat sebelum periode "minggu lalu" (≥ 14 hari riwayat).
+  const firstWeekEnd = addDays(input.firstLogDate, 6);
+  const comparable = firstWeekEnd < addDays(input.endDate, -13);
+  const first = comparable ? perDayAverages(input.firstWeekLogs.filter((l) => l.log_date >= input.firstLogDate! && l.log_date <= firstWeekEnd)) : null;
+  const hasFirst = !!first && first.days > 0;
+  return {
+    minggu_sejak_mulai_mencatat: Math.floor(daysBetween(input.firstLogDate, input.endDate) / 7) + 1,
+    rata_screen_4_minggu: last28.screen,
+    rata_positif_4_minggu: last28.positif,
+    minggu_pertama: hasFirst ? { mulai: input.firstLogDate, rata_screen_min_per_hari: first.screen, rata_positif_min_per_hari: first.positif } : null,
+    perubahan_screen_sejak_awal_persen: hasFirst && cur.days ? changePct(cur.screen, first.screen) : null,
+    perubahan_positif_sejak_awal_persen: hasFirst && cur.days ? changePct(cur.positif, first.positif) : null,
+  };
+}
 
 export function sumBy<T>(rows: T[], f: (r: T) => number): number {
   return rows.reduce((a, r) => a + f(r), 0);
@@ -107,7 +161,7 @@ function changePct(now: number, before: number): number | null {
 
 export function computeIndicators(input: {
   endDate: string;
-  logs: LogRow[]; // minimal 14 hari terakhir
+  logs: LogRow[]; // minimal 14 hari terakhir (28 hari jika history diisi)
   checkins: CheckinRow[];
   categories: CategoryRow[];
   targetMin: number;
@@ -115,6 +169,8 @@ export function computeIndicators(input: {
   schoolLevel: string;
   reference: { max_min: number; note: string } | null;
   lastReflection: { action_text: string; outcome: string | null } | null;
+  /** Untuk konteks jangka panjang: tanggal catatan pertama dan catatan minggu pertama. */
+  history?: { firstLogDate: string | null; firstWeekLogs: LogRow[] };
 }): Indicators {
   const start = addDays(input.endDate, -6);
   const prevStart = addDays(input.endDate, -13);
@@ -196,6 +252,9 @@ export function computeIndicators(input: {
     tindak_lanjut_sebelumnya: input.lastReflection
       ? { rencana: input.lastReflection.action_text, hasil: input.lastReflection.outcome }
       : null,
+    jangka_panjang: input.history
+      ? computeLongTerm({ endDate: input.endDate, logs: input.logs, firstLogDate: input.history.firstLogDate, firstWeekLogs: input.history.firstWeekLogs })
+      : null,
   };
 }
 
@@ -244,6 +303,9 @@ export function ruleBasedInsight(ind: Indicators): InsightOutput {
     saran.push("Sepakati jam bebas gawai satu jam sebelum tidur, dan simpan HP di luar kamar.");
   }
   if (ind.variasi_aktivitas_positif >= 3) baik.push(`Anak mencoba ${ind.variasi_aktivitas_positif} jenis aktivitas positif.`);
+  const turunSejakAwal = ind.jangka_panjang?.perubahan_screen_sejak_awal_persen;
+  if (turunSejakAwal !== null && turunSejakAwal !== undefined && turunSejakAwal <= -10)
+    baik.unshift(`Dibanding minggu pertama mencatat, rata-rata waktu layar sudah turun ${Math.abs(turunSejakAwal)}%.`);
   const menolak = ind.checkin.respons_berhenti["menolak"] ?? 0;
   if (menolak >= 3) perhatian.push(`Anak menolak berhenti memakai gawai pada ${menolak} hari.`);
 

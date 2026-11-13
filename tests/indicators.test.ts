@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { balancePercent, computeIndicators, gcdRatio, parseInsight, ruleBasedInsight, type LogRow } from "../src/lib/indicators";
+import { balancePercent, computeIndicators, computeLongTerm, gcdRatio, parseInsight, ruleBasedInsight, type LogRow } from "../src/lib/indicators";
 
 const cats = [
   { id: "g", type: "digital" as const, name: "Game", icon: "🎮" },
@@ -116,5 +116,58 @@ describe("parseInsight membersihkan tanda pisah panjang", () => {
     expect(o.ringkasan).toBe("Minggu ini bagus, terus pertahankan");
     expect(o.saran[0]).toBe("Coba ini, lalu itu");
     expect(o.sudah_baik[0]).toBe("Main 10–15 menit");
+  });
+});
+
+describe("computeLongTerm (konteks jangka panjang)", () => {
+  const end = "2026-11-10";
+
+  it("membandingkan minggu ini dengan minggu pertama dan rata-rata 4 minggu", () => {
+    const firstWeek = [log("2026-09-01", "digital", "g", 200), log("2026-09-01", "positif", "m", 20), log("2026-09-02", "digital", "g", 160), log("2026-09-02", "positif", "m", 40)];
+    const logs = [
+      log("2026-11-10", "digital", "g", 100),
+      log("2026-11-10", "positif", "l", 60),
+      log("2026-11-09", "digital", "g", 80),
+      log("2026-11-09", "positif", "m", 60),
+      log("2026-10-20", "digital", "g", 180), // masih dalam 28 hari
+      log("2026-10-01", "digital", "g", 500), // di luar 28 hari
+    ];
+    const jp = computeLongTerm({ endDate: end, logs, firstLogDate: "2026-09-01", firstWeekLogs: firstWeek })!;
+    expect(jp.minggu_sejak_mulai_mencatat).toBe(11); // 70 hari: minggu ke-11
+    expect(jp.rata_screen_4_minggu).toBe(120); // (100+80+180)/3 hari
+    expect(jp.rata_positif_4_minggu).toBe(40); // (60+60)/3 hari
+    expect(jp.minggu_pertama).toEqual({ mulai: "2026-09-01", rata_screen_min_per_hari: 180, rata_positif_min_per_hari: 30 });
+    expect(jp.perubahan_screen_sejak_awal_persen).toBe(-50); // 90 vs 180
+    expect(jp.perubahan_positif_sejak_awal_persen).toBe(100); // 60 vs 30
+  });
+
+  it("tidak membandingkan minggu pertama bila riwayat kurang dari 3 minggu", () => {
+    const logs = [log("2026-11-01", "digital", "g", 200), log("2026-11-10", "digital", "g", 100)];
+    const jp = computeLongTerm({ endDate: end, logs, firstLogDate: "2026-11-01", firstWeekLogs: logs })!;
+    expect(jp.minggu_sejak_mulai_mencatat).toBe(2);
+    expect(jp.minggu_pertama).toBeNull();
+    expect(jp.perubahan_screen_sejak_awal_persen).toBeNull();
+  });
+
+  it("null bila belum pernah mencatat", () => {
+    expect(computeLongTerm({ endDate: end, logs: [], firstLogDate: null, firstWeekLogs: [] })).toBeNull();
+  });
+
+  it("ikut di computeIndicators dan ringkasan cadangan bila history diisi", () => {
+    const firstWeek = [log("2026-09-01", "digital", "g", 200)];
+    const ind = computeIndicators({
+      endDate: end,
+      logs: [log("2026-11-10", "digital", "g", 100)],
+      checkins: [],
+      categories: cats,
+      targetMin: 90,
+      childAge: 9,
+      schoolLevel: "SD",
+      reference: null,
+      lastReflection: null,
+      history: { firstLogDate: "2026-09-01", firstWeekLogs: firstWeek },
+    });
+    expect(ind.jangka_panjang?.perubahan_screen_sejak_awal_persen).toBe(-50);
+    expect(ruleBasedInsight(ind).sudah_baik[0]).toMatch(/turun 50%/);
   });
 });
